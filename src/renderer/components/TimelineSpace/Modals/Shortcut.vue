@@ -32,6 +32,14 @@
         <td>{{ $t('modals.shortcut.k') }}</td>
       </tr>
       <tr>
+        <td><kbd>h</kbd></td>
+        <td>{{ $t('modals.shortcut.h') }}</td>
+      </tr>
+      <tr>
+        <td><kbd>l</kbd></td>
+        <td>{{ $t('modals.shortcut.l') }}</td>
+      </tr>
+      <tr>
         <td><kbd>r</kbd></td>
         <td>{{ $t('modals.shortcut.r') }}</td>
       </tr>
@@ -58,6 +66,10 @@
       <tr>
         <td><kbd>x</kbd></td>
         <td>{{ $t('modals.shortcut.x') }}</td>
+      </tr>
+      <tr>
+        <td><kbd>?</kbd></td>
+        <td>{{ $t('modals.shortcut.?') }}</td>
       </tr>
       <tr>
         <td><kbd>esc</kbd></td>

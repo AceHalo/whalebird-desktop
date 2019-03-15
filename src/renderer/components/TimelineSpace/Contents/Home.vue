@@ -4,16 +4,17 @@
   <div v-shortkey="{linux: ['ctrl', 'r'], mac: ['meta', 'r']}" @shortkey="reload()">
   </div>
   <transition-group name="timeline" tag="div">
-    <div class="home-timeline" v-for="message in timeline" :key="message.uri">
+    <div class="home-timeline" v-for="message in filteredTimeline" :key="message.uri + message.id">
       <toot
         :message="message"
         :filter="filter"
-        :focused="message.uri === focusedId"
+        :focused="message.uri + message.id === focusedId"
         :overlaid="modalOpened"
         v-on:update="updateToot"
         v-on:delete="deleteToot"
         @focusNext="focusNext"
         @focusPrev="focusPrev"
+        @focusRight="focusSidebar"
         @selectToot="focusToot(message)"
         >
       </toot>
@@ -21,7 +22,7 @@
   </transition-group>
   <div class="loading-card" v-loading="lazyLoading" :element-loading-background="backgroundColor">
   </div>
-  <div class="upper" v-show="!heading">
+  <div :class="openSideBar ? 'upper-with-side-bar' : 'upper'" v-show="!heading">
     <el-button type="primary" icon="el-icon-arrow-up" @click="upper" circle>
     </el-button>
   </div>
@@ -30,12 +31,15 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import Toot from './Cards/Toot'
+import Toot from '~/src/renderer/components/molecules/Toot'
 import scrollTop from '../../utils/scroll'
+import reloadable from '~/src/renderer/components/mixins/reloadable'
+import { Event } from '~/src/renderer/components/event'
 
 export default {
   name: 'home',
   components: { Toot },
+  mixins: [reloadable],
   data () {
     return {
       focusedId: null
@@ -43,29 +47,62 @@ export default {
   },
   computed: {
     ...mapState({
+      openSideBar: state => state.TimelineSpace.Contents.SideBar.openSideBar,
       backgroundColor: state => state.App.theme.background_color,
       startReload: state => state.TimelineSpace.HeaderMenu.reload,
       timeline: state => state.TimelineSpace.Contents.Home.timeline,
       lazyLoading: state => state.TimelineSpace.Contents.Home.lazyLoading,
       heading: state => state.TimelineSpace.Contents.Home.heading,
       unread: state => state.TimelineSpace.Contents.Home.unreadTimeline,
-      filter: state => state.TimelineSpace.Contents.Home.filter
+      filter: state => state.TimelineSpace.Contents.Home.filter,
+      showReblogs: state => state.TimelineSpace.Contents.Home.showReblogs,
+      showReplies: state => state.TimelineSpace.Contents.Home.showReplies
     }),
     ...mapGetters('TimelineSpace/Modals', [
       'modalOpened'
     ]),
     shortcutEnabled: function () {
-      return !this.focusedId && !this.modalOpened
+      if (this.modalOpened) {
+        return false
+      }
+      if (!this.focusedId) {
+        return true
+      }
+      // Sometimes toots are deleted, so perhaps focused toot don't exist.
+      const currentIndex = this.timeline.findIndex(toot => this.focusedId === toot.uri + toot.id)
+      return currentIndex === -1
+    },
+    filteredTimeline () {
+      return this.timeline.filter((toot) => {
+        if (toot.in_reply_to_id) {
+          return this.showReplies
+        } else if (toot.reblog) {
+          return this.showReblogs
+        } else {
+          return true
+        }
+      })
     }
   },
   mounted () {
     this.$store.commit('TimelineSpace/SideMenu/changeUnreadHomeTimeline', false)
     document.getElementById('scrollable').addEventListener('scroll', this.onScroll)
+    Event.$on('focus-timeline', () => {
+      // If focusedId does not change, we have to refresh focusedId because Toot component watch change events.
+      const previousFocusedId = this.focusedId
+      this.focusedId = 0
+      this.$nextTick(function () {
+        this.focusedId = previousFocusedId
+      })
+    })
   },
   beforeUpdate () {
     if (this.$store.state.TimelineSpace.SideMenu.unreadHomeTimeline && this.heading) {
       this.$store.commit('TimelineSpace/SideMenu/changeUnreadHomeTimeline', false)
     }
+  },
+  beforeDestroy () {
+    Event.$off('focus-timeline')
   },
   destroyed () {
     this.$store.commit('TimelineSpace/Contents/Home/changeHeading', true)
@@ -123,33 +160,7 @@ export default {
     async reload () {
       this.$store.commit('TimelineSpace/changeLoading', true)
       try {
-        const account = await this.$store.dispatch('TimelineSpace/localAccount', this.$route.params.id).catch((err) => {
-          this.$message({
-            message: this.$t('message.account_load_error'),
-            type: 'error'
-          })
-          throw err
-        })
-        await this.$store.dispatch('TimelineSpace/stopUserStreaming')
-        await this.$store.dispatch('TimelineSpace/stopLocalStreaming')
-
-        await this.$store.dispatch('TimelineSpace/Contents/Home/fetchTimeline', account)
-          .catch(() => {
-            this.$message({
-              message: this.$t('message.timeline_fetch_error'),
-              type: 'error'
-            })
-          })
-        await this.$store.dispatch('TimelineSpace/Contents/Local/fetchLocalTimeline', account)
-
-        this.$store.dispatch('TimelineSpace/startUserStreaming', account)
-          .catch(() => {
-            this.$message({
-              message: this.$t('message.start_streaming_error'),
-              type: 'error'
-            })
-          })
-        this.$store.dispatch('TimelineSpace/startLocalStreaming', account)
+        await this.reloadable()
       } finally {
         this.$store.commit('TimelineSpace/changeLoading', false)
       }
@@ -162,28 +173,31 @@ export default {
       this.focusedId = null
     },
     focusNext () {
-      const currentIndex = this.timeline.findIndex(toot => this.focusedId === toot.uri)
+      const currentIndex = this.timeline.findIndex(toot => this.focusedId === toot.uri + toot.id)
       if (currentIndex === -1) {
-        this.focusedId = this.timeline[0].uri
+        this.focusedId = this.timeline[0].uri + this.timeline[0].id
       } else if (currentIndex < this.timeline.length) {
-        this.focusedId = this.timeline[currentIndex + 1].uri
+        this.focusedId = this.timeline[currentIndex + 1].uri + this.timeline[currentIndex + 1].id
       }
     },
     focusPrev () {
-      const currentIndex = this.timeline.findIndex(toot => this.focusedId === toot.uri)
+      const currentIndex = this.timeline.findIndex(toot => this.focusedId === toot.uri + toot.id)
       if (currentIndex === 0) {
         this.focusedId = null
       } else if (currentIndex > 0) {
-        this.focusedId = this.timeline[currentIndex - 1].uri
+        this.focusedId = this.timeline[currentIndex - 1].uri + this.timeline[currentIndex - 1].id
       }
     },
     focusToot (message) {
-      this.focusedId = message.uri
+      this.focusedId = message.uri + message.id
+    },
+    focusSidebar () {
+      Event.$emit('focus-sidebar')
     },
     handleKey (event) {
       switch (event.srcKey) {
         case 'next':
-          this.focusedId = this.timeline[0].uri
+          this.focusedId = this.timeline[0].uri + this.timeline[0].id
           break
       }
     }
@@ -219,6 +233,14 @@ export default {
     position: fixed;
     bottom: 20px;
     right: 20px;
+    transition: all 0.5s;
+  }
+
+  .upper-with-side-bar {
+    position: fixed;
+    bottom: 20px;
+    right: calc(20px + 360px);
+    transition: all 0.5s;
   }
 }
 </style>

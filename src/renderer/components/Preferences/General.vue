@@ -1,167 +1,61 @@
 <template>
 <div id="general" v-loading="loading">
   <h2>{{ $t('preferences.general.title') }}</h2>
-  <div class="appearance">
-    <h3>{{ $t('preferences.general.appearance') }}</h3>
-    <table class="theme">
-      <tbody>
-        <tr>
-          <td class="title">{{ $t('preferences.general.theme_color') }}</td>
-          <td class="status">
-            <el-radio v-for="t in themes" :key="t.key" v-model="theme" :label="t.key">{{ $t(t.name) }}</el-radio>
-          </td>
-        </tr>
-        <tr>
-          <td class="title">{{ $t('preferences.general.font_size') }}</td>
-          <td class="status">
-            <el-input-number :value="fontSize" :min="9" :max="18" @change="updateFontSize"></el-input-number>
-          </td>
-        </tr>
-        <tr>
-          <td class="title">{{ $t('preferences.general.display_style.title') }}</td>
-          <td class="status">
-            <el-select v-model="displayNameStyle" placeholder="style">
-              <el-option
-                v-for="style in nameStyles"
-                :key="style.value"
-                :label="$t(style.name)"
-                :value="style.value">
-              </el-option>
-            </el-select>
-          </td>
-        </tr>
-        <tr>
-          <td class="title">{{ $t('preferences.general.time_format.title') }}</td>
-          <td class="status">
-            <el-select v-model="timeFormat" placeholder="format">
-              <el-option
-                v-for="format in timeFormats"
-                :key="format.value"
-                :label="$t(format.name)"
-                :value="format.value">
-              </el-option>
-            </el-select>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="toot">
-    <h3>{{ $t('preferences.general.toot') }}</h3>
-    <table>
-      <tbody>
-        <tr>
-          <td class="title">{{ $t('preferences.general.visibility.title') }}</td>
-          <td class="status">
-            <el-select v-model="tootVisibility" placeholder="visibility">
-              <el-option
-                v-for="v in visibilities"
-                :key="v.value"
-                :label="$t(v.name)"
-                :value="v.value">
-              </el-option>
-            </el-select>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="sounds">
-    <h3>{{ $t('preferences.general.sounds') }}</h3>
-    <table>
-      <tbody>
-        <tr>
-          <td class="title">{{ $t('preferences.general.fav_rb_sound') }}</td>
-          <td class="status">
-            <el-switch
-              v-model="sound_fav_rb"
-              active-color="#13ce66">
-            </el-switch>
-          </td>
-        </tr>
-        <tr>
-          <td class="title">{{ $t('preferences.general.toot_sound') }}</td>
-          <td class="status">
-            <el-switch
-              v-model="sound_toot"
-              active-color="#13ce66">
-            </el-switch>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <el-form class="sounds section" label-position="right" label-width="250px" size="small">
+    <h3>{{ $t('preferences.general.sounds.title') }}</h3>
+    <p class="description">{{ $t('preferences.general.sounds.description') }}</p>
+    <el-form-item for="fav_rb" :label="$t('preferences.general.sounds.fav_rb')">
+      <el-switch
+        id="fav_rb"
+        v-model="sound_fav_rb"
+        active-color="#13ce66">
+      </el-switch>
+    </el-form-item>
+    <el-form-item for="sound_toot" :label="$t('preferences.general.sounds.toot')">
+      <el-switch
+        id="sound_toot"
+        v-model="sound_toot"
+        active-color="#13ce66">
+      </el-switch>
+    </el-form-item>
+  </el-form>
+  <el-form class="timeline section" label-potision="right" label-width="250px" size="samll">
+    <h3>{{ $t('preferences.general.timeline.title') }}</h3>
+    <p class="description">{{ $t('preferences.general.timeline.description') }}</p>
+    <el-form-item for="cw" :label="$t('preferences.general.timeline.cw')">
+      <el-switch
+        id="cw"
+        v-model="timeline_cw"
+        active-color="#13ce66">
+      </el-switch>
+    </el-form-item>
+    <el-form-item for="nfsw" :label="$t('preferences.general.timeline.nfsw')">
+      <el-switch
+        id="nfsw"
+        v-model="timeline_nfsw"
+        active-color="#13ce66">
+      </el-switch>
+    </el-form-item>
+    <el-form-item for="hideAllAttachments" :label="$t('preferences.general.timeline.hideAllAttachments')">
+      <el-switch
+        id="hideAllAttachments"
+        v-model="timeline_hide_attachments"
+        active-color="#13ce66">
+      </el-switch>
+    </el-form-item>
+  </el-form>
 </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import Visibility from '~/src/constants/visibility'
-import DisplayStyle from '~/src/constants/displayStyle'
-import Theme from '~/src/constants/theme'
-import TimeFormat from '~/src/constants/timeFormat'
 
 export default {
   name: 'general',
-  data () {
-    return {
-      visibilities: [
-        Visibility.Public,
-        Visibility.Unlisted,
-        Visibility.Private
-      ],
-      nameStyles: [
-        DisplayStyle.DisplayNameAndUsername,
-        DisplayStyle.DisplayName,
-        DisplayStyle.Username
-      ],
-      themes: [
-        Theme.Light,
-        Theme.Dark
-      ],
-      timeFormats: [
-        TimeFormat.Absolute,
-        TimeFormat.Relative
-      ]
-    }
-  },
   computed: {
     ...mapState({
-      loading: state => state.Preferences.General.loading,
-      fontSize: state => state.Preferences.General.general.fontSize
+      loading: state => state.Preferences.General.loading
     }),
-    theme: {
-      get () {
-        return this.$store.state.Preferences.General.general.theme
-      },
-      set (value) {
-        this.$store.dispatch('Preferences/General/updateTheme', value)
-      }
-    },
-    displayNameStyle: {
-      get () {
-        return this.$store.state.Preferences.General.general.displayNameStyle
-      },
-      set (value) {
-        this.$store.dispatch('Preferences/General/updateDisplayNameStyle', value)
-      }
-    },
-    timeFormat: {
-      get () {
-        return this.$store.state.Preferences.General.general.timeFormat
-      },
-      set (value) {
-        this.$store.dispatch('Preferences/General/updateTimeFormat', value)
-      }
-    },
-    tootVisibility: {
-      get () {
-        return this.$store.state.Preferences.General.general.tootVisibility
-      },
-      set (value) {
-        this.$store.dispatch('Preferences/General/updateTootVisibility', value)
-      }
-    },
     sound_fav_rb: {
       get () {
         return this.$store.state.Preferences.General.general.sound.fav_rb
@@ -181,6 +75,36 @@ export default {
           toot: value
         })
       }
+    },
+    timeline_cw: {
+      get () {
+        return this.$store.state.Preferences.General.general.timeline.cw
+      },
+      set (value) {
+        this.$store.dispatch('Preferences/General/updateTimeline', {
+          cw: value
+        })
+      }
+    },
+    timeline_nfsw: {
+      get () {
+        return this.$store.state.Preferences.General.general.timeline.nfsw
+      },
+      set (value) {
+        this.$store.dispatch('Preferences/General/updateTimeline', {
+          nfsw: value
+        })
+      }
+    },
+    timeline_hide_attachments: {
+      get () {
+        return this.$store.state.Preferences.General.general.timeline.hideAllAttachments
+      },
+      set (value) {
+        this.$store.dispatch('Preferences/General/updateTimeline', {
+          hideAllAttachments: value
+        })
+      }
     }
   },
   created () {
@@ -191,51 +115,31 @@ export default {
           type: 'error'
         })
       })
-  },
-  methods: {
-    updateFontSize (value) {
-      this.$store.dispatch('Preferences/General/updateFontSize', value)
-    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 #general {
-  table {
-    width: 100%;
+  .description {
+    margin: 24px 0 20px;
   }
 
-  td {
-    padding: 16px 0;
+  .section /deep/ {
+    margin-bottom: 40px;
+
+    .el-form-item__label {
+      color: var(--theme-primary-color);
+    }
   }
 
-  .title {
-    text-align: right;
-    width: 50%;
-  }
+  .selection {
+    margin: 12px 0;
 
-  .status {
-    width: 50%;
-    text-align: center;
-  }
-
-  .appearance {
-    color: var(--theme-secondary-color);
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .toot {
-    color: var(--theme-secondary-color);
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .sounds {
-    color: var(--theme-secondary-color);
-    width: 100%;
-    box-sizing: border-box;
+    .title {
+      margin-left: 12px;
+      font-weight: 800;
+    }
   }
 }
 </style>

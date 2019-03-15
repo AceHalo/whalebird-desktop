@@ -5,13 +5,16 @@
     :before-close="closeConfirm"
     width="400px"
     class="new-toot-modal">
-    <el-form v-on:submit.prevent="toot">
+    <el-form v-on:submit.prevent="toot" role="form">
       <div class="spoiler" v-show="showContentWarning">
-        <el-input :placeholder="$t('modals.new_toot.cw')" v-model="spoiler"></el-input>
+        <div class="el-input">
+          <input type="text" class="el-input__inner" :placeholder="$t('modals.new_toot.cw')" v-model="spoiler" v-shortkey.avoid />
+        </div>
       </div>
       <Status
         v-model="status"
         :opened="newTootModal"
+        :fixCursorPos="hashtagInserting"
         @paste="onPaste"
         @toot="toot"
         />
@@ -19,7 +22,18 @@
     <div class="preview">
       <div class="image-wrapper" v-for="media in attachedMedias" v-bind:key="media.id">
         <img :src="media.preview_url" class="preview-image" />
-        <el-button size="small" type="text" @click="removeAttachment(media)" class="remove-image"><icon name="times-circle"></icon></el-button>
+        <el-button type="text" @click="removeAttachment(media)" class="remove-image"><icon name="times-circle"></icon></el-button>
+        <textarea
+          maxlength="420"
+          class="image-description"
+          :placeholder="$t('modals.new_toot.description')"
+          v-model="mediaDescriptions[media.id]"
+          v-shortkey="{left: ['arrowleft'], right: ['arrowright']}"
+          @shortkey="handleDescriptionKey"
+          role="textbox"
+          contenteditable="true"
+          aria-multiline="true">
+        </textarea>
       </div>
     </div>
     <div slot="footer" class="dialog-footer">
@@ -55,26 +69,31 @@
         </el-dropdown>
       </div>
       <div class="sensitive" v-show="attachedMedias.length > 0">
-        <el-button size="small" type="text" @click="changeSensitive" :title="$t('modals.new_toot.change_sensitive')">
-          <icon name="eye-slash" v-show="sensitive"></icon>
-          <icon name="eye" v-show="!sensitive"></icon>
+        <el-button size="small" type="text" @click="changeSensitive" :title="$t('modals.new_toot.change_sensitive')" :aria-pressed="sensitive">
+          <icon name="eye-slash" v-show="!sensitive"></icon>
+          <icon name="eye" v-show="sensitive"></icon>
         </el-button>
       </div>
       <div class="content-warning">
-        <el-button size="small" type="text" @click="showContentWarning = !showContentWarning" :title="$t('modals.new_toot.add_cw')">
-          CW
+        <el-button size="small" type="text" @click="showContentWarning = !showContentWarning" :title="$t('modals.new_toot.add_cw')" :class="showContentWarning? '' : 'clickable'" :aria-pressed="showContentWarning">
+          <span class="cw-text">CW</span>
         </el-button>
       </div>
-      <span class="text-count">{{ 500 - status.length }}</span>
-      <el-button @click="close">{{ $t('modals.new_toot.cancel') }}</el-button>
-      <el-button type="primary" @click="toot" v-loading="blockSubmit">{{ $t('modals.new_toot.toot') }}</el-button>
+      <div class="pined-hashtag">
+        <el-button size="small" type="text" @click="pinedHashtag = !pinedHashtag" :title="$t('modals.new_toot.pined_hashtag')" :class="pinedHashtag? '' : 'clickable'" :aria-pressed="pinedHashtag">
+          <icon name="hashtag"></icon>
+        </el-button>
+      </div>
+      <span class="text-count">{{ tootMax - status.length }}</span>
+      <el-button class="toot-action" size="small" @click="closeConfirm(close)">{{ $t('modals.new_toot.cancel') }}</el-button>
+      <el-button class="toot-action" size="small" type="primary" @click="toot" :loading="blockSubmit">{{ $t('modals.new_toot.toot') }}</el-button>
       <div class="clearfix"></div>
     </div>
   </el-dialog>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import { clipboard } from 'electron'
 import Visibility from '~/src/constants/visibility'
 import Status from './NewToot/Status'
@@ -86,26 +105,31 @@ export default {
   },
   data () {
     return {
+      status: '',
+      mediaDescriptions: {},
+      spoiler: '',
       showContentWarning: false,
       visibilityList: Visibility
     }
   },
   computed: {
-    ...mapState({
+    ...mapState('TimelineSpace/Modals/NewToot', {
       replyToId: (state) => {
-        if (state.TimelineSpace.Modals.NewToot.replyToMessage !== null) {
-          return state.TimelineSpace.Modals.NewToot.replyToMessage.id
+        if (state.replyToMessage !== null) {
+          return state.replyToMessage.id
         } else {
           return null
         }
       },
-      attachedMedias: state => state.TimelineSpace.Modals.NewToot.attachedMedias,
-      attachedMediaId: state => state.TimelineSpace.Modals.NewToot.attachedMediaId,
-      blockSubmit: state => state.TimelineSpace.Modals.NewToot.blockSubmit,
-      visibility: state => state.TimelineSpace.Modals.NewToot.visibility,
-      sensitive: state => state.TimelineSpace.Modals.NewToot.sensitive,
+      attachedMedias: state => state.attachedMedias,
+      attachedMediaId: state => state.attachedMediaId,
+      blockSubmit: state => state.blockSubmit,
+      visibility: state => state.visibility,
+      sensitive: state => state.sensitive,
+      initialStatus: state => state.initialStatus,
+      initialSpoiler: state => state.initialSpoiler,
       visibilityIcon: (state) => {
-        switch (state.TimelineSpace.Modals.NewToot.visibility) {
+        switch (state.visibility) {
           case Visibility.Public.value:
             return 'globe'
           case Visibility.Unlisted.value:
@@ -119,6 +143,12 @@ export default {
         }
       }
     }),
+    ...mapState('TimelineSpace', {
+      tootMax: state => state.tootMax
+    }),
+    ...mapGetters('TimelineSpace/Modals/NewToot', [
+      'hashtagInserting'
+    ]),
     newTootModal: {
       get () {
         return this.$store.state.TimelineSpace.Modals.NewToot.modalOpen
@@ -131,27 +161,21 @@ export default {
         }
       }
     },
-    status: {
+    pinedHashtag: {
       get () {
-        return this.$store.state.TimelineSpace.Modals.NewToot.status
+        return this.$store.state.TimelineSpace.Modals.NewToot.pinedHashtag
       },
       set (value) {
-        this.$store.commit('TimelineSpace/Modals/NewToot/updateStatus', value)
-      }
-    },
-    spoiler: {
-      get () {
-        return this.$store.state.TimelineSpace.Modals.NewToot.spoiler
-      },
-      set (value) {
-        this.$store.commit('TimelineSpace/Modals/NewToot/updateSpoiler', value)
+        this.$store.commit('TimelineSpace/Modals/NewToot/changePinedHashtag', value)
       }
     }
   },
   watch: {
     newTootModal: function (newState, oldState) {
       if (!oldState && newState) {
-        this.showContentWarning = false
+        this.showContentWarning = this.initialSpoiler
+        this.status = this.initialStatus
+        this.spoiler = this.initialSpoiler
       }
     }
   },
@@ -161,13 +185,13 @@ export default {
       this.$store.dispatch('TimelineSpace/Modals/NewToot/resetMediaId')
       this.$store.dispatch('TimelineSpace/Modals/NewToot/closeModal')
     },
-    toot () {
+    async toot () {
       if (!this.newTootModal) {
         return
       }
       if (this.status.length <= 0 || this.status.length >= 500) {
         return this.$message({
-          message: this.$t('validation.new_toot.toot_length', {min: 1, max: 500}),
+          message: this.$t('validation.new_toot.toot_length', { min: 1, max: 500 }),
           type: 'error'
         })
       }
@@ -188,7 +212,7 @@ export default {
       if (this.attachedMedias.length > 0) {
         if (this.attachedMedias.length > 4) {
           return this.$message({
-            message: this.$t('validation.new_toot.attach_length', {max: 4}),
+            message: this.$t('validation.new_toot.attach_length', { max: 4 }),
             type: 'error'
           })
         }
@@ -197,13 +221,18 @@ export default {
         })
       }
 
-      this.$store.dispatch('TimelineSpace/Modals/NewToot/postToot', form)
-        .catch(() => {
+      const status = await this.$store.dispatch('TimelineSpace/Modals/NewToot/updateMedia', this.mediaDescriptions)
+        .then(() => {
+          return this.$store.dispatch('TimelineSpace/Modals/NewToot/postToot', form)
+        })
+        .catch((e) => {
+          console.error(e)
           this.$message({
             message: this.$t('message.toot_error'),
             type: 'error'
           })
         })
+      this.$store.dispatch('TimelineSpace/Modals/NewToot/updateHashtags', status.tags)
       this.close()
     },
     selectImage () {
@@ -251,6 +280,7 @@ export default {
     },
     removeAttachment (media) {
       this.$store.commit('TimelineSpace/Modals/NewToot/removeMedia', media)
+      delete this.mediaDescriptions[media.id]
     },
     changeVisibility (level) {
       this.$store.commit('TimelineSpace/Modals/NewToot/changeVisibilityValue', level)
@@ -272,6 +302,19 @@ export default {
             done()
           })
           .catch(_ => {})
+      }
+    },
+    handleDescriptionKey (event) {
+      const current = event.target.selectionStart
+      switch (event.srcKey) {
+        case 'left':
+          event.target.setSelectionRange(current - 1, current - 1)
+          break
+        case 'right':
+          event.target.setSelectionRange(current + 1, current + 1)
+          break
+        default:
+          return true
       }
     }
   }
@@ -298,7 +341,6 @@ export default {
 
       input {
         border-radius: 0;
-        font-family: 'Lato', sans-serif;
 
         &::placeholder {
           color: #c0c4cc;
@@ -308,23 +350,61 @@ export default {
 
     .preview {
       box-sizing: border-box;
-      padding: 0 12px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
 
       .image-wrapper {
         position: relative;
-        display: inline-block;
+        flex: 1 1 0;
+        min-width: 40%;
+        height: 150px;
+        margin: 4px;
 
         .preview-image {
-          width: 60px;
-          margin-right: 8px;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border: 0;
+          border-radius: 8px;
+        }
+
+        .image-description {
+          position: absolute;
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          box-sizing: border-box;
+          border: 0;
+          border-bottom-left-radius: 8px;
+          border-bottom-right-radius: 8px;
+          background: linear-gradient(0deg, rgba(0, 0, 0, 0.8) 0, rgba(0, 0, 0, 0.35) 80%, transparent);
+          font-size: var(--font-base-size);
+          color: #fff;
+          opacity: 1;
+          resize: none;
+          overflow: scroll;
+
+          &::placeholder {
+            color: #c0c4cc;
+          }
         }
 
         .remove-image {
           position: absolute;
-          top: 0;
-          left: 0;
+          top: 2px;
+          left: 2px;
           padding: 0;
           cursor: pointer;
+          font-size: 1.5rem;
+
+          .fa-icon {
+            font-size: 0.9em;
+            width: auto;
+            height: 1em;
+            max-width: 100%;
+            max-height: 100%;
+          }
         }
       }
     }
@@ -356,14 +436,30 @@ export default {
       float: left;
       margin-left: 8px;
 
-      span {
+      .cw-text {
         font-weight: 800;
+        line-height: 18px;
       }
     }
 
-    .text-count {
-      padding-right: 24px;
+    .pined-hashtag {
+      float: left;
+      margin-left: 8px;
+    }
+
+    .clickable {
       color: #909399;
+    }
+
+    .text-count {
+      padding-right: 10px;
+      color: #909399;
+    }
+
+    .toot-action {
+      font-size: var(--base-font-size);
+      margin-top: 2px;
+      margin-bottom: 2px;
     }
   }
 }

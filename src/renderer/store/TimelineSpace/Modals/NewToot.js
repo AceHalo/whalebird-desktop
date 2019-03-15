@@ -10,14 +10,16 @@ const NewToot = {
   },
   state: {
     modalOpen: false,
-    status: '',
+    initialStatus: '',
+    initialSpoiler: '',
     replyToMessage: null,
     blockSubmit: false,
     attachedMedias: [],
     visibility: Visibility.Public.value,
     sensitive: false,
-    spoiler: '',
-    attachedMediaId: 0
+    attachedMediaId: 0,
+    pinedHashtag: false,
+    hashtags: []
   },
   mutations: {
     changeModal (state, value) {
@@ -26,8 +28,11 @@ const NewToot = {
     setReplyTo (state, message) {
       state.replyToMessage = message
     },
-    updateStatus (state, status) {
-      state.status = status
+    updateInitialStatus (state, status) {
+      state.initialStatus = status
+    },
+    updateInitialSpoiler (state, cw) {
+      state.initialSpoiler = cw
     },
     changeBlockSubmit (state, value) {
       state.blockSubmit = value
@@ -46,25 +51,54 @@ const NewToot = {
      * Update visibility using direct value
      * @param state vuex state object
      * @param value visibility value
-     **/
+     */
     changeVisibilityValue (state, value) {
       state.visibility = value
     },
     changeSensitive (state, value) {
       state.sensitive = value
     },
-    updateSpoiler (state, value) {
-      state.spoiler = value
-    },
     updateMediaId (state, value) {
       state.attachedMediaId = value
+    },
+    changePinedHashtag (state, value) {
+      state.pinedHashtag = value
+    },
+    updateHashtags (state, tags) {
+      state.hashtags = tags
+    }
+  },
+  getters: {
+    hashtagInserting (state) {
+      return !state.replyToMessage && state.pinedHashtag
     }
   },
   actions: {
-    postToot ({ state, commit, rootState }, form) {
+    async updateMedia ({ state, commit, rootState }, media) {
       if (rootState.TimelineSpace.account.accessToken === undefined || rootState.TimelineSpace.account.accessToken === null) {
         throw new AuthenticationError()
       }
+      const client = new Mastodon(
+        rootState.TimelineSpace.account.accessToken,
+        rootState.TimelineSpace.account.baseURL + '/api/v1'
+      )
+      return Promise.all(
+        Object.keys(media).map(async (id, index) => {
+          return client.put(`/media/${id}`, { description: media[id] })
+        }
+        )).catch(err => {
+        console.error(err)
+        throw err
+      })
+    },
+    async postToot ({ state, commit, rootState }, form) {
+      if (rootState.TimelineSpace.account.accessToken === undefined || rootState.TimelineSpace.account.accessToken === null) {
+        throw new AuthenticationError()
+      }
+      if (state.blockSubmit) {
+        return
+      }
+      commit('changeBlockSubmit', true)
       const client = new Mastodon(
         rootState.TimelineSpace.account.accessToken,
         rootState.TimelineSpace.account.baseURL + '/api/v1'
@@ -74,14 +108,18 @@ const NewToot = {
           ipcRenderer.send('toot-action-sound')
           return res.data
         })
+        .finally(() => {
+          commit('changeBlockSubmit', false)
+        })
     },
     openReply ({ dispatch, commit, rootState }, message) {
       commit('setReplyTo', message)
       const mentionAccounts = [message.account.acct].concat(message.mentions.map(a => a.acct))
         .filter((a, i, self) => self.indexOf(a) === i)
         .filter((a) => a !== rootState.TimelineSpace.account.username)
+      commit('updateInitialStatus', `${mentionAccounts.map(m => `@${m}`).join(' ')} `)
+      commit('updateInitialSpoiler', message.spoiler_text)
       commit('changeModal', true)
-      commit('updateStatus', `${mentionAccounts.map(m => `@${m}`).join(' ')} `)
       let value = Visibility.Public.value
       Object.keys(Visibility).map((key, index) => {
         const target = Visibility[key]
@@ -91,18 +129,21 @@ const NewToot = {
       })
       commit('changeVisibilityValue', value)
     },
-    openModal ({ dispatch, commit, rootState }) {
+    openModal ({ dispatch, commit, state, rootState }) {
+      if (!state.replyToMessage && state.pinedHashtag) {
+        commit('updateInitialStatus', state.hashtags.map(t => ` #${t.name}`).join())
+      }
       commit('changeModal', true)
-      commit('changeVisibilityValue', rootState.App.tootVisibility)
+      dispatch('fetchVisibility')
     },
     closeModal ({ commit }) {
       commit('changeModal', false)
-      commit('updateStatus', '')
+      commit('updateInitialStatus', '')
+      commit('updateInitialSpoiler', '')
       commit('setReplyTo', null)
       commit('changeBlockSubmit', false)
       commit('clearAttachedMedias')
       commit('changeSensitive', false)
-      commit('updateSpoiler', '')
       commit('changeVisibilityValue', Visibility.Public.value)
     },
     uploadImage ({ state, commit, rootState }, image) {
@@ -134,6 +175,25 @@ const NewToot = {
     },
     resetMediaId ({ commit }) {
       commit('updateMediaId', 0)
+    },
+    updateHashtags ({ commit, state }, tags) {
+      if (state.pinedHashtag) {
+        commit('updateHashtags', tags)
+      }
+    },
+    fetchVisibility ({ commit, rootState }) {
+      const client = new Mastodon(
+        rootState.TimelineSpace.account.accessToken,
+        rootState.TimelineSpace.account.baseURL + '/api/v1'
+      )
+      return client.get('/accounts/verify_credentials')
+        .then(res => {
+          const visibility = Object.values(Visibility).find((v) => {
+            return v.key === res.data.source.privacy
+          })
+          commit('changeVisibilityValue', visibility.value)
+          return res.data
+        })
     }
   }
 }

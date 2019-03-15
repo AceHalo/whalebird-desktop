@@ -23,7 +23,8 @@ export default {
           '--theme-border-color': state.App.theme.border_color,
           '--theme-header-menu-color': state.App.theme.header_menu_color,
           '--theme-wrapper-mask-color': state.App.theme.wrapper_mask_color,
-          '--base-font-size': `${state.App.fontSize}px`
+          '--base-font-size': `${state.App.fontSize}px`,
+          '--specified-fonts': state.App.defaultFonts.join(', ')
         }
       }
     })
@@ -42,8 +43,6 @@ export default {
 </script>
 
 <style lang="scss">
-body { font-family: 'Noto Sans', sans-serif; }
-
 html, body, #app {
   --theme-background-color: #ffffff;
   --theme-selected-background-color: #f2f6fc;
@@ -73,6 +72,20 @@ html, body, #app {
 
   .theme-popover {
     background-color: #d9e1e8;
+  }
+
+  --specified-fonts: 'Noto Sans', 'Noto Sans CJK JP', 'Takaoゴシック', 'ヒラギノ角ゴ ProN W3', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+
+  font-family: var(--specified-fonts);
+
+  /*
+  These selectors are defined in user agent stylesheet. So I override.
+ */
+  input,
+  textarea,
+  select,
+  button {
+    font-family: var(--specified-fonts);
   }
 }
 

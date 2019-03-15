@@ -30,6 +30,7 @@
     "window": {
       "name": "Window",
       "close": "Close Window",
+      "open": "Open Window",
       "minimize": "Minimize",
       "jump_to": "Jump to"
     }
@@ -41,10 +42,12 @@
     "profile": "Profile",
     "show_profile": "Show profile",
     "edit_profile": "Edit profile",
+    "settings": "Settings",
     "collapse": "Collapse",
     "expand": "Expand",
     "home": "Home",
     "notification": "Notification",
+    "direct": "Direct messages",
     "favourite": "Favourite",
     "local": "Local timeline",
     "public": "Public timeline",
@@ -65,53 +68,108 @@
     "filter": {
       "title": "Filter",
       "placeholder": "Filter out by regular expressions",
+      "show_dms": "Show direct messages",
+      "show_reblogs": "Show reblogs",
+      "show_replies": "Show replies",
       "apply": "Apply"
     },
+    "switch_streaming": "Use websocket for streaming. If the timeline does not update with streaming, please try it.",
     "new_toot": "Toot",
-    "reload": "Reload"
+    "reload": "Reload",
+    "settings": "Settings"
+  },
+  "settings": {
+    "title": "Settings",
+    "general": {
+      "title": "General",
+      "toot": {
+        "title": "Toot",
+        "visibility": {
+          "description": "Customize default visibility of toot.",
+          "public": "Public",
+          "unlisted": "Unlisted",
+          "private": "Private",
+          "direct": "Direct"
+        },
+        "sensitive": {
+          "description": "Mark media as sensitive by default"
+        }
+      }
+    },
+    "timeline": {
+      "title": "Timeline",
+      "unread_notification": {
+        "title": "Unread Notification",
+        "description": "Customize unread notifications for each timeline.",
+        "direct": "Direct Messages",
+        "local": "Local Timeline",
+        "public": "Public Timeline"
+      }
+    }
   },
   "preferences": {
     "title": "Preferences",
     "general": {
       "title": "General",
-      "appearance": "Appearance",
-      "theme_color": "Theme color:",
+      "sounds": {
+        "title": "Sounds",
+        "description": "Please set feedback sounds.",
+        "fav_rb": "When you favorite or boost the toot",
+        "toot": "When you post toot"
+      },
+      "timeline": {
+        "title": "Timeline",
+        "description": "Customize view in your timelines.",
+        "cw": "Always ignore contents warnings",
+        "nfsw": "Always ignore NFSW of medias",
+        "hideAllAttachments": "Hide all medias"
+      }
+    },
+    "appearance": {
+      "title": "Appearance",
+      "theme_color": "Theme color",
       "theme": {
         "light": "Light",
-        "dark": "Dark"
+        "dark": "Dark",
+        "solarized_light": "SolarizedLight",
+        "solarized_dark": "SolarizedDark",
+        "kimbie_dark": "KimbieDark",
+        "custom": "Custom"
       },
-      "font_size": "Font size:",
+      "custom_theme": {
+        "background_color": "Base background",
+        "selected_background_color": "Focused background",
+        "global_header_color": "Account menu",
+        "side_menu_color": "Side menu",
+        "primary_color": "Primary font",
+        "regular_color": "Regular font",
+        "secondary_color": "Secondary font",
+        "border_color": "Border",
+        "header_menu_color": "Header menu",
+        "wrapper_mask_color": "Modal wrapper"
+      },
+      "font_size": "Font size",
+      "font_family": "Font family",
       "display_style": {
-        "title": "Display style:",
+        "title": "Display style of username",
         "display_name_and_username": "Display name and username",
         "display_name": "Display name",
         "username": "Username"
       },
       "time_format": {
-        "title": "Time format:",
+        "title": "Time format",
         "absolute": "Absolute",
         "relative": "Relative"
-      },
-      "toot": "Toot",
-      "visibility": {
-        "title": "Default visibility:",
-        "public": "Public",
-        "unlisted": "Unlisted",
-        "private": "Private",
-        "direct": "Direct"
-      },
-      "sounds": "Sounds",
-      "fav_rb_sound": "Favorite and Boost:",
-      "toot_sound": "Toot:"
+      }
     },
     "notification": {
       "title": "Notification",
-      "notify": {
-        "title": "Notify",
-        "reply": "Reply:",
-        "reblog": "Reblog:",
-        "favourite": "Favourite:",
-        "follow": "Follow:"
+      "enable": {
+        "description": "Please set notification events.",
+        "reply": "Notify me when I receive a reply",
+        "reblog": "Notify me when I receive a reblog",
+        "favourite": "Notify me when I receive a favourite",
+        "follow": "Notify me when I receive a follow"
       }
     },
     "account": {
@@ -129,8 +187,8 @@
     },
     "language": {
       "title": "Language",
-      "display_language": "language",
-      "notice": "Require relaunch",
+      "language_description": "Choose the language you would like to use with Whalebird.",
+      "notice": "Requires relaunch",
       "confirm": {
         "title": "Warning",
         "message": "You have to restart this application. Continue?",
@@ -146,13 +204,15 @@
       "status": "What is on your mind?",
       "cancel": "Cancel",
       "toot": "Toot",
-      "close_confirm": "Are you sure to close new toot?",
+      "close_confirm": "Are you sure you want to cancel the new toot?",
       "close_confirm_ok": "OK",
       "close_confirm_cancel": "Cancel",
       "add_image": "Add images",
       "change_visibility": "Change visibility",
-      "add_cw": "Add contents warning",
-      "change_sensitive": "Change sensitive"
+      "add_cw": "Add content warning",
+      "change_sensitive": "Change sensitive",
+      "pined_hashtag": "Pin the hashtag",
+      "description": "Describe for the visually impaired"
     },
     "jump": {
       "jump_to": "Jump to..."
@@ -164,6 +224,12 @@
     "list_membership": {
       "title": "List Memberships"
     },
+    "mute_confirm": {
+      "title": "Are you sure you want to mute?",
+      "body": "Hide notification from this user?",
+      "cancel": "Cancel",
+      "ok": "Mute"
+    },
     "shortcut": {
       "title": "Keyboard shortcuts",
       "ctrl_number": "Switch accounts",
@@ -172,6 +238,8 @@
       "ctrl_enter": "Post the toot",
       "j": "Select the next toot",
       "k": "Select the previous toot",
+      "h": "Switch focus to the left column",
+      "l": "Switch focus to the right column",
       "r": "Reply to the toot",
       "b": "Reblog the toot",
       "f": "Favourite the toot",
@@ -179,7 +247,14 @@
       "p": "Open account profile of the toot",
       "i": "Open the images",
       "x": "Show/hide CW and NSFW",
+      "?": "Show this help",
       "esc": "Close current page"
+    },
+    "report": {
+      "title": "Reporting this user",
+      "comment": "Additional comments",
+      "cancel": "Cancel",
+      "ok": "Report"
     }
   },
   "cards": {
@@ -190,12 +265,16 @@
       "view_toot_detail": "View Toot Detail",
       "open_in_browser": "Open in Browser",
       "copy_link_to_toot": "Copy Link to Toot",
+      "mute": "Mute",
+      "block": "Block",
+      "report": "Report",
       "delete": "Delete",
       "via": "via {{application}}",
       "reply": "Reply",
       "reblog": "Reblog",
       "fav": "Favourite",
-      "detail": "Toot details"
+      "detail": "Toot details",
+      "pinned": "Pinned toot"
     }
   },
   "side_bar": {
@@ -208,18 +287,26 @@
       "follow_requested": "Follow requested",
       "open_in_browser": "Open in Browser",
       "manage_list_memberships": "Manage List Memberships",
+      "mute": "Mute",
+      "unmute": "Unmute",
+      "unblock": "Unblock",
+      "block": "Block",
       "toots": "Toots",
       "follows": "Follows",
       "followers": "Followers"
     }
   },
   "hashtag": {
-    "tag_name": "Tag name"
+    "tag_name": "Tag name",
+    "delete_tag": "Delete tag",
+    "save_tag": "Save tag"
   },
   "search": {
     "search": "Search",
     "account": "Account",
-    "keyword": "keyword"
+    "tag": "Hashtag",
+    "keyword": "keyword",
+    "toot": "Toot"
   },
   "lists": {
     "index": {
@@ -233,9 +320,9 @@
     "login": "Login"
   },
   "authorize": {
-    "manually_1": "Now authorization page is opened in your browser.",
-    "manually_2": "If it is not opened, please open the following URL manually.",
-    "code_label": "Please paste authorization code from your browser:",
+    "manually_1": "An authorization page has opened in your browser.",
+    "manually_2": "If it has not opened, please go to the following URL manually.",
+    "code_label": "Please paste the authorization code from your browser:",
     "submit": "Submit"
   },
   "receive_drop": {
@@ -278,8 +365,8 @@
   },
   "validation": {
     "login": {
-      "require_domain_name": "Domain name is required",
-      "domain_format": "Please write only domain name"
+      "require_domain_name": "A domain name is required",
+      "domain_format": "Please only enter the domain name"
     },
     "new_toot": {
       "toot_length": "Toot length should be {{min}} to {{max}}",

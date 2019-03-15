@@ -5,7 +5,7 @@
   :element-loading-text="$t('message.loading')"
   element-loading-spinner="el-icon-loading"
   element-loading-background="rgba(0, 0, 0, 0.8)"
-  v-shortkey="shortcutEnabled ? {help: ['h']} : {}"
+  v-shortkey="shortcutEnabled ? {help: ['shift', '?']} : {}"
   @shortkey="handleKey"
   >
   <side-menu></side-menu>
@@ -50,9 +50,10 @@ export default {
       return !this.modalOpened
     }
   },
-  created () {
+  async created () {
+    this.$store.dispatch('TimelineSpace/Contents/SideBar/close')
     this.$store.commit('TimelineSpace/changeLoading', true)
-    this.initialize()
+    await this.initialize()
       .finally(() => {
         this.$store.commit('TimelineSpace/changeLoading', false)
         this.$store.commit('GlobalHeader/updateChanging', false)
@@ -72,15 +73,13 @@ export default {
     window.removeEventListener('dragleave', this.onDragLeave)
     window.removeEventListener('dragover', this.onDragOver)
     window.removeEventListener('drop', this.handleDrop)
-    this.$store.dispatch('TimelineSpace/stopUserStreaming')
-    this.$store.dispatch('TimelineSpace/stopLocalStreaming')
+    this.$store.dispatch('TimelineSpace/stopStreamings')
+    this.$store.dispatch('TimelineSpace/unbindStreamings')
   },
   methods: {
     async clear () {
       await this.$store.dispatch('TimelineSpace/clearAccount')
-      await this.$store.commit('TimelineSpace/Contents/Home/clearTimeline')
-      await this.$store.commit('TimelineSpace/Contents/Local/clearTimeline')
-      await this.$store.commit('TimelineSpace/Contents/Notifications/clearNotifications')
+      this.$store.dispatch('TimelineSpace/clearContentsTimelines')
       await this.$store.dispatch('TimelineSpace/removeShortcutEvents')
       await this.$store.dispatch('TimelineSpace/clearUnread')
       return 'clear'
@@ -95,40 +94,26 @@ export default {
           type: 'error'
         })
       })
-      try {
-        await this.$store.dispatch('TimelineSpace/Contents/Home/fetchTimeline', account)
-      } catch (err) {
-        this.$message({
-          message: this.$t('message.timeline_fetch_error'),
-          type: 'error'
-        })
-      }
-      try {
-        await this.$store.dispatch('TimelineSpace/Contents/Notifications/fetchNotifications', account)
-      } catch (err) {
-        this.$message({
-          message: this.$t('message.notification_fetch_error'),
-          type: 'error'
-        })
-      }
-      try {
-        await this.$store.dispatch('TimelineSpace/Contents/Local/fetchLocalTimeline', account)
-      } catch (err) {
-        this.$message({
-          message: this.$t('message.timeline_fetch_error'),
-          type: 'error'
-        })
-      }
       this.$store.dispatch('TimelineSpace/SideMenu/fetchLists', account)
-      this.$store.dispatch('TimelineSpace/startUserStreaming', account)
-        .catch(() => {
+      await this.$store.dispatch('TimelineSpace/loadUnreadNotification', this.$route.params.id)
+
+      // Load timelines
+      await this.$store.dispatch('TimelineSpace/fetchContentsTimelines', account)
+        .catch(_ => {
           this.$message({
-            message: this.$t('message.start_streaming_error'),
+            message: this.$t('message.timeline_fetch_error'),
             type: 'error'
           })
         })
-      this.$store.dispatch('TimelineSpace/startLocalStreaming', account)
+
+      await this.$store.dispatch('TimelineSpace/detectPleroma')
+      // Bind streamings
+      await this.$store.dispatch('TimelineSpace/bindStreamings', account)
+      // Start streamings
+      this.$store.dispatch('TimelineSpace/startStreamings', account)
+
       this.$store.dispatch('TimelineSpace/fetchEmojis', account)
+      this.$store.dispatch('TimelineSpace/fetchInstance', account)
     },
     handleDrop (e) {
       e.preventDefault()
@@ -189,27 +174,35 @@ export default {
   box-sizing: border-box;
 
   .header {
-    width: calc(100% - 245px);
+    width: calc(100% - 180px);
     position: fixed;
     top: 0;
-    left: 245px;
     height: 48px;
     border-bottom: solid 1px var(--theme-border-color);
   }
 }
 
 .page-narrow {
-  margin-left: 76px;
+  margin-left: 64px;
   height: 100%;
   box-sizing: border-box;
 
   .header {
-    width: calc(100% - 141px);
+    width: calc(100% - 64px);
     position: fixed;
     top: 0;
-    left: 141px;
     height: 48px;
     border-bottom: solid 1px var(--theme-border-color);
+  }
+}
+
+.with-global-header {
+  .page .header {
+    width: calc(100% - 245px);
+  }
+
+  .page-narrow .header {
+    width: calc(100% - 65px - 64px);
   }
 }
 

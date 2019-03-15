@@ -27,6 +27,11 @@ export default new Router({
           component: require('@/components/Preferences/General').default
         },
         {
+          path: 'appearance',
+          name: 'appearance',
+          component: require('@/components/Preferences/Appearance').default
+        },
+        {
           path: 'notification',
           name: 'notification',
           component: require('@/components/Preferences/Notification').default
@@ -48,6 +53,20 @@ export default new Router({
       name: 'global-header',
       component: require('@/components/GlobalHeader').default,
       children: [
+        {
+          path: ':id/settings/',
+          component: require('@/components/Settings').default,
+          children: [
+            {
+              path: 'general',
+              component: require('@/components/Settings/General').default
+            },
+            {
+              path: 'timeline',
+              component: require('@/components/Settings/Timeline').default
+            }
+          ]
+        },
         {
           path: ':id/',
           name: 'timeline-space',
@@ -99,6 +118,11 @@ export default new Router({
               path: 'search',
               name: 'search',
               component: require('@/components/TimelineSpace/Contents/Search').default
+            },
+            {
+              path: 'direct-messages',
+              name: 'direct-messages',
+              component: require('@/components/TimelineSpace/Contents/DirectMessages').default
             },
             {
               path: 'lists',

@@ -30,6 +30,7 @@
     "window": {
       "name": "Fenster",
       "close": "Fenster schließen",
+      "open": "Open Window",
       "minimize": "Minimieren",
       "jump_to": "Springe zu"
     }
@@ -41,6 +42,7 @@
     "profile": "Profil",
     "show_profile": "Profil ansehen",
     "edit_profile": "Profil bearbeiten",
+    "settings": "Settings",
     "collapse": "Zusammenbruch",
     "expand": "Erweitern",
     "home": "Home",
@@ -65,48 +67,88 @@
     "filter": {
       "title": "Filter",
       "placeholder": "Mit regulären Ausdrücken filtern",
+      "show_reblogs": "Geteilte Beiträge anzeigen",
+      "show_replies": "Antworten anzeigen",
       "apply": "Übernehmen"
     },
     "new_toot": "Toot",
     "reload": "Neu laden"
   },
+  "settings": {
+    "title": "Settings",
+    "general": {
+      "title": "Settings",
+      "toot": {
+        "title": "Toot",
+        "visibility": {
+          "description": "Customize default visibility of toot.",
+          "public": "Öffenlich",
+          "unlisted": "Nicht gelistet",
+          "private": "Privat",
+          "direct": "Direkt"
+        },
+        "sensitive": {
+          "description": "Mark medias as sensitive by default"
+        }
+      }
+    }
+  },
   "preferences": {
     "title": "Einstellungen",
     "general": {
       "title": "Allgemein",
-      "appearance": "Anzeige",
-      "theme_color": "Themenfarbe:",
+      "sounds": {
+        "title": "Klänge",
+        "description": "Please set feedback sounds.",
+        "fav_rb": "When you favourite or boost the toot",
+        "toot": "When you post toot"
+      }
+    },
+    "appearance": {
+      "title": "Anzeige",
+      "theme_color": "Themenfarbe",
       "theme": {
         "light": "Hell",
-        "dark": "Dunkel"
+        "dark": "Dunkel",
+        "solarized_light": "SolarizedLight",
+        "solarized_dark": "SolarizedDark",
+        "kimbie_dark": "KimbieDark",
+        "custom": "Custom"
       },
-      "font_size": "Schriftgröße:",
+      "custom_theme": {
+        "background_color": "Base background",
+        "selected_background_color": "Focused background",
+        "global_header_color": "Account menu",
+        "side_menu_color": "Side menu",
+        "primary_color": "Primary font",
+        "regular_color": "Regular font",
+        "secondary_color": "Secondary font",
+        "border_color": "Border",
+        "header_menu_color": "Header menu",
+        "wrapper_mask_color": "Modal wrapper"
+      },
+      "font_size": "Schriftgröße",
+      "font_family": "Font family",
       "display_style": {
-        "title": "Anzeigestil:",
+        "title": "Anzeigestil",
         "display_name_and_username": "Anzeige- und Benutzername",
         "display_name": "Anzeigename",
         "username": "Benutzername"
       },
-      "toot": "Toot",
-      "visibility": {
-        "title": "Standard-Sichtbarkeit:",
-        "public": "Öffenlich",
-        "unlisted": "Nicht gelistet",
-        "private": "Privat",
-        "direct": "Direkt"
-      },
-      "sounds": "Klänge",
-      "fav_rb_sound": "Favorit und Boost:",
-      "toot_sound": "Toot:"
+      "time_format": {
+        "title": "Time format",
+        "absolute": "Absolute",
+        "relative": "Relative"
+      }
     },
     "notification": {
       "title": "Notification",
-      "notify": {
-        "title": "Notify",
-        "reply": "Reply:",
-        "reblog": "Reblog:",
-        "favourite": "Favourite:",
-        "follow": "Follow:"
+      "enable": {
+        "description": "Pelase set notification events.",
+        "reply": "Notify me when I receive reply",
+        "reblog": "Notify me when I receive reblog",
+        "favourite": "Notify me when I receive favourite",
+        "follow": "Notify me when I receive follow"
       }
     },
     "account": {
@@ -124,7 +166,7 @@
     },
     "language": {
       "title": "Sprache",
-      "display_language": "Sprache",
+      "language_description": "Choose the language you would like to use with Whalebird.",
       "notice": "Erfordert Neustart",
       "confirm": {
         "title": "Warnung",
@@ -147,7 +189,9 @@
       "add_image": "Bild hinzufügen",
       "change_visibility": "Sichtbarkeit ändern",
       "add_cw": "Inhalt hinzufügen Warnung",
-      "change_sensitive": "Ändern Sie empfindlich"
+      "change_sensitive": "Ändern Sie empfindlich",
+      "pined_hashtag": "Pin the hashtag",
+      "description": "Für Menschen mit Sehbehinderung beschreiben"
     },
     "jump": {
       "jump_to": "Springe zu..."
@@ -158,6 +202,12 @@
     },
     "list_membership": {
       "title": "Listen-Mitgliedschaften"
+    },
+    "mute_confirm": {
+      "title": "Are you sure to mute?",
+      "body": "Hide notification from this user?",
+      "cancel": "Cancel",
+      "ok": "Mute"
     },
     "shortcut": {
       "title": "Keyboard shortcuts",
@@ -185,12 +235,16 @@
       "view_toot_detail": "Zeige Toot-Details",
       "open_in_browser": "Im Browser öffnen",
       "copy_link_to_toot": "Link zum Toot kopieren",
+      "mute": "Mute",
+      "block": "Block",
+      "report": "Report",
       "delete": "Löschen",
       "via": "via {{application}}",
       "reply": "Antworten",
       "reblog": "Reblog",
       "fav": "Favorit",
-      "detail": "Toot details"
+      "detail": "Toot details",
+      "pinned": "Angehefteter Beitrag"
     }
   },
   "side_bar": {
@@ -203,18 +257,25 @@
       "follow_requested": "Folgen Sie angefordert",
       "open_in_browser": "Im Browser öffnen",
       "manage_list_memberships": "Listen-Mitgliedschaften verwalten",
+      "mute": "Mute",
+      "unmute": "Unmute",
+      "unblock": "Unblock",
+      "block": "Block",
       "toots": "Toots",
       "follows": "Follows",
       "followers": "Follower"
     }
   },
   "hashtag": {
-    "tag_name": "Tagname"
+    "tag_name": "Tagname",
+    "delete_tag": "Delete tag",
+    "save_tag": "Save tag"
   },
   "search": {
     "search": "Suche",
     "account": "Konto",
-    "keyword": "stichwort"
+    "keyword": "stichwort",
+    "toot": "Toot"
   },
   "lists": {
     "index": {

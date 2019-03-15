@@ -4,6 +4,7 @@ const Timeline = {
   namespaced: true,
   state: {
     timeline: [],
+    pinnedToots: [],
     lazyLoading: false
   },
   mutations: {
@@ -13,8 +14,27 @@ const Timeline = {
     insertTimeline (state, messages) {
       state.timeline = state.timeline.concat(messages)
     },
+    updatePinnedToots (state, messages) {
+      state.pinnedToots = messages
+    },
     changeLazyLoading (state, value) {
       state.lazyLoading = value
+    },
+    updatePinnedToot (state, message) {
+      state.pinnedToots = state.pinnedToots.map((toot) => {
+        if (toot.id === message.id) {
+          return message
+        } else if (toot.reblog !== null && toot.reblog.id === message.id) {
+          // When user reblog/favourite a reblogged toot, target message is a original toot.
+          // So, a message which is received now is original toot.
+          const reblog = {
+            reblog: message
+          }
+          return Object.assign(toot, reblog)
+        } else {
+          return toot
+        }
+      })
     },
     updateToot (state, message) {
       // Replace target message in timeline
@@ -50,7 +70,13 @@ const Timeline = {
         rootState.TimelineSpace.account.accessToken,
         rootState.TimelineSpace.account.baseURL + '/api/v1'
       )
-      return client.get(`/accounts/${account.id}/statuses`, { limit: 40 })
+      return client.get(`/accounts/${account.id}/statuses`, { limit: 10, pinned: true })
+        .then(res => {
+          commit('updatePinnedToots', res.data)
+        })
+        .then(() => {
+          return client.get(`/accounts/${account.id}/statuses`, { limit: 40 })
+        })
         .then(res => {
           commit('TimelineSpace/Contents/SideBar/AccountProfile/changeLoading', false, { root: true })
           commit('updateTimeline', res.data)
@@ -80,6 +106,9 @@ const Timeline = {
           commit('changeLazyLoading', false)
           throw err
         })
+    },
+    clearTimeline ({ state, commit, rootState }) {
+      commit('updateTimeline', [])
     }
   }
 }

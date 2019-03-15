@@ -8,6 +8,8 @@ import Login from './Login'
 import Authorize from './Authorize'
 import TimelineSpace from './TimelineSpace'
 import Preferences from './Preferences'
+import Settings from './Settings'
+import molecules from './molecules'
 
 Vue.use(Vuex)
 
@@ -22,6 +24,8 @@ export default new Vuex.Store({
     Login,
     Authorize,
     TimelineSpace,
-    Preferences
+    Preferences,
+    Settings,
+    molecules
   }
 })

@@ -7,7 +7,9 @@ const Home = {
     heading: true,
     timeline: [],
     unreadTimeline: [],
-    filter: ''
+    filter: '',
+    showReblogs: true,
+    showReplies: true
   },
   mutations: {
     changeLazyLoading (state, value) {
@@ -27,7 +29,7 @@ const Home = {
       state.timeline = messages
     },
     mergeTimeline (state) {
-      state.timeline = state.unreadTimeline.concat(state.timeline)
+      state.timeline = state.unreadTimeline.slice(0, 80).concat(state.timeline)
       state.unreadTimeline = []
     },
     insertTimeline (state, messages) {
@@ -68,10 +70,16 @@ const Home = {
     },
     changeFilter (state, filter) {
       state.filter = filter
+    },
+    showReblogs (state, visible) {
+      state.showReblogs = visible
+    },
+    showReplies (state, visible) {
+      state.showReplies = visible
     }
   },
   actions: {
-    fetchTimeline ({ state, commit, rootState }, account) {
+    fetchTimeline ({ state, commit, rootState }) {
       const client = new Mastodon(
         rootState.TimelineSpace.account.accessToken,
         rootState.TimelineSpace.account.baseURL + '/api/v1'
@@ -96,13 +104,11 @@ const Home = {
       )
       return client.get('/timelines/home', { max_id: last.id, limit: 40 })
         .then(res => {
-          commit('changeLazyLoading', false)
           commit('insertTimeline', res.data)
           return res.data
         })
-        .catch(err => {
+        .finally(() => {
           commit('changeLazyLoading', false)
-          throw err
         })
     }
   }

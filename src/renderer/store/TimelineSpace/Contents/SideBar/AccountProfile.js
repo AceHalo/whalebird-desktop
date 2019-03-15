@@ -27,15 +27,31 @@ const AccountProfile = {
     }
   },
   actions: {
-    searchAccount ({ commit, rootState }, accountURL) {
+    fetchAccount ({ rootState }, accountID) {
       const client = new Mastodon(
         rootState.TimelineSpace.account.accessToken,
         rootState.TimelineSpace.account.baseURL + '/api/v1'
       )
-      return client.get('/search', { q: accountURL })
+      return client.get(`/accounts/${accountID}`)
+        .then(res => res.data)
+    },
+    searchAccount ({ commit, rootState }, parsedAccount) {
+      const client = new Mastodon(
+        rootState.TimelineSpace.account.accessToken,
+        rootState.TimelineSpace.account.baseURL + '/api/v1'
+      )
+      return client.get('/search', { q: parsedAccount.url, resolve: true })
         .then(res => {
-          if (res.data.accounts.length <= 0) throw new AccountNotFound('not found')
-          return res.data.accounts[0]
+          if (res.data.accounts.length <= 0) throw new AccountNotFound('empty result')
+          const account = res.data.accounts.find(a => `@${a.acct}` === parsedAccount.acct)
+          if (account) return account
+          const pleromaUser = res.data.accounts.find(a => a.acct === parsedAccount.acct)
+          if (pleromaUser) return pleromaUser
+          const localUser = res.data.accounts.find(a => `@${a.username}@${rootState.TimelineSpace.account.domain}` === parsedAccount.acct)
+          if (localUser) return localUser
+          const user = res.data.accounts.find(a => a.url === parsedAccount.url)
+          if (!user) throw new AccountNotFound('not found')
+          return user
         })
     },
     changeAccount ({ commit, dispatch }, account) {
@@ -55,41 +71,62 @@ const AccountProfile = {
         })
     },
     follow ({ state, commit, rootState }, account) {
-      commit('changeLoading', true)
       const client = new Mastodon(
         rootState.TimelineSpace.account.accessToken,
         rootState.TimelineSpace.account.baseURL + '/api/v1'
       )
       return client.post(`/accounts/${account.id}/follow`)
         .then(res => {
-          commit('changeLoading', false)
           commit('changeRelationship', res.data)
           return res.data
         })
-        .catch(err => {
-          commit('changeLoading', false)
-          throw err
-        })
     },
-    unfollow ({ state, commit, rootState }, account) {
-      commit('changeLoading', true)
+    unfollow ({ commit, rootState }, account) {
       const client = new Mastodon(
         rootState.TimelineSpace.account.accessToken,
         rootState.TimelineSpace.account.baseURL + '/api/v1'
       )
       return client.post(`/accounts/${account.id}/unfollow`)
         .then(res => {
-          commit('changeLoading', false)
           commit('changeRelationship', res.data)
           return res.data
-        })
-        .catch(err => {
-          commit('changeLoading', false)
-          throw err
         })
     },
     close ({ commit }) {
       commit('changeAccount', null)
+    },
+    unmute ({ rootState, commit }, account) {
+      const client = new Mastodon(
+        rootState.TimelineSpace.account.accessToken,
+        rootState.TimelineSpace.account.baseURL + '/api/v1'
+      )
+      return client.post(`/accounts/${account.id}/unmute`)
+        .then(res => {
+          commit('changeRelationship', res.data)
+          return res.data
+        })
+    },
+    block ({ rootState, commit }, account) {
+      const client = new Mastodon(
+        rootState.TimelineSpace.account.accessToken,
+        rootState.TimelineSpace.account.baseURL + '/api/v1'
+      )
+      return client.post(`/accounts/${account.id}/block`)
+        .then(res => {
+          commit('changeRelationship', res.data)
+          return res.data
+        })
+    },
+    unblock ({ rootState, commit }, account) {
+      const client = new Mastodon(
+        rootState.TimelineSpace.account.accessToken,
+        rootState.TimelineSpace.account.baseURL + '/api/v1'
+      )
+      return client.post(`/accounts/${account.id}/unblock`)
+        .then(res => {
+          commit('changeRelationship', res.data)
+          return res.data
+        })
     }
   }
 }

@@ -30,6 +30,7 @@
     "window": {
       "name": "Okno",
       "close": "Zamknij okno",
+      "open": "Open Window",
       "minimize": "Zminimalizuj",
       "jump_to": "Przejdź do"
     }
@@ -41,6 +42,7 @@
     "profile": "Profil",
     "show_profile": "Pokaż profil",
     "edit_profile": "Edytuj profil",
+    "settings": "Settings",
     "collapse": "Zawalić się",
     "expand": "Rozszerzać",
     "home": "Strona główna",
@@ -65,48 +67,88 @@
     "filter": {
       "title": "Filtruj",
       "placeholder": "Filtruj z użyciem wyrażeń regularnych",
+      "show_reblogs": "Pokazuj podbicia",
+      "show_replies": "Pokazuj odpowiedzi",
       "apply": "Zastosuj"
     },
     "new_toot": "Wpisy",
     "reload": "Przeładować"
   },
+  "settings": {
+    "title": "Settings",
+    "general": {
+      "title": "Ogólne",
+      "toot": {
+        "title": "Wpisy",
+        "visibility": {
+          "description": "Customize default visibility of toot.",
+          "public": "Publiczne",
+          "unlisted": "Niewidoczne",
+          "private": "Prywatne",
+          "direct": "Bezpośrednie"
+        },
+        "sensitive": {
+          "description": "Mark medias as sensitive by default"
+        }
+      }
+    }
+  },
   "preferences": {
     "title": "Preferencje",
     "general": {
       "title": "Ogólne",
-      "appearance": "Wygląd",
-      "theme_color": "Kolor motywu:",
+      "sounds": {
+        "title": "Dźwięki",
+        "description": "Please set feedback sounds.",
+        "fav_rb": "Polubienie i podbicie",
+        "toot": "Wpisy"
+      }
+    },
+    "appearance": {
+      "title": "Wygląd",
+      "theme_color": "Kolor motywu",
       "theme": {
         "light": "Jasny",
-        "dark": "Ciemny"
+        "dark": "Ciemny",
+        "solarized_light": "SolarizedLight",
+        "solarized_dark": "SolarizedDark",
+        "kimbie_dark": "KimbieDark",
+        "custom": "Custom"
       },
-      "font_size": "Rozmiar czcionki:",
+      "custom_theme": {
+        "background_color": "Base background",
+        "selected_background_color": "Focused background",
+        "global_header_color": "Account menu",
+        "side_menu_color": "Side menu",
+        "primary_color": "Primary font",
+        "regular_color": "Regular font",
+        "secondary_color": "Secondary font",
+        "border_color": "Border",
+        "header_menu_color": "Header menu",
+        "wrapper_mask_color": "Modal wrapper"
+      },
+      "font_size": "Rozmiar czcionki",
+      "font_family": "Font family",
       "display_style": {
-        "title": "Styl wyświetlania:",
+        "title": "Styl wyświetlania",
         "display_name_and_username": "Nazwa wyświetlana i nazwa użytkownika",
         "display_name": "Nazwa wyświetlana",
         "username": "Nazwa użytkownika"
       },
-      "toot": "Wpisy",
-      "visibility": {
-        "title": "Domyślna widoczność:",
-        "public": "Publiczne",
-        "unlisted": "Niewidoczne",
-        "private": "Prywatne",
-        "direct": "Bezpośrednie"
-      },
-      "sounds": "Dźwięki",
-      "fav_rb_sound": "Polubienie i podbicie:",
-      "toot_sound": "Wpisy:"
+      "time_format": {
+        "title": "Time format",
+        "absolute": "Absolute",
+        "relative": "Relative"
+      }
     },
     "notification": {
       "title": "Notification",
-      "notify": {
-        "title": "Notify",
-        "reply": "Reply:",
-        "reblog": "Reblog:",
-        "favourite": "Favourite:",
-        "follow": "Follow:"
+      "enable": {
+        "description": "Please set notification events.",
+        "reply": "Notify me when I receive reply",
+        "reblog": "Notify me when I receive reblog",
+        "favourite": "Notify me when I receive favourite",
+        "follow": "Notify me when I receive follow"
       }
     },
     "account": {
@@ -124,7 +166,7 @@
     },
     "language": {
       "title": "Język",
-      "display_language": "język",
+      "language_description": "Choose the language you would like to use with Whalebird.",
       "notice": "Wymaga ponownego uruchomienia",
       "confirm": {
         "title": "Ostrzeżenie",
@@ -147,7 +189,10 @@
       "add_image": "Dodaj obraz",
       "change_visibility": "Zmień widoczność",
       "add_cw": "Dodaj ostrzeżenie zawartości",
-      "change_sensitive": "Zmień wrażliwy"
+      "change_sensitive": "Zmień wrażliwy",
+      "pined_hashtag": "Pin the hashtag",
+      "description": "Wprowadź opis dla niewidomych i niedowidzących",
+      "pinned": "Przypięty wpis"
     },
     "jump": {
       "jump_to": "Przejdź do…"
@@ -158,6 +203,12 @@
     },
     "list_membership": {
       "title": "Należy do grup"
+    },
+    "mute_confirm": {
+      "title": "Are you sure to mute?",
+      "body": "Hide notification from this user?",
+      "cancel": "Cancel",
+      "ok": "Mute"
     },
     "shortcut": {
       "title": "Keyboard shortcuts",
@@ -185,6 +236,9 @@
       "view_toot_detail": "Wyświetl szczegoły wpisu",
       "open_in_browser": "Otwórz w przeglądarce",
       "copy_link_to_toot": "Skopiuj odnośnik do wpisu",
+      "mute": "Mute",
+      "block": "Block",
+      "report": "Report",
       "delete": "Usuń",
       "via": "przez {{application}}",
       "reply": "Odpowiadać",
@@ -203,18 +257,25 @@
       "follow_requested": "Śledź prośbę",
       "open_in_browser": "Otwórz w przeglądarce",
       "manage_list_memberships": "Zarządzaj przynależnością do grup",
+      "mute": "Mute",
+      "unmute": "Unmute",
+      "unblock": "Unblock",
+      "block": "Block",
       "toots": "Wpisy",
       "follows": "Śledzeni",
       "followers": "Śledzący"
     }
   },
   "hashtag": {
-    "tag_name": "Tag"
+    "tag_name": "Tag",
+    "delete_tag": "Delete tag",
+    "save_tag": "Save tag"
   },
   "search": {
     "search": "Szukaj",
     "account": "Konta",
-    "keyword": "Słowo kluczowe"
+    "keyword": "Słowo kluczowe",
+    "toot": "Wpisy"
   },
   "lists": {
     "index": {

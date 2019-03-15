@@ -1,10 +1,12 @@
+import sanitizeHtml from 'sanitize-html'
 import { ipcRenderer } from 'electron'
 import Mastodon from 'megalodon'
 import SideMenu from './TimelineSpace/SideMenu'
 import HeaderMenu from './TimelineSpace/HeaderMenu'
 import Modals from './TimelineSpace/Modals'
 import Contents from './TimelineSpace/Contents'
-import router from '../router'
+import router from '@/router'
+import unreadSettings from '~/src/constants/unreadNotification'
 
 const TimelineSpace = {
   namespaced: true,
@@ -21,7 +23,15 @@ const TimelineSpace = {
       username: ''
     },
     loading: false,
-    emojis: []
+    emojis: [],
+    tootMax: 500,
+    unreadNotification: {
+      direct: unreadSettings.Direct.default,
+      local: unreadSettings.Local.default,
+      public: unreadSettings.Public.default
+    },
+    useWebsocket: false,
+    pleroma: false
   },
   mutations: {
     updateAccount (state, account) {
@@ -37,9 +47,28 @@ const TimelineSpace = {
           image: e.url
         }
       })
+    },
+    updateTootMax (state, value) {
+      if (value) {
+        state.tootMax = value
+      } else {
+        state.tootMax = 500
+      }
+    },
+    updateUnreadNotification (state, settings) {
+      state.unreadNotification = settings
+    },
+    changePleroma (state, pleroma) {
+      state.pleroma = pleroma
+    },
+    changeUseWebsocket (state, use) {
+      state.useWebsocket = use
     }
   },
   actions: {
+    // -------------------------------------------------
+    // Accounts
+    // -------------------------------------------------
     localAccount ({ dispatch, commit }, id) {
       return new Promise((resolve, reject) => {
         ipcRenderer.send('get-local-account', id)
@@ -79,7 +108,144 @@ const TimelineSpace = {
         })
       })
     },
-    startUserStreaming ({ state, commit, rootState }, account) {
+    async clearAccount ({ commit }) {
+      commit(
+        'updateAccount',
+        {
+          domain: '',
+          _id: '',
+          username: ''
+        }
+      )
+      return 'clearAccount'
+    },
+    async detectPleroma ({ commit, state }) {
+      const data = await Mastodon.get('/instance', {}, state.account.baseURL + '/api/v1')
+      if (data.version.includes('Pleroma')) {
+        commit('changePleroma', true)
+        commit('changeUseWebsocket', true)
+      } else {
+        commit('changePleroma', false)
+        commit('changeUseWebsocket', false)
+      }
+    },
+    // -----------------------------------------------
+    // Shortcuts
+    // -----------------------------------------------
+    watchShortcutEvents ({ commit, dispatch }) {
+      ipcRenderer.on('CmdOrCtrl+N', () => {
+        dispatch('TimelineSpace/Modals/NewToot/openModal', {}, { root: true })
+      })
+      ipcRenderer.on('CmdOrCtrl+K', () => {
+        commit('TimelineSpace/Modals/Jump/changeModal', true, { root: true })
+      })
+    },
+    async removeShortcutEvents () {
+      ipcRenderer.removeAllListeners('CmdOrCtrl+N')
+      ipcRenderer.removeAllListeners('CmdOrCtrl+K')
+      return 'removeShortcutEvents'
+    },
+    /**
+     * clearUnread
+     */
+    async clearUnread ({ dispatch }) {
+      dispatch('TimelineSpace/SideMenu/clearUnread', {}, { root: true })
+    },
+    /**
+     * fetchEmojis
+     */
+    async fetchEmojis ({ commit }, account) {
+      const data = await Mastodon.get('/custom_emojis', {}, account.baseURL + '/api/v1')
+      commit('updateEmojis', data)
+      return data
+    },
+    /**
+     * fetchInstance
+     */
+    async fetchInstance ({ commit }, account) {
+      const data = await Mastodon.get('/instance', {}, account.baseURL + '/api/v1')
+      commit('updateTootMax', data.max_toot_chars)
+      return data
+    },
+    loadUnreadNotification ({ commit, rootState }, accountID) {
+      return new Promise((resolve, reject) => {
+        ipcRenderer.once('response-get-unread-notification', (event, settings) => {
+          ipcRenderer.removeAllListeners('error-get-unread-notification')
+          commit('updateUnreadNotification', settings)
+          resolve(settings)
+        })
+        ipcRenderer.once('error-get-unread-notification', (event, err) => {
+          ipcRenderer.removeAllListeners('response-get-unread-notification')
+          commit('updateUnreadNotification', {
+            direct: unreadSettings.Direct.default,
+            local: unreadSettings.Local.default,
+            public: unreadSettings.Public.default
+          })
+          resolve(null)
+        })
+        ipcRenderer.send('get-unread-notification', accountID)
+      })
+    },
+    async fetchContentsTimelines ({ dispatch, state }, account) {
+      await dispatch('TimelineSpace/Contents/Home/fetchTimeline', account, { root: true })
+      await dispatch('TimelineSpace/Contents/Notifications/fetchNotifications', account, { root: true })
+      if (state.unreadNotification.direct) {
+        await dispatch('TimelineSpace/Contents/DirectMessages/fetchTimeline', {}, { root: true })
+      }
+      if (state.unreadNotification.local) {
+        await dispatch('TimelineSpace/Contents/Local/fetchLocalTimeline', {}, { root: true })
+      }
+      if (state.unreadNotification.public) {
+        await dispatch('TimelineSpace/Contents/Public/fetchPublicTimeline', {}, { root: true })
+      }
+    },
+    clearContentsTimelines ({ commit }) {
+      commit('TimelineSpace/Contents/Home/clearTimeline', {}, { root: true })
+      commit('TimelineSpace/Contents/Local/clearTimeline', {}, { root: true })
+      commit('TimelineSpace/Contents/DirectMessages/clearTimeline', {}, { root: true })
+      commit('TimelineSpace/Contents/Notifications/clearNotifications', {}, { root: true })
+      commit('TimelineSpace/Contents/Public/clearTimeline', {}, { root: true })
+    },
+    bindStreamings ({ dispatch, state }, account) {
+      dispatch('bindUserStreaming', account)
+      if (state.unreadNotification.direct) {
+        dispatch('bindDirectMessagesStreaming')
+      }
+      if (state.unreadNotification.local) {
+        dispatch('bindLocalStreaming')
+      }
+      if (state.unreadNotification.public) {
+        dispatch('bindPublicStreaming')
+      }
+    },
+    startStreamings ({ dispatch, state }) {
+      dispatch('startUserStreaming')
+      if (state.unreadNotification.direct) {
+        dispatch('startDirectMessagesStreaming')
+      }
+      if (state.unreadNotification.local) {
+        dispatch('startLocalStreaming')
+      }
+      if (state.unreadNotification.public) {
+        dispatch('startPublicStreaming')
+      }
+    },
+    stopStreamings ({ dispatch }) {
+      dispatch('stopUserStreaming')
+      dispatch('stopDirectMessagesStreaming')
+      dispatch('stopLocalStreaming')
+      dispatch('stopPublicStreaming')
+    },
+    unbindStreamings ({ dispatch }) {
+      dispatch('unbindUserStreaming')
+      dispatch('unbindDirectMessagesStreaming')
+      dispatch('unbindLocalStreaming')
+      dispatch('unbindPublicStreaming')
+    },
+    // ------------------------------------------------
+    // Each streaming methods
+    // ------------------------------------------------
+    bindUserStreaming ({ commit, rootState }, account) {
       ipcRenderer.on('update-start-user-streaming', (event, update) => {
         commit('TimelineSpace/Contents/Home/appendTimeline', update, { root: true })
         // Sometimes archive old statuses
@@ -101,15 +267,19 @@ const TimelineSpace = {
         }
         commit('TimelineSpace/SideMenu/changeUnreadNotifications', true, { root: true })
       })
-
+    },
+    startUserStreaming ({ state }) {
       return new Promise((resolve, reject) => {
-        ipcRenderer.send('start-user-streaming', account)
+        ipcRenderer.send('start-user-streaming', {
+          account: state.account,
+          useWebsocket: state.useWebsocket
+        })
         ipcRenderer.once('error-start-user-streaming', (event, err) => {
           reject(err)
         })
       })
     },
-    startLocalStreaming ({ state, commit, rootState }, account) {
+    bindLocalStreaming ({ commit, rootState }) {
       ipcRenderer.on('update-start-local-streaming', (event, update) => {
         commit('TimelineSpace/Contents/Local/appendTimeline', update, { root: true })
         if (rootState.TimelineSpace.Contents.Local.heading && Math.random() > 0.8) {
@@ -117,57 +287,86 @@ const TimelineSpace = {
         }
         commit('TimelineSpace/SideMenu/changeUnreadLocalTimeline', true, { root: true })
       })
+    },
+    startLocalStreaming ({ state }) {
       return new Promise((resolve, reject) => {
-        ipcRenderer.send('start-local-streaming', account)
+        ipcRenderer.send('start-local-streaming', {
+          account: state.account,
+          useWebsocket: state.useWebsocket
+        })
         ipcRenderer.once('error-start-local-streaming', (event, err) => {
           reject(err)
         })
       })
     },
-    async stopUserStreaming ({ commit }) {
+    bindPublicStreaming ({ commit, rootState }) {
+      ipcRenderer.on('update-start-public-streaming', (event, update) => {
+        commit('TimelineSpace/Contents/Public/appendTimeline', update, { root: true })
+        if (rootState.TimelineSpace.Contents.Public.heading && Math.random() > 0.8) {
+          commit('TimelineSpace/Contents/Public/archiveTimeline', {}, { root: true })
+        }
+        commit('TimelineSpace/SideMenu/changeUnreadPublicTimeline', true, { root: true })
+      })
+    },
+    startPublicStreaming ({ state }) {
+      return new Promise((resolve, reject) => {
+        ipcRenderer.send('start-public-streaming', {
+          account: state.account,
+          useWebsocket: state.useWebsocket
+        })
+        ipcRenderer.once('error-start-public-streaming', (event, err) => {
+          reject(err)
+        })
+      })
+    },
+    bindDirectMessagesStreaming ({ commit, rootState }) {
+      ipcRenderer.on('update-start-directmessages-streaming', (event, update) => {
+        commit('TimelineSpace/Contents/DirectMessages/appendTimeline', update, { root: true })
+        if (rootState.TimelineSpace.Contents.DirectMessages.heading && Math.random() > 0.8) {
+          commit('TimelineSpace/Contents/DirectMessages/archiveTimeline', {}, { root: true })
+        }
+        commit('TimelineSpace/SideMenu/changeUnreadDirectMessagesTimeline', true, { root: true })
+      })
+    },
+    startDirectMessagesStreaming ({ state }) {
+      return new Promise((resolve, reject) => {
+        ipcRenderer.send('start-directmessages-streaming', {
+          account: state.account,
+          useWebsocket: state.useWebsocket
+        })
+        ipcRenderer.once('error-start-directmessages-streaming', (event, err) => {
+          reject(err)
+        })
+      })
+    },
+    unbindUserStreaming () {
       ipcRenderer.removeAllListeners('update-start-user-streaming')
       ipcRenderer.removeAllListeners('notification-start-user-streaming')
       ipcRenderer.removeAllListeners('error-start-user-streaming')
-      ipcRenderer.send('stop-user-streaming')
-      return 'stopUserStreaming'
     },
-    async stopLocalStreaming ({ commit }) {
+    stopUserStreaming () {
+      ipcRenderer.send('stop-user-streaming')
+    },
+    unbindLocalStreaming () {
       ipcRenderer.removeAllListeners('error-start-local-streaming')
       ipcRenderer.removeAllListeners('update-start-local-streaming')
+    },
+    stopLocalStreaming () {
       ipcRenderer.send('stop-local-streaming')
-      return 'stopLocalStreaming'
     },
-    watchShortcutEvents ({ commit, dispatch }) {
-      ipcRenderer.on('CmdOrCtrl+N', () => {
-        dispatch('TimelineSpace/Modals/NewToot/openModal', {}, { root: true })
-      })
-      ipcRenderer.on('CmdOrCtrl+K', () => {
-        commit('TimelineSpace/Modals/Jump/changeModal', true, { root: true })
-      })
+    unbindPublicStreaming () {
+      ipcRenderer.removeAllListeners('error-start-public-streaming')
+      ipcRenderer.removeAllListeners('update-start-public-streaming')
     },
-    async removeShortcutEvents () {
-      ipcRenderer.removeAllListeners('CmdOrCtrl+N')
-      ipcRenderer.removeAllListeners('CmdOrCtrl+K')
-      return 'removeShortcutEvents'
+    stopPublicStreaming () {
+      ipcRenderer.send('stop-public-streaming')
     },
-    async clearAccount ({ commit }) {
-      commit(
-        'updateAccount',
-        {
-          domain: '',
-          _id: '',
-          username: ''
-        }
-      )
-      return 'clearAccount'
+    unbindDirectMessagesStreaming () {
+      ipcRenderer.removeAllListeners('error-start-directmessages-streaming')
+      ipcRenderer.removeAllListeners('update-start-directmessages-streaming')
     },
-    async clearUnread ({ dispatch }) {
-      dispatch('TimelineSpace/SideMenu/clearUnread', {}, { root: true })
-    },
-    async fetchEmojis ({ commit }, account) {
-      const data = await Mastodon.get('/custom_emojis', {}, account.baseURL + '/api/v1')
-      commit('updateEmojis', data)
-      return data
+    stopDirectMessagesStreaming () {
+      ipcRenderer.send('stop-directmessages-streaming')
     }
   }
 }
@@ -194,7 +393,10 @@ function createNotification (notification, notifyConfig) {
       if (notifyConfig.reply) {
         // Clean html tags
         return new Notification(`${notification.status.account.display_name}`, {
-          body: `${notification.status.content.replace(/<("[^"]*"|'[^']*'|[^'">])*>/g, '')}`
+          body: sanitizeHtml(notification.status.content, {
+            allowedTags: [],
+            allowedAttributes: []
+          })
         })
       }
       break

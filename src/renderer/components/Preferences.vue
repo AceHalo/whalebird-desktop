@@ -3,10 +3,10 @@
     <el-header class="header">
       <el-row>
         <el-col :span="23">
-          <h3>{{ $t('preferences.title') }}</h3>
+          <h1>{{ $t('preferences.title') }}</h1>
         </el-col>
         <el-col :span="1">
-          <el-button type="text" icon="el-icon-close" @click="close" class="close-button"></el-button>
+          <el-button type="text" icon="el-icon-close" @click="close" class="close-button" role="button"></el-button>
         </el-col>
       </el-row>
     </el-header>
@@ -14,24 +14,28 @@
       <div v-shortkey="['esc']" @shortkey="close"></div>
       <el-aside width="240px" class="menu">
         <el-menu
-          :default-active="defaultActive"
+          :default-active="activeRoute()"
           class="setting-menu"
           :text-color="primaryColor"
           :background-color="backgroundColor"
-          :route="true">
-          <el-menu-item index="1" :route="{path: '/preferences/general'}" @click="general">
+          :router="true">
+          <el-menu-item index="/preferences/general">
             <icon name="cog" class="icon" scale="1.3"></icon>
             <span>{{ $t('preferences.general.title') }}</span>
           </el-menu-item>
-          <el-menu-item index="2" :route="{path: '/preferences/notification'}" @click="notification">
+          <el-menu-item index="/preferences/appearance">
+            <icon name="palette" class="icon" scale="1.3"></icon>
+            <span>{{ $t('preferences.appearance.title') }}</span>
+          </el-menu-item>
+          <el-menu-item index="/preferences/notification">
             <icon name="bell" class="icon" scale="1.3"></icon>
             <span>{{ $t('preferences.notification.title') }}</span>
           </el-menu-item>
-          <el-menu-item index="3" :route="{path: '/preferences/account'}" @click="account">
+          <el-menu-item index="/preferences/account">
             <icon name="user" class="icon" scale="1.3"></icon>
             <span>{{ $t('preferences.account.title') }}</span>
           </el-menu-item>
-          <el-menu-item index="4" :route="{path: '/preferences/language'}" @click="language">
+          <el-menu-item index="/preferences/language">
             <icon name="language" class="icon" scale="1.3"></icon>
             <span>{{ $t('preferences.language.title') }}</span>
           </el-menu-item>
@@ -51,7 +55,6 @@ export default {
   name: 'preferences',
   computed: {
     ...mapState({
-      defaultActive: state => state.Preferences.defaultActive,
       primaryColor: state => state.App.theme.primary_color,
       backgroundColor: state => state.App.theme.background_color
     })
@@ -59,19 +62,9 @@ export default {
   methods: {
     close () {
       this.$router.push('/')
-      this.$store.commit('Preferences/changeActive', '1')
     },
-    general () {
-      this.$router.push('/preferences/general')
-    },
-    notification () {
-      this.$router.push('/preferences/notification')
-    },
-    account () {
-      this.$router.push('/preferences/account')
-    },
-    language () {
-      this.$router.push('/preferences/language')
+    activeRoute () {
+      return this.$route.path
     }
   }
 }
@@ -84,9 +77,10 @@ export default {
   .header {
     text-align: center;
     border-bottom: 1px solid var(--theme-border-color);
+    user-select: none;
 
     .close-button {
-      font-size: 24px;
+      font-size: 28px;
     }
   }
 
@@ -95,30 +89,15 @@ export default {
     padding-left: 24px;
 
     .el-menu {
-      background-color: var(--theme-background-color);
       border-right: solid 1px var(--theme-border-color);
     }
 
     .setting-menu /deep/ {
       height: 100%;
+      user-select: none;
 
       .icon {
         margin-right: 9px;
-      }
-
-      .el-menu-item {
-        transition: none;
-        -webkit-transition: none;
-
-        .icon {
-          color: var(--theme-secondary-color);
-        }
-      }
-
-      .is-active {
-        .icon {
-          color: #409eff;
-        }
       }
     }
   }

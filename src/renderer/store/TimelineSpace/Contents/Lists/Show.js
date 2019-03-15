@@ -25,7 +25,7 @@ const Show = {
       state.timeline = timeline
     },
     mergeTimeline (state) {
-      state.timeline = state.unreadTimeline.concat(state.timeline)
+      state.timeline = state.unreadTimeline.slice(0, 80).concat(state.timeline)
       state.unreadTimeline = []
     },
     insertTimeline (state, messages) {
@@ -91,8 +91,9 @@ const Show = {
       })
       return new Promise((resolve, reject) => {
         ipcRenderer.send('start-list-streaming', {
-          list_id: listID,
-          account: rootState.TimelineSpace.account
+          listID: listID,
+          account: rootState.TimelineSpace.account,
+          useWebsocket: rootState.TimelineSpace.useWebsocket
         })
         ipcRenderer.once('error-start-list-streaming', (event, err) => {
           reject(err)

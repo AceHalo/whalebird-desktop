@@ -1,13 +1,13 @@
 <template>
 <transition name="image-viewer">
-  <div id="image" v-show="modalOpen" @click="close">
+  <div id="image" v-show="modalOpen" @click="close" :aria-hidden="!modalOpen" aria-modal="true" role="dialog">
     <div class="image-wrapper" v-shortkey="modalOpen ? {close: ['esc']} : {}" @shortkey="closeHandle">
       <div class="image-header">
         <el-button type="text" icon="el-icon-close" @click="close" class="close-button"></el-button>
       </div>
-      <div class="image-content">
+      <div class="image-content" role="presentation">
         <span class="button-area"><el-button type="text" v-show="showLeft" v-shortkey="['arrowleft']" @shortkey.native="decrementIndex()"><i class="el-icon-arrow-left" @click.stop="decrementIndex"></i></el-button></span>
-        <Media :src="imageURL"></Media>
+        <Media :src="imageURL" :type="imageType"></Media>
         <span class="button-area"><el-button type="text" v-show="showRight" v-shortkey="['arrowright']" @shortkey.native="incrementIndex()"><i class="el-icon-arrow-right" @click.stop="incrementIndex"></i></el-button></span>
       </div>
     </div>
@@ -30,6 +30,9 @@ export default {
     }),
     imageURL () {
       return this.$store.getters['TimelineSpace/Modals/ImageViewer/imageURL']
+    },
+    imageType () {
+      return this.$store.getters['TimelineSpace/Modals/ImageViewer/imageType']
     },
     showLeft () {
       return this.$store.getters['TimelineSpace/Modals/ImageViewer/showLeft']
@@ -83,8 +86,7 @@ export default {
   }
 
   .image-content {
-    height: 100%;
-    width: 100%;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;

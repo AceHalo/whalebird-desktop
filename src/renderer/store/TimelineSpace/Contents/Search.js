@@ -1,8 +1,10 @@
 import Account from './Search/Account'
+import Tag from './Search/Tag'
+import Toots from './Search/Toots'
 
 const Search = {
   namespaced: true,
-  modules: { Account },
+  modules: { Account, Tag, Toots },
   state: {
     loading: false
   },

@@ -1,38 +1,52 @@
 <template>
   <div id="global_header">
     <el-menu
-      :default-active="defaultActive"
-      class="el-menu-vertical account-menu"
+      v-if="!hide"
+      :default-active="activeRoute()"
+       class="el-menu-vertical account-menu"
       :collapse="true"
-      :route="true"
+      :router="true"
       :background-color="themeColor"
       text-color="#909399"
-      active-text-color="#ffffff">
-      <el-menu-item :index="index.toString()" v-for="(account, index) in accounts" v-bind:key="account._id" :route="{path: `/${account._id}/home`}" @click="select(account)">
+      active-text-color="#ffffff"
+      role="menubar">
+      <el-menu-item :index="`/${account._id}/home`" v-for="(account, index) in accounts" v-bind:key="account._id" role="menuitem">
         <i v-if="account.avatar === undefined || account.avatar === null || account.avatar === ''" class="el-icon-menu"></i>
-        <img v-else :src="account.avatar" class="avatar" :title="account.username + '@' + account.domain" />
+        <FailoverImg v-else :src="account.avatar" class="avatar" :title="account.username + '@' + account.domain" />
+        <FailoverImg
+          :src="`${account.baseURL}/favicon.ico`"
+          :failoverSrc="`${account.baseURL}/favicon.png`"
+          class="instance-icon"
+        />
         <span slot="title">{{ account.domain }}</span>
       </el-menu-item>
-      <el-menu-item index="/login" @click="login" :title="$t('global_header.add_new_account')">
+      <el-menu-item index="/login" :title="$t('global_header.add_new_account')" role="menuitem">
         <i class="el-icon-plus"></i>
         <span slot="new">New</span>
       </el-menu-item>
     </el-menu>
-    <div class="space">
+    <div :class="hide ? 'space no-global-header':'space with-global-header' ">
       <router-view :key="$route.params.id"></router-view>
     </div>
   </div>
+</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import FailoverImg from '~/src/renderer/components/atoms/FailoverImg'
 
 export default {
   name: 'global-header',
+  components: {
+    FailoverImg
+  },
   computed: {
+    ...mapState('GlobalHeader', {
+      accounts: state => state.accounts,
+      hide: state => state.hide
+    }),
     ...mapState({
-      defaultActive: state => state.GlobalHeader.defaultActive,
-      accounts: state => state.GlobalHeader.accounts,
       themeColor: state => state.App.theme.global_header_color
     })
   },
@@ -40,26 +54,21 @@ export default {
     this.initialize()
   },
   methods: {
+    activeRoute () {
+      return this.$route.path
+    },
     async initialize () {
       await this.$store.dispatch('GlobalHeader/removeShortcutEvents')
+      await this.$store.dispatch('GlobalHeader/loadHide')
       this.$store.dispatch('GlobalHeader/watchShortcutEvents')
       try {
         const accounts = await this.$store.dispatch('GlobalHeader/listAccounts')
         if (this.$route.params.id === undefined) {
-          this.$store.dispatch('GlobalHeader/schmearMenu', accounts[0]._id)
           return this.$router.push({ path: `/${accounts[0]._id}/home` })
-        } else {
-          return this.$store.dispatch('GlobalHeader/schmearMenu', this.$route.params.id)
         }
       } catch (err) {
         return this.$router.push({ path: '/login' })
       }
-    },
-    login () {
-      return this.$router.push({ path: '/login' })
-    },
-    select (account) {
-      return this.$store.dispatch('GlobalHeader/selectAccount', account)
     }
   }
 }
@@ -74,6 +83,7 @@ export default {
     left: 0;
     width: 65px;
     padding-top: 24px;
+    border: 0;
 
     .el-tooltip {
       outline: 0;
@@ -88,16 +98,35 @@ export default {
       mix-blend-mode: overlay;
     }
 
+    .instance-icon {
+      width: 18px;
+      height: 18px;
+      mix-blend-mode: overlay;
+      vertical-align: bottom;
+      margin-left: -18px;
+    }
+
     .is-active {
       .avatar {
+        mix-blend-mode: normal;
+      }
+
+      .instance-icon {
         mix-blend-mode: normal;
       }
     }
   }
 
   .space {
-    margin-left: 65px;
     height: 100%;
+  }
+
+  .no-global-header {
+    margin-left: 0;
+  }
+
+  .with-global-header {
+    margin-left: 65px;
   }
 }
 </style>

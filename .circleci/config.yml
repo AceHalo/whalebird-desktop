@@ -2,10 +2,15 @@ version: 2
 jobs:
   build:
     docker:
-      - image: node:10-slim
+      - image: node:10.13.0-slim
     working_directory: /var/opt/app
     steps:
       - checkout
+      - run:
+          name: git
+          command: |
+            apt-get update
+            apt-get install -y git
       - restore_cache:
           name: Restoring cache - node_modules
           keys:
@@ -19,5 +24,5 @@ jobs:
           paths:
             - node_modules
       - run:
-          name: mocha
-          command: npm run mocha
+          name: spec
+          command: npm run spec

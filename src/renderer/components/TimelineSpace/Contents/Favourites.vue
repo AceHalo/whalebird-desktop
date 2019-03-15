@@ -12,13 +12,14 @@
       v-on:delete="deleteToot"
       @focusNext="focusNext"
       @focusPrev="focusPrev"
+      @focusRight="focusSidebar"
       @selectToot="focusToot(message)"
       >
     </toot>
   </div>
   <div class="loading-card" v-loading="lazyLoading" :element-loading-background="backgroundColor">
   </div>
-  <div class="upper" v-show="!heading">
+  <div :class="openSideBar ? 'upper-with-side-bar' : 'upper'" v-show="!heading">
     <el-button type="primary" icon="el-icon-arrow-up" @click="upper" circle>
     </el-button>
   </div>
@@ -27,12 +28,15 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import Toot from './Cards/Toot'
+import Toot from '~/src/renderer/components/molecules/Toot'
 import scrollTop from '../../utils/scroll'
+import reloadable from '~/src/renderer/components/mixins/reloadable'
+import { Event } from '~/src/renderer/components/event'
 
 export default {
   name: 'favourites',
   components: { Toot },
+  mixins: [reloadable],
   data () {
     return {
       heading: true,
@@ -41,6 +45,7 @@ export default {
   },
   computed: {
     ...mapState({
+      openSideBar: state => state.TimelineSpace.Contents.SideBar.openSideBar,
       backgroundColor: state => state.App.theme.background_color,
       startReload: state => state.TimelineSpace.HeaderMenu.reload,
       account: state => state.TimelineSpace.account,
@@ -70,6 +75,17 @@ export default {
   },
   mounted () {
     document.getElementById('scrollable').addEventListener('scroll', this.onScroll)
+    Event.$on('focus-timeline', () => {
+      // If focusedId does not change, we have to refresh focusedId because Toot component watch change events.
+      const previousFocusedId = this.focusedId
+      this.focusedId = 0
+      this.$nextTick(function () {
+        this.focusedId = previousFocusedId
+      })
+    })
+  },
+  beforeDestroy () {
+    Event.$off('focus-timeline')
   },
   destroyed () {
     this.$store.commit('TimelineSpace/Contents/Favourites/updateFavourites', [])
@@ -122,19 +138,7 @@ export default {
     async reload () {
       this.$store.commit('TimelineSpace/changeLoading', true)
       try {
-        const account = await this.$store.dispatch('TimelineSpace/localAccount', this.$route.params.id).catch((err) => {
-          this.$message({
-            message: this.$t('message.account_load_error'),
-            type: 'error'
-          })
-          throw err
-        })
-
-        await this.$store.dispatch('TimelineSpace/stopUserStreaming')
-        await this.$store.dispatch('TimelineSpace/stopLocalStreaming')
-
-        await this.$store.dispatch('TimelineSpace/Contents/Home/fetchTimeline', account)
-        await this.$store.dispatch('TimelineSpace/Contents/Local/fetchLocalTimeline', account)
+        const account = await this.reloadable()
         await this.$store.dispatch('TimelineSpace/Contents/Favourites/fetchFavourites', account)
           .catch(() => {
             this.$message({
@@ -142,9 +146,6 @@ export default {
               type: 'error'
             })
           })
-
-        this.$store.dispatch('TimelineSpace/startUserStreaming', account)
-        this.$store.dispatch('TimelineSpace/startLocalStreaming', account)
       } finally {
         this.$store.commit('TimelineSpace/changeLoading', false)
       }
@@ -175,6 +176,9 @@ export default {
     focusToot (message) {
       this.focusedId = message.id
     },
+    focusSidebar () {
+      Event.$emit('focus-sidebar')
+    },
     handleKey (event) {
       switch (event.srcKey) {
         case 'next':
@@ -199,5 +203,11 @@ export default {
   position: fixed;
   bottom: 20px;
   right: 20px;
+}
+
+.upper-with-side-bar {
+  position: fixed;
+  bottom: 20px;
+  right: calc(20px + 360px);
 }
 </style>

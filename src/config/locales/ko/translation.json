@@ -30,6 +30,7 @@
     "window": {
       "name": "창",
       "close": "창 닫기",
+      "open": "창 열기",
       "minimize": "최소화",
       "jump_to": "이동"
     }
@@ -41,10 +42,12 @@
     "profile": "프로필",
     "show_profile": "프로필 보기",
     "edit_profile": "프로필 수정",
+    "settings": "설정",
     "collapse": "접기",
     "expand": "펼치기",
     "home": "홈",
     "notification": "알림",
+    "direct": "메세지",
     "favourite": "즐겨찾기",
     "local": "로컬",
     "public": "연합",
@@ -65,53 +68,100 @@
     "filter": {
       "title": "필터",
       "placeholder": "정규식으로 필터링",
+      "show_reblogs": "부스트 표시",
+      "show_replies": "답글 표시",
       "apply": "적용"
     },
     "new_toot": "툿",
-    "reload": "새로고침"
+    "reload": "새로고침",
+    "settings": "설정",
+    "switch_streaming": "스트리밍 웹소켓을 사용하도록 설정합니다. 타임라인이 자동으로 갱신되지 않는다면 이 항목을 사용함으로 설정하십시오."
+  },
+  "settings": {
+    "title": "설정",
+    "general": {
+      "title": "일반",
+      "toot": {
+        "title": "툿",
+        "visibility": {
+          "description": "툿의 기본 공개범위를 변경합니다.",
+          "public": "공개",
+          "unlisted": "미등록",
+          "private": "비공개",
+          "direct": "다이렉트"
+        },
+        "sensitive": {
+          "description": "자동으로 모든 미디어를 민감한 미디어로 분류"
+        }
+      }
+    },
+    "timeline": {
+      "title": "타임라인",
+      "unread_notification": {
+        "title": "읽지 않은 알림",
+        "description": "각 타임라인마다 새 알림 표시 여부를 설정합니다.",
+        "direct": "메세지",
+        "local": "로컬",
+        "public": "퍼블릭"
+      }
+    }
   },
   "preferences": {
     "title": "설정",
     "general": {
       "title": "일반",
-      "appearance": "외관",
-      "theme_color": "테마 색상:",
+      "sounds": {
+        "title": "사운드",
+        "description": "피드백 소리를 설정해 주세요.",
+        "fav_rb": "툿을 즐겨찾기하거나 부스트 했을 때",
+        "toot": "새 툿을 보낼 때"
+      }
+    },
+    "appearance": {
+      "title": "외관",
+      "theme_color": "테마 색상",
       "theme": {
         "light": "밝은 테마",
-        "dark": "어두운 테마"
+        "dark": "어두운 테마",
+        "solarized_light": "SolarizedLight",
+        "solarized_dark": "SolarizedDark",
+        "kimbie_dark": "KimbieDark",
+        "custom": "사용자 설정"
       },
-      "font_size": "폰트 크기:",
+      "custom_theme": {
+        "background_color": "기본 배경 색상",
+        "selected_background_color": "선택 배경 색상",
+        "global_header_color": "계정 메뉴 색상",
+        "side_menu_color": "사이드 바 색상",
+        "primary_color": "기본 글꼴 색상",
+        "regular_color": "레귤러 글꼴 색상",
+        "secondary_color": "보조 글꼴 색상",
+        "border_color": "경계선 색상",
+        "header_menu_color": "헤더 메뉴 색상",
+        "wrapper_mask_color": "모달 랩퍼 색상"
+      },
+      "font_size": "글꼴 크기",
+      "font_family": "글꼴 패밀리",
       "display_style": {
-        "title": "사용자 표시 형식:",
+        "title": "사용자 표시 형식",
         "display_name_and_username": "닉네임과 아이디 모두 보이기",
         "display_name": "닉네임만 보이기",
         "username": "아이디만 보이기"
       },
-	  "time_format":{
-        "title": "시간 표시 형식:",
+      "time_format":{
+        "title": "시간 표시 형식",
         "absolute": "고정 시각 표시",
         "relative": "상대 시간 표시"
-	  },
-      "toot": "툿",
-      "visibility": {
-        "title": "기본 공개 설정:",
-        "public": "공개",
-        "unlisted": "미등록",
-        "private": "비공개",
-        "direct": "다이렉트"
-      },
-      "sounds": "사운드",
-      "fav_rb_sound": "즐겨찾기 및 부스트:",
-      "toot_sound": "툿:"
+      }
     },
     "notification": {
       "title": "알림",
-      "notify": {
-        "title": "푸쉬 알림",
-        "reply": "답장:",
-        "reblog": "부스트:",
-        "favourite": "즐겨찾기:",
-        "follow": "즐겨찾기:"
+      "enable": {
+        "description": "알림 범위를 설정해 주세요.",
+        "reply": "답장을 받았을 때 알림을 받습니다",
+        "reblog": "누군가 부스트했을 때 알림을 받습니다",
+        "favourite": "누군가 즐겨찾기 했을 때 알림을 받습니다",
+        "follow": "누군가 나를 팔로우 했을 때 알림을 받습니다"
       }
     },
     "account": {
@@ -129,7 +179,7 @@
     },
     "language": {
       "title": "언어",
-      "display_language": "언어",
+      "language_description": "Whalebird에서 사용할 언어를 선택해 주세요.",
       "notice": "재실행이 필요합니다",
       "confirm": {
         "title": "알림",
@@ -152,7 +202,10 @@
       "add_image": "이미지 추가",
       "change_visibility": "공개 범위 변경",
       "add_cw": "경고 문구 추가",
-      "change_sensitive": "민감한 미디어 설정"
+      "change_sensitive": "민감한 미디어 설정",
+      "pined_hashtag": "해시태그고정",
+      "description": "시각장애인을 위한 설명",
+      "pinned": "고정 된 툿"
     },
     "jump": {
       "jump_to": "이동"
@@ -164,6 +217,12 @@
     "list_membership": {
       "title": "리스트 멤버"
     },
+    "mute_confirm": {
+      "title": "정말로 뮤트하시겠습니까?",
+      "body": "이 사용자로부터의 모든 알림이 꺼집니다.",
+      "cancel": "취소",
+      "ok": "뮤트"
+    },
     "shortcut": {
       "title": "키보드 단축키",
       "ctrl_number": "계정 변경",
@@ -172,6 +231,8 @@
       "ctrl_enter": "툿 보내기",
       "j": "다음 툿으로 이동",
       "k": "이전 툿으로 이동",
+      "h": "왼쪽 칼럼으로 포커스 이동",
+      "l": "오른쪽 칼럼으로 포커스 이동",
       "r": "툿에 멘션 보내기",
       "b": "툿 부스트",
       "f": "툿 즐겨찾기",
@@ -179,7 +240,8 @@
       "p": "툿 작성자 프로필 열기",
       "i": "이미지 열기",
       "x": "경고 문구 및 민감한 미디어 토글",
-      "esc": "현재 페이지 닫기"
+      "esc": "현재 페이지 닫기",
+      "?": "이 도움말 보이기"
     }
   },
   "cards": {
@@ -190,6 +252,9 @@
       "view_toot_detail": "툿 자세히 보기",
       "open_in_browser": "브라우저에서 열기",
       "copy_link_to_toot": "툿 링크 복사하기",
+      "mute": "뮤트",
+      "block": "차단",
+      "report": "신고",
       "delete": "삭제",
       "via": "{{application}} 에서",
       "reply": "답장하기",
@@ -208,18 +273,26 @@
       "follow_requested": "팔로우 요청중",
       "open_in_browser": "브라우저에서 열기",
       "manage_list_memberships": "리스트 멤버 관리",
+      "mute": "뮤트",
+      "unmute": "뮤트 해제",
+      "unblock": "차단 해제",
+      "block": "차단",
       "toots": "툿",
       "follows": "팔로잉",
       "followers": "팔로워"
     }
   },
   "hashtag": {
-    "tag_name": "태그 이름"
+    "tag_name": "태그 이름",
+    "delete_tag": "태그 삭제",
+    "save_tag": "태그 저장"
   },
   "search": {
     "search": "검색",
     "account": "계정",
-    "keyword": "키워드"
+    "keyword": "키워드",
+    "toot": "툿",
+    "tag": "해시태그"
   },
   "lists": {
     "index": {

@@ -13,7 +13,10 @@ export default class Streaming {
 
   startUserStreaming (updateCallback, notificationCallback, errCallback) {
     this.listener = this.client.stream('/streaming/user')
-    log.info('/streaming/user started')
+
+    this.listener.on('connect', _ => {
+      log.info('/streaming/user started')
+    })
 
     this.listener.on('update', (status) => {
       updateCallback(status)
@@ -26,11 +29,17 @@ export default class Streaming {
     this.listener.on('error', (err) => {
       errCallback(err)
     })
+
+    this.listener.on('connection-limit-exceeded', err => {
+      errCallback(err)
+    })
   }
 
   start (path, updateCallback, errCallback) {
     this.listener = this.client.stream(path)
-    log.info(`${path} started`)
+    this.listener.on('connect', _ => {
+      log.info(`${path} started`)
+    })
 
     this.listener.on('update', (status) => {
       updateCallback(status)
@@ -39,10 +48,27 @@ export default class Streaming {
     this.listener.on('error', (err) => {
       errCallback(err)
     })
+
+    this.listener.on('connection-limit-exceeded', err => {
+      errCallback(err)
+    })
   }
 
   stop () {
-    this.listener.stop()
-    log.info('streaming stopped')
+    if (this.listener) {
+      this.listener.removeAllListeners('connect')
+      this.listener.removeAllListeners('update')
+      this.listener.removeAllListeners('notification')
+      this.listener.removeAllListeners('error')
+      this.listener.removeAllListeners('parser-error')
+      this.listener.on('error', (e) => {
+        log.error(e)
+      })
+      this.listener.on('parser-error', (e) => {
+        log.error(e)
+      })
+      this.listener.stop()
+      log.info('streaming stopped')
+    }
   }
 }

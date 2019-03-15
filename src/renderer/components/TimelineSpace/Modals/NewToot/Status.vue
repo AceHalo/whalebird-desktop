@@ -8,6 +8,9 @@
     @paste="onPaste"
     v-on:input="startSuggest"
     :placeholder="$t('modals.new_toot.status')"
+    role="textbox"
+    contenteditable="true"
+    aria-multiline="true"
     autofocus>
   </textarea>
   <el-popover
@@ -33,21 +36,46 @@
       </li>
     </ul>
   </el-popover>
+  <div v-click-outside="hideEmojiPicker">
+    <el-button type="text" class="emoji-selector" @click="toggleEmojiPicker">
+      <icon name="regular/smile" scale="1.2"></icon>
+    </el-button>
+    <div v-if="openEmojiPicker" class="emoji-picker">
+      <picker
+        set="emojione"
+        :autoFocus="true"
+        :custom="pickerEmojis"
+        @select="selectEmoji"
+        />
+    </div>
+  </div>
 </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import emojilib from 'emojilib'
+import { Picker } from 'emoji-mart-vue'
+import ClickOutside from 'vue-click-outside'
 import suggestText from '../../../../utils/suggestText'
 
 export default {
   name: 'status',
+  directives: {
+    ClickOutside
+  },
+  components: {
+    Picker
+  },
   props: {
     value: {
       type: String
     },
     opened: {
+      type: Boolean,
+      default: false
+    },
+    fixCursorPos: {
       type: Boolean,
       default: false
     }
@@ -58,14 +86,21 @@ export default {
       highlightedIndex: 0,
       startIndex: null,
       matchWord: null,
-      filteredSuggestion: []
+      filteredSuggestion: [],
+      openEmojiPicker: false
     }
   },
   computed: {
     ...mapState({
-      filteredAccounts: state => state.TimelineSpace.Modals.NewToot.Status.filteredAccounts,
       customEmojis: state => state.TimelineSpace.emojis
     }),
+    ...mapState('TimelineSpace/Modals/NewToot/Status', {
+      filteredAccounts: state => state.filteredAccounts,
+      filteredHashtags: state => state.filteredHashtags
+    }),
+    ...mapGetters('TimelineSpace/Modals/NewToot/Status', [
+      'pickerEmojis'
+    ]),
     status: {
       get: function () {
         return this.value
@@ -79,42 +114,58 @@ export default {
     // When change account, the new toot modal is recreated.
     // So can not catch open event in watch.
     this.$refs.status.focus()
+    if (this.fixCursorPos) {
+      this.$refs.status.setSelectionRange(0, 0)
+    }
   },
   watch: {
     opened: function (newState, oldState) {
       if (!oldState && newState) {
         this.$nextTick(function () {
           this.$refs.status.focus()
+          if (this.fixCursorPos) {
+            this.$refs.status.setSelectionRange(0, 0)
+          }
         })
       } else if (oldState && !newState) {
         this.closeSuggest()
+        this.hideEmojiPicker()
       }
     }
   },
   methods: {
-    startSuggest (e) {
+    async startSuggest (e) {
       const currentValue = e.target.value
       // Start suggest after user stop writing
-      setTimeout(() => {
+      setTimeout(async () => {
         if (currentValue === this.status) {
-          this.suggest(e)
+          await this.suggest(e)
         }
-      }, 500)
+      }, 700)
     },
     async suggest (e) {
-      const ac = await this.suggestAccount(e)
-      if (!ac) {
-        this.suggestEmoji(e)
-      }
-    },
-    async suggestAccount (e) {
       // e.target.sectionStart: Cursor position
       // e.target.value: current value of the textarea
-      const [start, word] = suggestText(e.target.value, e.target.selectionStart, '@')
+      const [start, word] = suggestText(e.target.value, e.target.selectionStart)
       if (!start || !word) {
         this.closeSuggest()
         return false
       }
+      switch (word.charAt(0)) {
+        case ':':
+          await this.suggestEmoji(start, word)
+          return true
+        case '@':
+          await this.suggestAccount(start, word)
+          return true
+        case '#':
+          await this.suggestHashtag(start, word)
+          return true
+        default:
+          return false
+      }
+    },
+    async suggestAccount (start, word) {
       try {
         await this.$store.dispatch('TimelineSpace/Modals/NewToot/Status/searchAccount', word)
         this.openSuggest = true
@@ -127,14 +178,20 @@ export default {
         return false
       }
     },
-    suggestEmoji (e) {
-      // e.target.sectionStart: Cursor position
-      // e.target.value: current value of the textarea
-      const [start, word] = suggestText(e.target.value, e.target.selectionStart, ':')
-      if (!start || !word) {
-        this.closeSuggest()
+    async suggestHashtag (start, word) {
+      try {
+        await this.$store.dispatch('TimelineSpace/Modals/NewToot/Status/searchHashtag', word)
+        this.openSuggest = true
+        this.startIndex = start
+        this.matchWord = word
+        this.filteredSuggestion = this.filteredHashtags
+        return true
+      } catch (err) {
+        console.log(err)
         return false
       }
+    },
+    suggestEmoji (start, word) {
       // Find native emojis
       const filteredEmojiName = emojilib.ordered.filter(emoji => `:${emoji}`.includes(word))
       const filteredNativeEmoji = filteredEmojiName.map((name) => {
@@ -146,24 +203,28 @@ export default {
       // Find custom emojis
       const filteredCustomEmoji = this.customEmojis.filter(emoji => emoji.name.includes(word))
       const filtered = filteredNativeEmoji.concat(filteredCustomEmoji)
-      console.log(filtered)
       if (filtered.length > 0) {
         this.openSuggest = true
         this.startIndex = start
         this.matchWord = word
-        this.filteredSuggestion = filtered
+        this.filteredSuggestion = filtered.filter((e, i, array) => {
+          return (array.findIndex(ar => e.name === ar.name) === i)
+        })
       } else {
-        this.openSuggest = false
+        this.closeSuggest()
       }
       return true
     },
     closeSuggest () {
-      this.openSuggest = false
-      this.startIndex = null
-      this.matchWord = null
-      this.highlightedIndex = 0
-      this.filteredSuggestion = []
-      this.$store.commit('TimelineSpace/Modals/NewToot/Status/clearFilteredAccounts')
+      if (this.openSuggest) {
+        this.openSuggest = false
+        this.startIndex = null
+        this.matchWord = null
+        this.highlightedIndex = 0
+        this.filteredSuggestion = []
+        this.$store.commit('TimelineSpace/Modals/NewToot/Status/clearFilteredAccounts')
+        this.$store.commit('TimelineSpace/Modals/NewToot/Status/clearFilteredHashtags')
+      }
     },
     suggestHighlight (index) {
       if (index < 0) {
@@ -219,6 +280,22 @@ export default {
         default:
           return true
       }
+    },
+    toggleEmojiPicker () {
+      this.openEmojiPicker = !this.openEmojiPicker
+    },
+    hideEmojiPicker () {
+      this.openEmojiPicker = false
+    },
+    selectEmoji (emoji) {
+      const current = this.$refs.status.selectionStart
+      if (emoji.native) {
+        this.status = `${this.status.slice(0, current)}${emoji.native} ${this.status.slice(current)}`
+      } else {
+        // Custom emoji don't have natvie code
+        this.status = `${this.status.slice(0, current)}${emoji.name} ${this.status.slice(current)}`
+      }
+      this.hideEmojiPicker()
     }
   }
 }
@@ -226,9 +303,12 @@ export default {
 
 <style lang="scss" scoped>
 .status {
+  position: relative;
+  z-index: 1;
+
   textarea {
     display: block;
-    padding: 5px 15px;
+    padding: 4px 32px 4px 16px;
     line-height: 1.5;
     box-sizing: border-box;
     width: 100%;
@@ -240,7 +320,6 @@ export default {
     resize: none;
     height: 120px;
     transition: border-color 0.2s cubic-bezier(0.645, 0.045, 9.355, 1);
-    font-family: 'Lato', sans-serif;
 
     &::placeholder {
       color: #c0c4cc;
@@ -280,6 +359,19 @@ export default {
     .highlighted {
       background-color: #f5f7fa;
     }
+  }
+
+  .emoji-selector {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    padding: 0;
+  }
+
+  .emoji-picker {
+    position: absolute;
+    top: 32px;
+    left: 240px;
   }
 }
 </style>

@@ -1,8 +1,4 @@
 import { ipcRenderer } from 'electron'
-import Visibility from '~/src/constants/visibility'
-import DisplayStyle from '~/src/constants/displayStyle'
-import Theme from '~/src/constants/theme'
-import TimeFormat from '~/src/constants/timeFormat'
 
 const General = {
   namespaced: true,
@@ -12,11 +8,11 @@ const General = {
         fav_rb: true,
         toot: true
       },
-      theme: Theme.Light.key,
-      fontSize: 14,
-      displayNameStyle: DisplayStyle.DisplayNameAndUsername.value,
-      tootVisibility: Visibility.Public.value,
-      timeFormat: TimeFormat.Absolute.value
+      timeline: {
+        cw: false,
+        nfsw: false,
+        hideAllAttachments: false
+      }
     },
     loading: false
   },
@@ -46,94 +42,6 @@ const General = {
         })
       })
     },
-    updateTheme ({ dispatch, commit, state }, theme) {
-      commit('changeLoading', true)
-      const newGeneral = Object.assign({}, state.general, {
-        theme: theme
-      })
-      const config = {
-        general: newGeneral
-      }
-      ipcRenderer.send('update-preferences', config)
-      ipcRenderer.once('error-update-preferences', (event, err) => {
-        ipcRenderer.removeAllListeners('response-update-preferences')
-        commit('changeLoading', false)
-      })
-      ipcRenderer.once('response-update-preferences', (event, conf) => {
-        ipcRenderer.removeAllListeners('error-update-preferences')
-        commit('updateGeneral', conf.general)
-        dispatch('App/loadPreferences', null, { root: true })
-        commit('changeLoading', false)
-      })
-    },
-    updateFontSize ({ dispatch, commit, state }, fontSize) {
-      const newGeneral = Object.assign({}, state.general, {
-        fontSize: fontSize
-      })
-      const config = {
-        general: newGeneral
-      }
-      ipcRenderer.send('update-preferences', config)
-      ipcRenderer.once('error-update-preferences', (event, err) => {
-        ipcRenderer.removeAllListeners('response-update-preferences')
-      })
-      ipcRenderer.once('response-update-preferences', (event, conf) => {
-        ipcRenderer.removeAllListeners('error-update-preferences')
-        commit('updateGeneral', conf.general)
-        dispatch('App/loadPreferences', null, { root: true })
-      })
-    },
-    updateDisplayNameStyle ({ dispatch, commit, state }, value) {
-      const newGeneral = Object.assign({}, state.general, {
-        displayNameStyle: value
-      })
-      const config = {
-        general: newGeneral
-      }
-      ipcRenderer.send('update-preferences', config)
-      ipcRenderer.once('error-update-preferences', (event, err) => {
-        ipcRenderer.removeAllListeners('response-update-preferences')
-      })
-      ipcRenderer.once('response-update-preferences', (event, conf) => {
-        ipcRenderer.removeAllListeners('error-update-preferences')
-        dispatch('App/loadPreferences', null, { root: true })
-        commit('updateGeneral', conf.general)
-      })
-    },
-    updateTimeFormat ({ dispatch, commit, state }, value) {
-      const newGeneral = Object.assign({}, state.general, {
-        timeFormat: value
-      })
-      const config = {
-        general: newGeneral
-      }
-      ipcRenderer.send('update-preferences', config)
-      ipcRenderer.once('error-update-preferences', (event, err) => {
-        ipcRenderer.removeAllListeners('response-update-preferences')
-      })
-      ipcRenderer.once('response-update-preferences', (event, conf) => {
-        ipcRenderer.removeAllListeners('error-update-preferences')
-        dispatch('App/loadPreferences', null, { root: true })
-        commit('updateGeneral', conf.general)
-      })
-    },
-    updateTootVisibility ({ dispatch, commit, state }, value) {
-      const newGeneral = Object.assign({}, state.general, {
-        tootVisibility: value
-      })
-      const config = {
-        general: newGeneral
-      }
-      ipcRenderer.send('update-preferences', config)
-      ipcRenderer.once('error-update-preferences', (event, err) => {
-        ipcRenderer.removeAllListeners('response-update-preferences')
-      })
-      ipcRenderer.once('response-update-preferences', (event, conf) => {
-        ipcRenderer.removeAllListeners('error-update-preferences')
-        dispatch('App/loadPreferences', null, { root: true })
-        commit('updateGeneral', conf.general)
-      })
-    },
     updateSound ({ commit, state }, sound) {
       commit('changeLoading', true)
       const newSound = Object.assign({}, state.general.sound, sound)
@@ -143,15 +51,44 @@ const General = {
       const config = {
         general: newGeneral
       }
-      ipcRenderer.send('update-preferences', config)
-      ipcRenderer.once('error-update-preferences', (event, err) => {
-        ipcRenderer.removeAllListeners('response-update-preferences')
-        commit('changeLoading', false)
+      return new Promise((resolve, reject) => {
+        ipcRenderer.send('update-preferences', config)
+        ipcRenderer.once('error-update-preferences', (event, err) => {
+          ipcRenderer.removeAllListeners('response-update-preferences')
+          commit('changeLoading', false)
+          reject(err)
+        })
+        ipcRenderer.once('response-update-preferences', (event, conf) => {
+          ipcRenderer.removeAllListeners('error-update-preferences')
+          commit('updateGeneral', conf.general)
+          commit('changeLoading', false)
+          resolve(conf)
+        })
       })
-      ipcRenderer.once('response-update-preferences', (event, conf) => {
-        ipcRenderer.removeAllListeners('error-update-preferences')
-        commit('updateGeneral', conf.general)
-        commit('changeLoading', false)
+    },
+    updateTimeline ({ commit, state, dispatch }, timeline) {
+      commit('changeLoading', true)
+      const newTimeline = Object.assign({}, state.general.timeline, timeline)
+      const newGeneral = Object.assign({}, state.general, {
+        timeline: newTimeline
+      })
+      const config = {
+        general: newGeneral
+      }
+      return new Promise((resolve, reject) => {
+        ipcRenderer.once('error-update-preferences', (event, err) => {
+          ipcRenderer.removeAllListeners('response-update-preferences')
+          commit('changeLoading', false)
+          reject(err)
+        })
+        ipcRenderer.once('response-update-preferences', (event, conf) => {
+          ipcRenderer.removeAllListeners('error-update-preferences')
+          commit('updateGeneral', conf.general)
+          commit('changeLoading', false)
+          dispatch('App/loadPreferences', null, { root: true })
+          resolve(conf)
+        })
+        ipcRenderer.send('update-preferences', config)
       })
     }
   }

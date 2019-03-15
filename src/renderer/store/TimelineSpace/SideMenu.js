@@ -7,8 +7,10 @@ const SideMenu = {
     unreadHomeTimeline: false,
     unreadNotifications: false,
     unreadLocalTimeline: false,
+    unreadDirectMessagesTimeline: false,
+    unreadPublicTimeline: false,
     lists: [],
-    overrideActivePath: null,
+    tags: [],
     collapse: false
   },
   mutations: {
@@ -21,14 +23,20 @@ const SideMenu = {
     changeUnreadLocalTimeline (state, value) {
       state.unreadLocalTimeline = value
     },
+    changeUnreadDirectMessagesTimeline (state, value) {
+      state.unreadDirectMessagesTimeline = value
+    },
+    changeUnreadPublicTimeline (state, value) {
+      state.unreadPublicTimeline = value
+    },
     updateLists (state, lists) {
       state.lists = lists
     },
-    updateOverrideActivePath (state, path) {
-      state.overrideActivePath = path
-    },
     changeCollapse (state, collapse) {
       state.collapse = collapse
+    },
+    updateTags (state, tags) {
+      state.tags = tags
     }
   },
   actions: {
@@ -48,15 +56,34 @@ const SideMenu = {
       commit('changeUnreadHomeTimeline', false)
       commit('changeUnreadNotifications', false)
       commit('changeUnreadLocalTimeline', false)
+      commit('changeUnreadDirectMessagesTimeline', false)
+      commit('changeUnreadPublicTimeline', false)
     },
     changeCollapse ({ commit }, value) {
       commit('changeCollapse', value)
       ipcRenderer.send('change-collapse', value)
     },
     readCollapse ({ commit }) {
-      ipcRenderer.send('get-collapse')
-      ipcRenderer.once('response-get-collapse', (event, value) => {
-        commit('changeCollapse', value)
+      return new Promise((resolve, reject) => {
+        ipcRenderer.send('get-collapse')
+        ipcRenderer.once('response-get-collapse', (event, value) => {
+          commit('changeCollapse', value)
+          resolve(value)
+        })
+      })
+    },
+    listTags ({ commit }) {
+      return new Promise((resolve, reject) => {
+        ipcRenderer.once('response-list-hashtags', (event, tags) => {
+          ipcRenderer.removeAllListeners('error-list-hashtags')
+          commit('updateTags', tags)
+          resolve(tags)
+        })
+        ipcRenderer.once('error-list-hashtags', (event, err) => {
+          ipcRenderer.removeAlListeners('response-list-hashtags')
+          reject(err)
+        })
+        ipcRenderer.send('list-hashtags')
       })
     }
   }

@@ -1,10 +1,11 @@
 import storage from 'electron-json-storage'
 import objectAssignDeep from 'object-assign-deep'
-import Visibility from '../constants/visibility'
 import DisplayStyle from '../constants/displayStyle'
 import Theme from '../constants/theme'
 import Language from '../constants/language'
 import TimeFormat from '../constants/timeFormat'
+import { LightTheme } from '../renderer/utils/theme'
+import DefaultFonts from '../renderer/utils/fonts'
 
 const Base = {
   general: {
@@ -12,14 +13,15 @@ const Base = {
       fav_rb: true,
       toot: true
     },
-    theme: Theme.Light.key,
-    fontSize: 14,
-    displayNameStyle: DisplayStyle.DisplayNameAndUsername.value,
-    tootVisibility: Visibility.Public.value,
-    timeFormat: TimeFormat.Absolute.value
+    timeline: {
+      cw: false,
+      nfsw: false,
+      hideAllAttachments: false
+    }
   },
   state: {
-    collapse: false
+    collapse: false,
+    hideGlobalHeader: false
   },
   language: {
     language: Language.en.key
@@ -31,6 +33,14 @@ const Base = {
       favourite: true,
       follow: true
     }
+  },
+  appearance: {
+    theme: Theme.Light.key,
+    fontSize: 14,
+    displayNameStyle: DisplayStyle.DisplayNameAndUsername.value,
+    timeFormat: TimeFormat.Absolute.value,
+    customThemeColor: LightTheme,
+    font: DefaultFonts[0]
   }
 }
 

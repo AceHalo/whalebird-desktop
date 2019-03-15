@@ -1,22 +1,22 @@
 import { ipcRenderer } from 'electron'
-import router from '../router'
+import router from '@/router'
 
 const GlobalHeader = {
   namespaced: true,
   state: {
-    defaultActive: '0',
     accounts: [],
-    changing: false
+    changing: false,
+    hide: false
   },
   mutations: {
-    changeDefaultActive (state, index) {
-      state.defaultActive = index
-    },
     updateAccounts (state, accounts) {
       state.accounts = accounts
     },
     updateChanging (state, value) {
       state.changing = value
+    },
+    changeHide (state, value) {
+      state.hide = value
     }
   },
   actions: {
@@ -50,7 +50,7 @@ const GlobalHeader = {
         })
       })
     },
-    watchShortcutEvents ({ state, commit, rootState }) {
+    watchShortcutEvents ({ state, commit, rootState, rootGetters }) {
       ipcRenderer.on('change-account', (event, account) => {
         if (state.changing) {
           return null
@@ -58,29 +58,36 @@ const GlobalHeader = {
         if (rootState.route.params.id === account._id) {
           return null
         }
+        // When the modal window is active, don't change account
+        if (rootGetters['TimelineSpace/Modals/modalOpened']) {
+          return null
+        }
         // changing finish after loading
         commit('updateChanging', true)
-        commit('changeDefaultActive', account.index.toString())
         router.push(`/${account._id}/home`)
       })
     },
-    selectAccount ({ state, commit }, account) {
-      commit('updateChanging', true)
-      const index = state.accounts.findIndex(a => a._id === account._id)
-      commit('changeDefaultActive', index.toString())
-      router.push({ path: `/${account._id}/home` })
-    },
     async removeShortcutEvents () {
       ipcRenderer.removeAllListeners('change-account')
-      return 'removeShortcutEvents'
+      return true
     },
-    schmearMenu ({ commit, state }, id) {
-      const index = state.accounts.findIndex((a) => {
-        return a._id === id
+    loadHide ({ commit }) {
+      return new Promise((resolve, reject) => {
+        ipcRenderer.send('get-global-header')
+        ipcRenderer.once('response-get-global-header', (event, value) => {
+          commit('changeHide', value)
+          resolve(value)
+        })
       })
-      if (index !== undefined) {
-        commit('changeDefaultActive', index.toString())
-      }
+    },
+    switchHide ({ dispatch }, value) {
+      return new Promise((resolve, reject) => {
+        ipcRenderer.send('change-global-header', value)
+        ipcRenderer.once('response-change-global-header', (event, _) => {
+          dispatch('loadHide')
+          resolve(true)
+        })
+      })
     }
   }
 }

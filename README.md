@@ -29,6 +29,8 @@ Whalebird is a mastodon client for desktop application.
 <tr><td> Open new toot window            </td><td>             <kbd>Cmd + n</kbd>             </td><td> <kbd>Ctrl + n</kbd>          </td></tr>
 <tr><td> Select next toot                </td><td>             <kbd>j</kbd>                   </td><td> <kbd>j</kbd>          </td></tr>
 <tr><td> Select previous toot            </td><td>             <kbd>k</kbd>                   </td><td> <kbd>k</kbd>          </td></tr>
+<tr><td> Switch focus to left column     </td><td>             <kbd>h</kbd>                   </td><td> <kbd>h</kbd>          </td></tr>
+<tr><td> Switch focus to right column    </td><td>             <kbd>l</kbd>                   </td><td> <kbd>l</kbd>          </td></tr>
 <tr><td> Reply to the toot               </td><td>             <kbd>r</kbd>                   </td><td> <kbd>r</kbd>          </td></tr>
 <tr><td> Reblog the toot                 </td><td>             <kbd>b</kbd>                   </td><td> <kbd>b</kbd>          </td></tr>
 <tr><td> Favourite the toot              </td><td>             <kbd>f</kbd>                   </td><td> <kbd>f</kbd>          </td></tr>
@@ -36,7 +38,8 @@ Whalebird is a mastodon client for desktop application.
 <tr><td> Open account profile of the toot</td><td>             <kbd>p</kbd>                   </td><td> <kbd>p</kbd>          </td></tr>
 <tr><td> Open the images                 </td><td>             <kbd>i</kbd>                   </td><td> <kbd>i</kbd>          </td></tr>
 <tr><td> Show/hide CW and NSFW           </td><td>             <kbd>x</kbd>                   </td><td> <kbd>x</kbd>          </td></tr>
-<tr><td> Close current page              </td><td>             <kbd>esc</kbd>                 </td><td> <kbd>esc</kbd>          </td></tr>
+<tr><td> Close current page              </td><td>             <kbd>esc</kbd>                 </td><td> <kbd>esc</kbd>        </td></tr>
+<tr><td> Show shortcut keys              </td><td>             <kbd>?</kbd>                   </td><td> <kbd>?</kbd>           </td></tr>
 </tbody>
 </table>
 
@@ -59,7 +62,7 @@ $ brew cask install whalebird
 ### Linux
 
 You can download `.deb` or `.rpm` from [release page](https://github.com/h3poteto/whalebird-desktop/releases).
-If you do not want to use package manager, please download `.tar.bz2` file and docompress it.
+If you do not want to use the package manager, please download `.tar.bz2` file and decompress it.
 
 Or please install the app from [snapcraft.io](https://snapcraft.io/whalebird).
 
@@ -77,7 +80,7 @@ We'd love you to contribute to Whalebird.
 
 ### Minimum requirements for development
 
-* Node.js greater than or equal version 8.9.0 (10.x is recommended)
+* Node.js greater than or equal version 8.9.0 (9.x is recommended)
 * npm or yarn
 
 ### Getting started
@@ -86,6 +89,9 @@ We'd love you to contribute to Whalebird.
 # clone this repository
 $ git clone https://github.com/h3poteto/whalebird-desktop.git
 $ cd whalebird-desktop
+
+# Install font config
+$ sudo apt-get install libfontconfig-dev
 
 # install dependencies
 $ npm install
@@ -100,14 +106,19 @@ $ npm run dev
 2. Next, add your language to constants like [French](https://github.com/h3poteto/whalebird-desktop/blob/master/src/constants/language.js#L10-L13).
 3. Finally, add your language at [here](https://github.com/h3poteto/whalebird-desktop/blob/master/src/renderer/components/Preferences/Language.vue#L37).
 
-If there is something unknown, please refer this pull request: https://github.com/h3poteto/whalebird-desktop/pull/502
+If there is something unknown, please refer to this pull request: https://github.com/h3poteto/whalebird-desktop/pull/502
 
 
 # License
 The software is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
 # Donate
-I prepared Bitcoin Address.
+
+[![Patreon](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/bePatron?u=15085320)
+
+[![Liberapay](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/h3poteto/donate)
+
+Or I prepared Bitcoin Address.
 
 ![Bitcoin](qr.png)
 

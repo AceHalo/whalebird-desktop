@@ -25,7 +25,7 @@ const Tag = {
       state.timeline = timeline
     },
     mergeTimeline (state) {
-      state.timeline = state.unreadTimeline.concat(state.timeline)
+      state.timeline = state.unreadTimeline.slice(0, 80).concat(state.timeline)
       state.unreadTimeline = []
     },
     insertTimeline (state, messages) {
@@ -91,7 +91,8 @@ const Tag = {
       return new Promise((resolve, reject) => {
         ipcRenderer.send('start-tag-streaming', {
           tag: encodeURIComponent(tag),
-          account: rootState.TimelineSpace.account
+          account: rootState.TimelineSpace.account,
+          useWebsocket: rootState.TimelineSpace.useWebsocket
         })
         ipcRenderer.once('error-start-tag-streaming', (event, err) => {
           reject(err)

@@ -1,4 +1,4 @@
-import router from '../../../router'
+import router from '@/router'
 import i18n from '~/src/config/i18n'
 
 const Jump = {
@@ -34,9 +34,14 @@ const Jump = {
       {
         name: i18n.t('side_menu.search'),
         path: 'search'
+      },
+      {
+        name: i18n.t('side_menu.direct'),
+        path: 'direct-messages'
       }
     ],
     listChannelList: [],
+    tagChannelList: [],
     selectedChannel: {
       name: i18n.t('side_menu.home'),
       path: 'home'
@@ -59,6 +64,14 @@ const Jump = {
           path: `lists/${l.id}`
         }
       })
+    },
+    updateTagChannel (state, tags) {
+      state.tagChannelList = tags.map(t => {
+        return {
+          name: `#${t.tagName}`,
+          path: `hashtag/${t.tagName}`
+        }
+      })
     }
   },
   actions: {
@@ -72,6 +85,9 @@ const Jump = {
     },
     syncListChannel ({ state, commit, rootState }) {
       commit('updateListChannel', rootState.TimelineSpace.SideMenu.lists)
+    },
+    syncTagChannel ({ commit, rootState }) {
+      commit('updateTagChannel', rootState.TimelineSpace.SideMenu.tags)
     }
   }
 }

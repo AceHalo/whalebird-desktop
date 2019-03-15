@@ -15,7 +15,9 @@
       </el-form>
     </div>
     <div class="search-result">
-      <search-account></search-account>
+      <search-account v-if="target==='account'"></search-account>
+      <search-tag v-else-if="target==='tag'"></search-tag>
+      <search-toots v-else-if="target==='toot'"></search-toots>
     </div>
   </div>
 </template>
@@ -23,10 +25,12 @@
 <script>
 import { mapState } from 'vuex'
 import SearchAccount from './Search/Account'
+import SearchTag from './Search/Tag'
+import SearchToots from './Search/Toots'
 
 export default {
   name: 'search',
-  components: { SearchAccount },
+  components: { SearchAccount, SearchTag, SearchToots },
   data () {
     return {
       target: 'account',
@@ -44,6 +48,14 @@ export default {
           {
             target: 'account',
             label: this.$t('search.account')
+          },
+          {
+            target: 'tag',
+            label: this.$t('search.tag')
+          },
+          {
+            target: 'toot',
+            label: this.$t('search.toot')
           }
         ]
       }
@@ -54,6 +66,24 @@ export default {
       switch (this.target) {
         case 'account':
           this.$store.dispatch('TimelineSpace/Contents/Search/Account/search', this.query)
+            .catch(() => {
+              this.$message({
+                message: this.$t('message.search_error'),
+                type: 'error'
+              })
+            })
+          break
+        case 'tag':
+          this.$store.dispatch('TimelineSpace/Contents/Search/Tag/search', `#${this.query}`)
+            .catch(() => {
+              this.$message({
+                message: this.$t('message.search_error'),
+                type: 'error'
+              })
+            })
+          break
+        case 'toot':
+          this.$store.dispatch('TimelineSpace/Contents/Search/Toots/search', this.query)
             .catch(() => {
               this.$message({
                 message: this.$t('message.search_error'),
