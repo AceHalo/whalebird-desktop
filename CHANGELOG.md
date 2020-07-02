@@ -1,4 +1,563 @@
 # Change Log
+
+## [4.0.2] - 2020-04-17
+### Added
+- [#1347](https://github.com/h3poteto/whalebird-desktop/pull/1347) closes #1279 Generate sha256sum file after build
+
+### Changed
+- [#1361](https://github.com/h3poteto/whalebird-desktop/pull/1361) Bump babel-jest from 24.9.0 to 25.3.0
+- [#1366](https://github.com/h3poteto/whalebird-desktop/pull/1366) Bump prettier from 1.19.1 to 2.0.4
+- [#1360](https://github.com/h3poteto/whalebird-desktop/pull/1360) Bump stylelint from 12.0.1 to 13.3.2
+- [#1363](https://github.com/h3poteto/whalebird-desktop/pull/1363) Bump eslint-plugin-import from 2.20.0 to 2.20.2
+- [#1334](https://github.com/h3poteto/whalebird-desktop/pull/1334) Bump webpack from 4.39.2 to 4.42.1
+- [#1364](https://github.com/h3poteto/whalebird-desktop/pull/1364) Bump @typescript-eslint/typescript-estree from 2.16.0 to 2.28.0
+- [#1342](https://github.com/h3poteto/whalebird-desktop/pull/1342) Bump @babel/core from 7.8.4 to 7.9.0
+- [#1353](https://github.com/h3poteto/whalebird-desktop/pull/1353) Bump @types/node from 13.1.6 to 13.11.1
+- [#1365](https://github.com/h3poteto/whalebird-desktop/pull/1365) Bump i18next from 19.0.3 to 19.4.1
+- [#1362](https://github.com/h3poteto/whalebird-desktop/pull/1362) Bump regenerator-runtime from 0.13.3 to 0.13.5
+- [#1352](https://github.com/h3poteto/whalebird-desktop/pull/1352) Bump eslint-loader from 2.1.1 to 3.0.4
+- [#1341](https://github.com/h3poteto/whalebird-desktop/pull/1341) Bump vuex from 3.1.2 to 3.1.3
+- [#1339](https://github.com/h3poteto/whalebird-desktop/pull/1339) Bump @typescript-eslint/parser from 2.18.0 to 2.26.0
+- [#1336](https://github.com/h3poteto/whalebird-desktop/pull/1336) Bump jsdom from 15.2.1 to 16.2.2
+- [#1333](https://github.com/h3poteto/whalebird-desktop/pull/1333) Bump ts-loader from 6.2.1 to 6.2.2
+- [#1331](https://github.com/h3poteto/whalebird-desktop/pull/1331) Bump webpack-cli from 3.3.10 to 3.3.11
+- [#1327](https://github.com/h3poteto/whalebird-desktop/pull/1327) Bump cross-env from 5.2.0 to 7.0.2
+- [#1330](https://github.com/h3poteto/whalebird-desktop/pull/1330) Bump babel-eslint from 10.0.3 to 10.1.0
+- [#1328](https://github.com/h3poteto/whalebird-desktop/pull/1328) Bump style-loader from 1.1.2 to 1.1.3
+- [#1322](https://github.com/h3poteto/whalebird-desktop/pull/1322) Bump @babel/plugin-proposal-object-rest-spread from 7.7.7 to 7.9.0
+- [#1359](https://github.com/h3poteto/whalebird-desktop/pull/1359) Update electron version to 7.2.1
+- [#1358](https://github.com/h3poteto/whalebird-desktop/pull/1358) Update typescript version to 3.8.3
+- [#1356](https://github.com/h3poteto/whalebird-desktop/pull/1356) Update electron-log to 4.1.1 and fix proxy spec
+
+
+### Fixed
+- [#1355](https://github.com/h3poteto/whalebird-desktop/pull/1355) closes #1263 Specify word-break to normal in New toot
+- [#1354](https://github.com/h3poteto/whalebird-desktop/pull/1354) closes #1318 Apply font-size settings in New toot
+
+
+## [4.0.1] - 2020-04-03
+### Added
+- [#1337](https://github.com/h3poteto/whalebird-desktop/pull/1337) closes #1307 Confirm timelines after initialized
+- [#1279](https://github.com/h3poteto/whalebird-desktop/pull/1279) closes #1279 Generate sha256sum file after build
+
+### Changed
+- [#1319](https://github.com/h3poteto/whalebird-desktop/pull/1319) Bump @babel/runtime from 7.8.0 to 7.9.2
+- [#1305](https://github.com/h3poteto/whalebird-desktop/pull/1305) Bump vue-loader from 15.8.3 to 15.9.1
+- [#1315](https://github.com/h3poteto/whalebird-desktop/pull/1315) Bump eslint-config-prettier from 6.9.0 to 6.10.1
+- [#1311](https://github.com/h3poteto/whalebird-desktop/pull/1311) Bump @vue/test-utils from 1.0.0-beta.30 to 1.0.0-beta.32
+- [#1306](https://github.com/h3poteto/whalebird-desktop/pull/1306) Bump eslint-plugin-promise from 4.0.1 to 4.2.1
+- [#1274](https://github.com/h3poteto/whalebird-desktop/pull/1274) Bump mini-css-extract-plugin from 0.4.5 to 0.9.0
+- [#1304](https://github.com/h3poteto/whalebird-desktop/pull/1304) Bump mousetrap from 1.6.3 to 1.6.5
+- [#1303](https://github.com/h3poteto/whalebird-desktop/pull/1303) Bump @typescript-eslint/eslint-plugin from 2.19.0 to 2.24.0
+- [#1301](https://github.com/h3poteto/whalebird-desktop/pull/1301) Bump eslint-plugin-vue from 6.1.2 to 6.2.2
+- [#1299](https://github.com/h3poteto/whalebird-desktop/pull/1299) Bump webpack-merge from 4.1.4 to 4.2.2
+- [#1290](https://github.com/h3poteto/whalebird-desktop/pull/1290) Bump @types/jest from 24.9.1 to 25.1.4
+- [#1288](https://github.com/h3poteto/whalebird-desktop/pull/1288) Bump sanitize-html from 1.20.1 to 1.22.0
+- [#1272](https://github.com/h3poteto/whalebird-desktop/pull/1272) Bump babel-plugin-istanbul from 5.1.0 to 6.0.0
+- [#1271](https://github.com/h3poteto/whalebird-desktop/pull/1271) Bump node-sass from 4.13.0 to 4.13.1
+- [#1270](https://github.com/h3poteto/whalebird-desktop/pull/1270) Bump @trodi/electron-splashscreen from 0.3.4 to 1.0.0
+
+### Fixed
+- [#1345](https://github.com/h3poteto/whalebird-desktop/pull/1345) closes #1325 Update megalodon version to 3.0.1
+
+## [4.0.0] - 2020-03-24
+### Added
+- [#1298](https://github.com/h3poteto/whalebird-desktop/pull/1298) refs #816 Add support for Misskey login
+
+### Changed
+- [#1314](https://github.com/h3poteto/whalebird-desktop/pull/1314) New Crowdin translations
+- [#1312](https://github.com/h3poteto/whalebird-desktop/pull/1312) New Crowdin translations
+- [#1309](https://github.com/h3poteto/whalebird-desktop/pull/1309) New Crowdin translations
+
+## [3.2.0] - 2020-03-17
+### Added
+- [#1278](https://github.com/h3poteto/whalebird-desktop/pull/1278) Add bidi support
+- [#1269](https://github.com/h3poteto/whalebird-desktop/pull/1269) Load system theme for dark mode
+
+### Changed
+- [#1296](https://github.com/h3poteto/whalebird-desktop/pull/1296) Update electron-builder version to 22.4.0
+- [#1292](https://github.com/h3poteto/whalebird-desktop/pull/1292) Update megalodon version to 3.0.0-beta.4
+- [#1293](https://github.com/h3poteto/whalebird-desktop/pull/1293) Update sideci settings
+- [#1291](https://github.com/h3poteto/whalebird-desktop/pull/1291) [Security] Bump acorn from 5.7.3 to 5.7.4
+- [#1268](https://github.com/h3poteto/whalebird-desktop/pull/1268) Upgrade Electron version to 7.1.11
+- [#1266](https://github.com/h3poteto/whalebird-desktop/pull/1266) Bump @typescript-eslint/eslint-plugin from 1.5.0 to 2.19.0
+- [#1264](https://github.com/h3poteto/whalebird-desktop/pull/1264) Bump electron-context-menu from 0.15.2 to 0.16.0
+- [#1262](https://github.com/h3poteto/whalebird-desktop/pull/1262) Bump vue-loader from 15.7.2 to 15.8.3
+- [#1261](https://github.com/h3poteto/whalebird-desktop/pull/1261) Bump electron-json-storage from 4.1.5 to 4.1.8
+- [#1260](https://github.com/h3poteto/whalebird-desktop/pull/1260) Bump eslint-plugin-import from 2.19.1 to 2.20.0
+- [#1259](https://github.com/h3poteto/whalebird-desktop/pull/1259) Bump prettier from 1.17.0 to 1.19.1
+- [#1254](https://github.com/h3poteto/whalebird-desktop/pull/1254) Bump @typescript-eslint/parser from 2.15.0 to 2.18.0
+- [#1256](https://github.com/h3poteto/whalebird-desktop/pull/1256) Bump @babel/core from 7.7.7 to 7.8.4
+- [#1252](https://github.com/h3poteto/whalebird-desktop/pull/1252) Bump @types/jest from 24.0.25 to 24.9.1
+- [#1248](https://github.com/h3poteto/whalebird-desktop/pull/1248) Bump sass-loader from 7.1.0 to 8.0.2
+- [#1246](https://github.com/h3poteto/whalebird-desktop/pull/1246) Bump core-js from 3.6.1 to 3.6.4
+- [#1244](https://github.com/h3poteto/whalebird-desktop/pull/1244) Bump @typescript-eslint/typescript-estree from 1.5.0 to 2.16.0
+- [#1241](https://github.com/h3poteto/whalebird-desktop/pull/1241) Bump @babel/plugin-proposal-class-properties from 7.7.0 to 7.8.3
+
+## [3.1.0] - 2020-01-23
+### Added
+- [#1223](https://github.com/h3poteto/whalebird-desktop/pull/1223) Read exif and rotate image for all attachment images
+
+### Changed
+
+- [#1239](https://github.com/h3poteto/whalebird-desktop/pull/1239) Bump all-object-keys from 1.1.1 to 2.1.1
+- [#1238](https://github.com/h3poteto/whalebird-desktop/pull/1238) Bump webpack-cli from 3.1.2 to 3.3.10
+- [#1237](https://github.com/h3poteto/whalebird-desktop/pull/1237) Bump @types/node from 11.11.4 to 13.1.6
+- [#1236](https://github.com/h3poteto/whalebird-desktop/pull/1236) Bump ts-jest from 24.2.0 to 24.3.0
+- [#1235](https://github.com/h3poteto/whalebird-desktop/pull/1235) Bump electron-context-menu from 0.15.1 to 0.15.2
+- [#1234](https://github.com/h3poteto/whalebird-desktop/pull/1234) Bump element-ui from 2.4.11 to 2.13.0
+- [#1233](https://github.com/h3poteto/whalebird-desktop/pull/1233) Bump @babel/plugin-transform-runtime from 7.6.2 to 7.8.3
+- [#1230](https://github.com/h3poteto/whalebird-desktop/pull/1230) Bump @babel/runtime from 7.7.7 to 7.8.0
+- [#1229](https://github.com/h3poteto/whalebird-desktop/pull/1229) Bump vuex from 3.0.1 to 3.1.2
+- [#1228](https://github.com/h3poteto/whalebird-desktop/pull/1238) Bump @mapbox/stylelint-processor-arbitrary-tags from 0.2.0 to 0.3.0
+- [#1227](https://github.com/h3poteto/whalebird-desktop/pull/1227) Bump @typescript-eslint/parser from 1.5.0 to 2.15.0
+- [#1224](https://github.com/h3poteto/whalebird-desktop/pull/1224) Hide detail menu in toot detail sidebar
+- [#1217](https://github.com/h3poteto/whalebird-desktop/pull/1217) Update electron-builder version to >= 22.0.0
+- [#1215](https://github.com/h3poteto/whalebird-desktop/pull/1215) Bump moment from 2.22.2 to 2.24.0
+- [#1211](https://github.com/h3poteto/whalebird-desktop/pull/1211) Bump electron-mock-ipc from 0.3.1 to 0.3.2
+- [#1214](https://github.com/h3poteto/whalebird-desktop/pull/1214) Bump eslint-plugin-node from 10.0.0 to 11.0.0
+- [#1213](https://github.com/h3poteto/whalebird-desktop/pull/1213) Bump axios from 0.19.0 to 0.19.1
+- [#1212](https://github.com/h3poteto/whalebird-desktop/pull/1212) Bump i18next from 12.1.0 to 19.0.3
+- [#1210](https://github.com/h3poteto/whalebird-desktop/pull/1210) Bump url-loader from 2.2.0 to 3.0.0
+- [#1209](https://github.com/h3poteto/whalebird-desktop/pull/1209) Bump stylelint from 10.1.0 to 12.0.1
+- [#1208](https://github.com/h3poteto/whalebird-desktop/pull/1208) Bump vue-shortkey from 3.1.6 to 3.1.7
+
+### Fixed
+
+- [#1232](https://github.com/h3poteto/whalebird-desktop/pull/1232) Fix url-loader for loading icon
+- [#1231](https://github.com/h3poteto/whalebird-desktop/pull/1231) Catch error when can not load image in exifImageUrl
+- [#1221](https://github.com/h3poteto/whalebird-desktop/pull/1221) Fix lazy loading for account timeline in sidebar
+- [#1219](https://github.com/h3poteto/whalebird-desktop/pull/1219) Fix i18next namespace for new version
+
+
+
+## [3.0.3] - 2020-01-08
+### Changed
+- [#1207](https://github.com/h3poteto/whalebird-desktop/pull/1207) Update electron version to 6.1.7
+- [#1201](https://github.com/h3poteto/whalebird-desktop/pull/1201) Bump @types/jest from 24.0.15 to 24.0.25
+- [#1204](https://github.com/h3poteto/whalebird-desktop/pull/1204) Bump animate.css from 3.7.0 to 3.7.2
+- [#1203](https://github.com/h3poteto/whalebird-desktop/pull/1203) Bump ts-jest from 24.0.2 to 24.2.0
+- [#1202](https://github.com/h3poteto/whalebird-desktop/pull/1202) Bump webpack-dev-server from 3.9.0 to 3.10.1
+- [#1200](https://github.com/h3poteto/whalebird-desktop/pull/1200) Bump @types/nedb from 1.8.7 to 1.8.9
+- [#1199](https://github.com/h3poteto/whalebird-desktop/pull/1199) Bump eslint-plugin-vue from 6.0.1 to 6.1.2
+- [#1198](https://github.com/h3poteto/whalebird-desktop/pull/1198) Bump cfonts from 2.4.5 to 2.4.6
+- [#1197](https://github.com/h3poteto/whalebird-desktop/pull/1197) Bump @babel/core from 7.4.3 to 7.7.7
+- [#1205](https://github.com/h3poteto/whalebird-desktop/pull/1205) New Crowdin translations
+- [#1194](https://github.com/h3poteto/whalebird-desktop/pull/1194) Bump eslint-plugin-prettier from 3.0.1 to 3.1.2
+- [#1196](https://github.com/h3poteto/whalebird-desktop/pull/1196) Bump eslint-config-prettier from 6.7.0 to 6.9.0
+- [#1195](https://github.com/h3poteto/whalebird-desktop/pull/1195) Bump @babel/runtime from 7.7.4 to 7.7.7
+- [#1193](https://github.com/h3poteto/whalebird-desktop/pull/1193) Bump @vue/test-utils from 1.0.0-beta.29 to 1.0.0-beta.30
+- [#1192](https://github.com/h3poteto/whalebird-desktop/pull/1192) New Crowdin translations
+- [#1191](https://github.com/h3poteto/whalebird-desktop/pull/1191) Bump core-js from 3.0.0 to 3.6.1
+- [#1186](https://github.com/h3poteto/whalebird-desktop/pull/1186) Bump vue and vue-template-compiler
+- [#1190](https://github.com/h3poteto/whalebird-desktop/pull/1190) Bump style-loader from 1.0.0 to 1.1.2
+- [#1185](https://github.com/h3poteto/whalebird-desktop/pull/1185) Bump copy-webpack-plugin from 5.0.5 to 5.1.1
+- [#1183](https://github.com/h3poteto/whalebird-desktop/pull/1183) Bump eslint-plugin-vue from 5.2.2 to 6.0.1
+- [#1182](https://github.com/h3poteto/whalebird-desktop/pull/1182) Bump eslint-plugin-import from 2.18.2 to 2.19.1
+- [#1180](https://github.com/h3poteto/whalebird-desktop/pull/1180) Bump eslint-config-prettier from 4.1.0 to 6.7.0
+- [#1176](https://github.com/h3poteto/whalebird-desktop/pull/1176) Bump @babel/plugin-proposal-object-rest-spread from 7.7.4 to 7.7.7
+
+
+
+## [3.0.2] - 2019-12-23
+### Changed
+- [#1142](https://github.com/h3poteto/whalebird-desktop/pull/1142) Bump cfonts from 2.3.0 to 2.4.5
+- [#1160](https://github.com/h3poteto/whalebird-desktop/pull/1160) Bump @babel/plugin-proposal-object-rest-spread from 7.4.3 to 7.7.4
+- [#1153](https://github.com/h3poteto/whalebird-desktop/pull/1153) Bump @babel/runtime from 7.4.3 to 7.7.4
+- [#1151](https://github.com/h3poteto/whalebird-desktop/pull/1151) Bump regenerator-runtime from 0.13.1 to 0.13.3
+- [#1152](https://github.com/h3poteto/whalebird-desktop/pull/1152) Bump @types/i18next from 12.1.0 to 13.0.0
+- [#1150](https://github.com/h3poteto/whalebird-desktop/pull/1150) Bump stylelint-config-standard from 18.3.0 to 19.0.0
+- [#1141](https://github.com/h3poteto/whalebird-desktop/pull/1141) Bump sanitize-html from 1.19.3 to 1.20.1
+- [#1139](https://github.com/h3poteto/whalebird-desktop/pull/1139) Bump babel-loader from 8.0.5 to 8.0.6
+- [#1138](https://github.com/h3poteto/whalebird-desktop/pull/1138) Bump vue-popperjs from 1.6.1 to 2.2.0
+
+### Fixed
+- [#1177](https://github.com/h3poteto/whalebird-desktop/pull/1177) Fix loading css path for vue-popper.js
+- [#1175](https://github.com/h3poteto/whalebird-desktop/pull/1175) Fix reading translation files japanese and italian
+
+## [3.0.1] - 2019-12-22
+### Added
+- [#1169](https://github.com/h3poteto/whalebird-desktop/pull/1169) Search account in reply_to and context before account name search
+- [#1129](https://github.com/h3poteto/whalebird-desktop/pull/1129) Add sponsor link in donate
+- [#1128](https://github.com/h3poteto/whalebird-desktop/pull/1128) Add FUNDING.yml for sponsors
+- [#1127](https://github.com/h3poteto/whalebird-desktop/pull/1127) Add dependabot badge in README
+- [#1125](https://github.com/h3poteto/whalebird-desktop/pull/1125) Add some empty language translations
+- [#1124](https://github.com/h3poteto/whalebird-desktop/pull/1124) Add explain for crowdin in readme
+- [#1117](https://github.com/h3poteto/whalebird-desktop/pull/1117) Update crowdin to specify locale mapping
+- [#1115](https://github.com/h3poteto/whalebird-desktop/pull/1115) Introduce Crowdin configuration
+
+### Changed
+- [#1168](https://github.com/h3poteto/whalebird-desktop/pull/1168) Update node version to 12.13.1 in CircleCI
+- [#1165](https://github.com/h3poteto/whalebird-desktop/pull/1165) New Crowdin translations
+- [#1155](https://github.com/h3poteto/whalebird-desktop/pull/1155) Use ipcRenderer directly from electron
+- [#1149](https://github.com/h3poteto/whalebird-desktop/pull/1149) Load translation json directly instead of i18next-sync-fs-backend
+- [#1148](https://github.com/h3poteto/whalebird-desktop/pull/1148) Stop to specify libraryTarget for renderer in webpack
+- [#1137](https://github.com/h3poteto/whalebird-desktop/pull/1137) Bump style-loader from 0.23.1 to 1.0.0
+- [#1143](https://github.com/h3poteto/whalebird-desktop/pull/1143) Bump @panter/vue-i18next from 0.13.0 to 0.15.1
+- [#1144](https://github.com/h3poteto/whalebird-desktop/pull/1144) Bump about-window from 1.13.1 to 1.13.2
+- [#1145](https://github.com/h3poteto/whalebird-desktop/pull/1145) Bump @types/lodash from 4.14.123 to 4.14.149
+- [#1146](https://github.com/h3poteto/whalebird-desktop/pull/1146) Bump eslint-plugin-import from 2.14.0 to 2.18.2
+- [#1147](https://github.com/h3poteto/whalebird-desktop/pull/1147) Use window object in index.ejs
+- [#1135](https://github.com/h3poteto/whalebird-desktop/pull/1135) Use ipc, shell and clipboard from preload.js
+- [#1133](https://github.com/h3poteto/whalebird-desktop/pull/1133) Bump axios from 0.18.1 to 0.19.0
+- [#1122](https://github.com/h3poteto/whalebird-desktop/pull/1122) Bump webpack-dev-server from 3.8.0 to 3.9.0
+- [#1130](https://github.com/h3poteto/whalebird-desktop/pull/1130) Bump jsdom from 13.0.0 to 15.2.1
+- [#1131](https://github.com/h3poteto/whalebird-desktop/pull/1131) Bump chalk from 2.4.2 to 3.0.0
+- [#1132](https://github.com/h3poteto/whalebird-desktop/pull/1132) Bump del from 3.0.0 to 5.1.0
+- [#1123](https://github.com/h3poteto/whalebird-desktop/pull/1123) Bump eslint-plugin-html from 4.0.6 to 6.0.0
+- [#1121](https://github.com/h3poteto/whalebird-desktop/pull/1121) Bump @babel/preset-env from 7.4.3 to 7.7.1
+- [#1134](https://github.com/h3poteto/whalebird-desktop/pull/1134) Bump vue-awesome from 3.2.0 to 4.0.2
+- [#1120](https://github.com/h3poteto/whalebird-desktop/pull/1120) Bump hoek from 6.1.2 to 6.1.3
+- [#1119](https://github.com/h3poteto/whalebird-desktop/pull/1119) Bump electron-context-menu from 0.12.0 to 0.15.1
+- [#1126](https://github.com/h3poteto/whalebird-desktop/pull/1126) New Crowdin translations
+- [#1118](https://github.com/h3poteto/whalebird-desktop/pull/1118) New Crowdin translations
+- [#1116](https://github.com/h3poteto/whalebird-desktop/pull/1116) New Crowdin translations
+- [#1113](https://github.com/h3poteto/whalebird-desktop/pull/1113) Always fallback to English when the translation key is missing
+- [#1108](https://github.com/h3poteto/whalebird-desktop/pull/1108) Bump mousetrap from 1.6.2 to 1.6.3
+- [#1109](https://github.com/h3poteto/whalebird-desktop/pull/1109) Bump url-loader from 1.1.2 to 2.2.0
+- [#1110](https://github.com/h3poteto/whalebird-desktop/pull/1110) Bump vue-router from 3.0.2 to 3.1.3
+- [#1111](https://github.com/h3poteto/whalebird-desktop/pull/1111) Bump electron-debug from 2.2.0 to 3.0.1
+- [#1112](https://github.com/h3poteto/whalebird-desktop/pull/1112) Bump eslint-plugin-node from 8.0.0 to 10.0.0
+- [#1104](https://github.com/h3poteto/whalebird-desktop/pull/1104) Bump @babel/plugin-proposal-class-properties from 7.4.0 to 7.7.0
+- [#1103](https://github.com/h3poteto/whalebird-desktop/pull/1103) Bump copy-webpack-plugin from 4.6.0 to 5.0.5
+- [#1105](https://github.com/h3poteto/whalebird-desktop/pull/1105) Update Italy translations
+- [#1080](https://github.com/h3poteto/whalebird-desktop/pull/1080) Bump @babel/plugin-proposal-class-properties from 7.4.0 to 7.5.5
+- [#1082](https://github.com/h3poteto/whalebird-desktop/pull/1082) Bump css-loader from 3.0.0 to 3.2.0
+- [#1079](https://github.com/h3poteto/whalebird-desktop/pull/1079) Bump vue-loader from 15.4.2 to 15.7.2
+- [#1078](https://github.com/h3poteto/whalebird-desktop/pull/1079) Bump @babel/plugin-transform-runtime from 7.4.3 to 7.6.2
+- [#1073](https://github.com/h3poteto/whalebird-desktop/pull/1073) Bump ts-loader from 6.0.4 to 6.2.1
+- [#1074](https://github.com/h3poteto/whalebird-desktop/pull/1074) Bump node-sass from 4.12.0 to 4.13.0
+- [#1072](https://github.com/h3poteto/whalebird-desktop/pull/1072) Bump chalk from 2.4.1 to 2.4.2
+- [#1071](https://github.com/h3poteto/whalebird-desktop/pull/1071) Bump webpack-hot-middleware from 2.24.3 to 2.25.0
+- [#1070](https://github.com/h3poteto/whalebird-desktop/pull/1070) Bump babel-eslint from 10.0.1 to 10.0.3
+
+### Fixed
+- [#1174](https://github.com/h3poteto/whalebird-desktop/pull/1174) Remove babel-minify because webpack can minify using terser when production
+- [#1172](https://github.com/h3poteto/whalebird-desktop/pull/1172) Build preload script for production
+- [#1171](https://github.com/h3poteto/whalebird-desktop/pull/1171) Update megalodon version to 2.1.1
+- [#1167](https://github.com/h3poteto/whalebird-desktop/pull/1167)  Add test for toot parser
+- [#1166](https://github.com/h3poteto/whalebird-desktop/pull/1166) Remove word-break in toot
+- [#1164](https://github.com/h3poteto/whalebird-desktop/pull/1164) Use default preference if the file does not exist when get proxy configuration
+- [#1162](https://github.com/h3poteto/whalebird-desktop/pull/1162) Update megalodon version to 2.1.0
+- [#1159](https://github.com/h3poteto/whalebird-desktop/pull/1159)  Update jest version to 24.9.0 and fix some tests
+- [#1157](https://github.com/h3poteto/whalebird-desktop/pull/1157) Update electron-mock-ipc verions to 0.3.1
+
+## [3.0.0] - 2019-11-17
+### Added
+- [#1090](https://github.com/h3poteto/whalebird-desktop/pull/1090) Add AppImage in release builds
+- [#1081](https://github.com/h3poteto/whalebird-desktop/pull/1081) Add notice in login for users who use proxy server
+- [#1069](https://github.com/h3poteto/whalebird-desktop/pull/1069) Reload proxy configuration after changed
+- [#1066](https://github.com/h3poteto/whalebird-desktop/pull/1066) Load proxy information and apply for all network connection
+- [#1060](https://github.com/h3poteto/whalebird-desktop/pull/1060) Add a tray menu to open window
+- [#1064](https://github.com/h3poteto/whalebird-desktop/pull/1064) Add proxy configuration in preferences
+
+### Changed
+- [#1094](https://github.com/h3poteto/whalebird-desktop/pull/1094) Use system proxy as default in preferences
+- [#1093](https://github.com/h3poteto/whalebird-desktop/pull/1093) Update word instance to server
+- [#1088](https://github.com/h3poteto/whalebird-desktop/pull/1088) Update translation when domain does not find
+- [#1087](https://github.com/h3poteto/whalebird-desktop/pull/1087) Check instance API before request host-meta when confirm instance
+- [#1067](https://github.com/h3poteto/whalebird-desktop/pull/1067) Update electron version to 6.1.0
+- [#1063](https://github.com/h3poteto/whalebird-desktop/pull/1063) Replace old Hiragino font for macOS
+- [#1062](https://github.com/h3poteto/whalebird-desktop/pull/1062) Update megalodon version to 2.0.0
+
+### Fixed
+- [#1101](https://github.com/h3poteto/whalebird-desktop/pull/1101) fix: Codesign script for app store
+- [#1100](https://github.com/h3poteto/whalebird-desktop/pull/1100) fix: Remove debugging code in websocket
+- [#1099](https://github.com/h3poteto/whalebird-desktop/pull/1099) Update megalodon version to 2.0.1
+- [#1097](https://github.com/h3poteto/whalebird-desktop/pull/1097) Reject duplicated status when append statuses in mutations
+- [#1089](https://github.com/h3poteto/whalebird-desktop/pull/1089) Trim authorization token and domain URL
+- [#1068](https://github.com/h3poteto/whalebird-desktop/pull/1068) Fix comparison between login user and target account
+
+
+## [2.9.0] - 2019-10-11
+### Added
+- [#1056](https://github.com/h3poteto/whalebird-desktop/pull/1056) Upgrade electron version to 5.0.11
+- [#1045](https://github.com/h3poteto/whalebird-desktop/pull/1045) Add a preference to auto launch at login
+
+### Changed
+- [#1057](https://github.com/h3poteto/whalebird-desktop/pull/1057) Update electron-builder version to 21.2.0
+- [#1053](https://github.com/h3poteto/whalebird-desktop/pull/1053) Allow resize sidebar using drag
+- [#1049](https://github.com/h3poteto/whalebird-desktop/pull/1049) Through auto-launch in darwin
+- [#1048](https://github.com/h3poteto/whalebird-desktop/pull/1048) Add shortcut description for reload
+- [#1047](https://github.com/h3poteto/whalebird-desktop/pull/1047) Remove QR code for bitcoin
+
+### Fixed
+- [#1052](https://github.com/h3poteto/whalebird-desktop/pull/1052) Fix scrollbar design for preferences and settings
+- [#1050](https://github.com/h3poteto/whalebird-desktop/pull/1050) Fix loading color in preferences
+
+
+## [2.8.6] - 2019-09-19
+### Added
+- [#1043](https://github.com/h3poteto/whalebird-desktop/pull/1043) Start to pacman support in release package
+- [#1038](https://github.com/h3poteto/whalebird-desktop/pull/1038) Add reload method in SideBar
+
+### Changed
+- [#1044](https://github.com/h3poteto/whalebird-desktop/pull/1044) Update electron version to 5.0.10
+- [#1041](https://github.com/h3poteto/whalebird-desktop/pull/1041) Replace multispinner with another one
+- [#1033](https://github.com/h3poteto/whalebird-desktop/pull/1033) Use authorized request to get instance information when start streamings
+- [#1032](https://github.com/h3poteto/whalebird-desktop/pull/1032) Confirm ActivityPub instance to read host-meta before login
+
+### Fixed
+- [#1042](https://github.com/h3poteto/whalebird-desktop/pull/1042) Do not enforce single instance in darwin
+- [#1037](https://github.com/h3poteto/whalebird-desktop/pull/1037) Fix validation status when change the domain in Login
+
+
+## [2.8.5] - 2019-09-09
+### Changed
+- [#1029](https://github.com/h3poteto/whalebird-desktop/pull/1029) Block to root path when user use brower-back
+- [#1024](https://github.com/h3poteto/whalebird-desktop/pull/1024) Update German translation
+- [#1020](https://github.com/h3poteto/whalebird-desktop/pull/1020) audit: Update eslint-utils version to 1.4.2
+- [#1016](https://github.com/h3poteto/whalebird-desktop/pull/1016) Update megalodon version to 1.0.2
+- [#1015](https://github.com/h3poteto/whalebird-desktop/pull/1015) Update megalodon version to 1.0.1
+- [#1014](https://github.com/h3poteto/whalebird-desktop/pull/1014) Enforces single instance for linux and windows
+
+### Fixed
+- [#1026](https://github.com/h3poteto/whalebird-desktop/pull/1026) Set word-break for toot content
+- [#1023](https://github.com/h3poteto/whalebird-desktop/pull/1023) Update megalodon version to 1.0.3
+- [#1019](https://github.com/h3poteto/whalebird-desktop/pull/1019) fix: Close request when modal is closed
+- [#1018](https://github.com/h3poteto/whalebird-desktop/pull/1018) fix: Remove cache file when load error
+- [#1013](https://github.com/h3poteto/whalebird-desktop/pull/1013) Enable nodeIntegration in about window
+
+
+
+## [2.8.4] - 2019-08-23
+### Added
+- [#1006](https://github.com/h3poteto/whalebird-desktop/pull/1006) Show tray icon only linux and windows, and append tray menu
+
+### Changed
+- [#1008](https://github.com/h3poteto/whalebird-desktop/pull/1008) Set autoplay for movie attachments
+- [#1007](https://github.com/h3poteto/whalebird-desktop/pull/1007) Update Electron version to 5.0.9
+- [#1004](https://github.com/h3poteto/whalebird-desktop/pull/1004) Cancel requests when suggestion is selected or closed
+- [#1003](https://github.com/h3poteto/whalebird-desktop/pull/1003) Update changelog
+
+### Fixed
+- [#1011](https://github.com/h3poteto/whalebird-desktop/pull/1011) Through close event when platform is darwin
+- [#1005](https://github.com/h3poteto/whalebird-desktop/pull/1005) Update French translation
+
+
+
+## [2.8.3] - 2019-08-13
+### Added
+- [#1000](https://github.com/h3poteto/whalebird-desktop/pull/1000) Add spec for zh_cn translation json
+- [#998](https://github.com/h3poteto/whalebird-desktop/pull/998) Simplified Chinese translation
+- [#995](https://github.com/h3poteto/whalebird-desktop/pull/995) Cache accounts and search cache when suggest
+- [#990](https://github.com/h3poteto/whalebird-desktop/pull/990) Cache hashtags
+- [#984](https://github.com/h3poteto/whalebird-desktop/pull/984) Add description for CSC_NAME in document
+
+### Changed
+- [#997](https://github.com/h3poteto/whalebird-desktop/pull/997) Use v2 API for suggestion
+- [#994](https://github.com/h3poteto/whalebird-desktop/pull/994) Move suggest logic to vuex
+- [#986](https://github.com/h3poteto/whalebird-desktop/pull/986) Use websocket as default streaming method for all timelines
+
+### Fixed
+- [#1001](https://github.com/h3poteto/whalebird-desktop/pull/1001) Fix API endpoint for direct messages, use conversations
+- [#996](https://github.com/h3poteto/whalebird-desktop/pull/996) Fix uniqueness in suggestion
+- [#987](https://github.com/h3poteto/whalebird-desktop/pull/987) Get streaming url for instance API before start streaming
+
+
+
+## [2.8.2] - 2019-07-25
+### Changed
+- [#974](https://github.com/h3poteto/whalebird-desktop/pull/974) Notify notification in main process
+- [#973](https://github.com/h3poteto/whalebird-desktop/pull/973) Update screenshot in README for recent updates
+
+### Fixed
+- [#981](https://github.com/h3poteto/whalebird-desktop/pull/981) Set appId to notify in windows10
+- [#979](https://github.com/h3poteto/whalebird-desktop/pull/979) fix: Check webContents status when receive status in streaming
+- [#978](https://github.com/h3poteto/whalebird-desktop/pull/978) Check webContent status before send event in all streamings
+- [#977](https://github.com/h3poteto/whalebird-desktop/pull/977) Fix digits number of percentage in polls
+
+
+## [2.8.1] - 2019-07-21
+### Added
+- [#966](https://github.com/h3poteto/whalebird-desktop/pull/966) Add a spec for translation json files
+- [#963](https://github.com/h3poteto/whalebird-desktop/pull/963) Add polls form in new toot modal
+- [#962](https://github.com/h3poteto/whalebird-desktop/pull/962) Add poll form in Toot
+
+## Changed
+- [#961](https://github.com/h3poteto/whalebird-desktop/pull/961) Update megalodon version to 0.8.2
+- [#960](https://github.com/h3poteto/whalebird-desktop/pull/960) Update outdated packages
+- [#959](https://github.com/h3poteto/whalebird-desktop/pull/959) Update megalodon version to 0.8.1
+
+## Fixed
+- [#971](https://github.com/h3poteto/whalebird-desktop/pull/971) Clear polls after close new toot modal
+- [#970](https://github.com/h3poteto/whalebird-desktop/pull/970) Attach only polls if it is specified
+- [#968](https://github.com/h3poteto/whalebird-desktop/pull/968) Fix code link in README which explain who to add new language
+- [#967](https://github.com/h3poteto/whalebird-desktop/pull/967) Add default fonts for emoji in Linux
+
+
+
+## [2.8.0] - 2019-07-13
+### Added
+- [#946](https://github.com/h3poteto/whalebird-desktop/pull/946) Run all userstreaming in background and notify for all accounts
+
+### Changed
+- [#955](https://github.com/h3poteto/whalebird-desktop/pull/955) Remove unused tests and packages
+- [#954](https://github.com/h3poteto/whalebird-desktop/pull/954) Update outdated packages
+- [#953](https://github.com/h3poteto/whalebird-desktop/pull/953) Use electrom-mock-ipc instead of electron-ipc-mock
+- [#951](https://github.com/h3poteto/whalebird-desktop/pull/951) Update node version to 10.16.0
+- [#950](https://github.com/h3poteto/whalebird-desktop/pull/950) Update megalodon version to 0.8.0
+
+### Fixed
+- [#957](https://github.com/h3poteto/whalebird-desktop/pull/957) Stop user streaming after remove account association
+
+
+
+## [2.7.5] - 2019-06-20
+### Changed
+- [#945](https://github.com/h3poteto/whalebird-desktop/pull/945) Update Electron version to 4.2.4
+- [#944](https://github.com/h3poteto/whalebird-desktop/pull/944) Allow up to 72pt font in Appearance
+- [#939](https://github.com/h3poteto/whalebird-desktop/pull/939) Add integration tests for Contents
+
+### Fixed
+- [#942](https://github.com/h3poteto/whalebird-desktop/pull/942) Update megalodon version to 0.7.5
+
+
+## [2.7.4] - 2019-06-12
+### Added
+
+- [#935](https://github.com/h3poteto/whalebird-desktop/pull/935) Customize toot padding
+- [#929](https://github.com/h3poteto/whalebird-desktop/pull/929) Add arm architecture in build target
+
+### Changed
+
+- [#938](https://github.com/h3poteto/whalebird-desktop/pull/938) Update megalodon version to 0.7.2
+- [#937](https://github.com/h3poteto/whalebird-desktop/pull/937) refactor: Use type instead of interface
+- [#936](https://github.com/h3poteto/whalebird-desktop/pull/936) refactor: Replace any type and organize preference
+- [#931](https://github.com/h3poteto/whalebird-desktop/pull/931) Update megalodon version to 0.7.1
+- [#930](https://github.com/h3poteto/whalebird-desktop/pull/930) Handle delete event of streamings
+
+### Fixed
+
+- [#941](https://github.com/h3poteto/whalebird-desktop/pull/941) Update megalodon for User Agent and add User Agent in streaming
+- [#933](https://github.com/h3poteto/whalebird-desktop/pull/933) Fix hashtag when it is fixed
+- [#928](https://github.com/h3poteto/whalebird-desktop/pull/928) Upgrade megalodon and fix id type
+
+
+
+## [2.7.3] - 2019-05-27
+### Added
+- [#925](https://github.com/h3poteto/whalebird-desktop/pull/925) Update access token using refresh token when expire the token
+
+### Fixed
+
+- [#927](https://github.com/h3poteto/whalebird-desktop/pull/927) Downgrade electron version to 4.2.2
+- [#924](https://github.com/h3poteto/whalebird-desktop/pull/924) Stop loading after initialized in direct messages
+- [#922](https://github.com/h3poteto/whalebird-desktop/pull/922) Unbind streaming for mentions when change accounts
+
+
+## [2.7.2] - 2019-05-21
+### Added
+- [#911](https://github.com/h3poteto/whalebird-desktop/pull/911) Add a menu to read follow requests, and accept/reject it
+- [#903](https://github.com/h3poteto/whalebird-desktop/pull/903) Add Italian translation
+- [#902](https://github.com/h3poteto/whalebird-desktop/pull/902) Add request loading circle
+### Changed
+- [#917](https://github.com/h3poteto/whalebird-desktop/pull/917) Change loading in order to change channel while loading
+- [#916](https://github.com/h3poteto/whalebird-desktop/pull/916) Stop loading after fetch home timeline
+- [#914](https://github.com/h3poteto/whalebird-desktop/pull/914) refactor: Move logics to vuex store in new toot
+- [#910](https://github.com/h3poteto/whalebird-desktop/pull/910) Update electron version to 5.0.1 for mas
+- [#900](https://github.com/h3poteto/whalebird-desktop/pull/900) Update electron version to 5.0.1
+- [#899](https://github.com/h3poteto/whalebird-desktop/pull/899) Use accounts/search API instead of v2/search
+### Fixed
+- [#919](https://github.com/h3poteto/whalebird-desktop/pull/919) Fix favourite and reblog event
+- [#918](https://github.com/h3poteto/whalebird-desktop/pull/918) Update favourited, Reblogged toot in all timelines
+- [#912](https://github.com/h3poteto/whalebird-desktop/pull/912) Update pinned hashtags if tags are exist
+- [#908](https://github.com/h3poteto/whalebird-desktop/pull/908) Remove commas between pinned hashtags in new toot
+
+
+## [2.7.1] - 2019-04-25
+### Added
+- [#898](https://github.com/h3poteto/whalebird-desktop/pull/898) Build package for 32bit
+- [#891](https://github.com/h3poteto/whalebird-desktop/pull/891) Introduce prettier combinated eslint
+- [#862](https://github.com/h3poteto/whalebird-desktop/pull/862) Add detail link on timestamp in toot
+
+### Changed
+
+- [#888](https://github.com/h3poteto/whalebird-desktop/pull/888) Change scrollbar design
+- [#887](https://github.com/h3poteto/whalebird-desktop/pull/887) Remove unused setting files
+- [#850](https://github.com/h3poteto/whalebird-desktop/issues/850) Use typescript in store
+
+### Fixed
+
+- [#897](https://github.com/h3poteto/whalebird-desktop/pull/897) Show a menu item for save image in context menu
+- [#407](https://github.com/h3poteto/whalebird-desktop/issues/407) Can not remove the list members
+
+
+
+## [2.7.0] - 2019-03-25
+### Added
+
+- [#849](https://github.com/h3poteto/whalebird-desktop/pull/849) Add mentions timeline
+- [#847](https://github.com/h3poteto/whalebird-desktop/pull/847) Add integration tests for ListMembership modal
+- [#846](https://github.com/h3poteto/whalebird-desktop/pull/846) Add integration tests for AddListMember modal
+
+### Changed
+
+- [#855](https://github.com/h3poteto/whalebird-desktop/pull/855) Add mention timeline to jump list
+- [#853](https://github.com/h3poteto/whalebird-desktop/pull/853) Update electron-builder version to 20.39.0
+- [#845](https://github.com/h3poteto/whalebird-desktop/pull/845) Update electron version to 4.0.8
+
+### Fixed
+
+- [#856](https://github.com/h3poteto/whalebird-desktop/pull/856) Hide long username and instance name in side menu
+- [#854](https://github.com/h3poteto/whalebird-desktop/pull/854) Fix validation which checks toot max length
+- [#852](https://github.com/h3poteto/whalebird-desktop/pull/852) Add ttfinfo
+- [#842](https://github.com/h3poteto/whalebird-desktop/pull/842) Merge french translation missing file to translation
+- [#841](https://github.com/h3poteto/whalebird-desktop/pull/841) Fix package.json for Windows
+- [#839](https://github.com/h3poteto/whalebird-desktop/pull/839) Completing French translation
+
+
+
+## [2.6.3] - 2019-02-25
+### Added
+- [#836](https://github.com/h3poteto/whalebird-desktop/pull/836) Add option to hide all attachments
+- [#833](https://github.com/h3poteto/whalebird-desktop/pull/833) Add tests for Jump modal
+- [#827](https://github.com/h3poteto/whalebird-desktop/pull/827) Add option to ignore CW and NFSW
+- [#824](https://github.com/h3poteto/whalebird-desktop/pull/824) Add unit/integration tests for TimelineSpace
+- [#823](https://github.com/h3poteto/whalebird-desktop/pull/823) Add unit tests for Home
+- [#820](https://github.com/h3poteto/whalebird-desktop/pull/820) Add intergation tests for Contents/Home
+
+### Changed
+- [#838](https://github.com/h3poteto/whalebird-desktop/pull/838) Update megalodon version to 0.5.0
+- [#828](https://github.com/h3poteto/whalebird-desktop/pull/828) refactor: Use computed instead of methods in Toot
+- [#819](https://github.com/h3poteto/whalebird-desktop/pull/819) Update Korean translation
+
+### Fixed
+- [#837](https://github.com/h3poteto/whalebird-desktop/pull/837) Reload app general config after change preferences
+- [#835](https://github.com/h3poteto/whalebird-desktop/pull/835) Adjust z-index for emoji picker in NewTootModal
+- [#834](https://github.com/h3poteto/whalebird-desktop/pull/834) Fix state definition in integration spec
+- [#826](https://github.com/h3poteto/whalebird-desktop/pull/826) Merge and lint ko translation json
+
+
+
+## [2.6.2] - 2019-01-08
+
+### Added
+- [#818](https://github.com/h3poteto/whalebird-desktop/pull/818) Add Makefile to build release files
+- [#786](https://github.com/h3poteto/whalebird-desktop/pull/786) Add a button to switch websocket for streaming
+
+### Changed
+- [#817](https://github.com/h3poteto/whalebird-desktop/pull/817) Add integration/unit tests for TimelineSpace/HeaderMenu
+- [#815](https://github.com/h3poteto/whalebird-desktop/pull/815) Add unit/integration tests for SideMenu
+- [#814](https://github.com/h3poteto/whalebird-desktop/pull/814) Add unit/integration tests for GlobalHeader
+- [#813](https://github.com/h3poteto/whalebird-desktop/pull/813) Add Preferences store tests
+- [#812](https://github.com/h3poteto/whalebird-desktop/pull/812) Add Authorize store tests
+- [#811](https://github.com/h3poteto/whalebird-desktop/pull/811) Fix Login spec to use ipc mock
+- [#810](https://github.com/h3poteto/whalebird-desktop/pull/810) Add Login store unit tests
+- [#809](https://github.com/h3poteto/whalebird-desktop/pull/809) Use jest for unit tests instead of mocha
+
+### Fixed
+- [#808](https://github.com/h3poteto/whalebird-desktop/pull/808) Fix cursor position when user types arrow keys on image description
+- [#807](https://github.com/h3poteto/whalebird-desktop/pull/807) Don't send event to webContents when window is already closed
+- [#806](https://github.com/h3poteto/whalebird-desktop/pull/806) Fix typo when stop direct messages streaming
+- [#805](https://github.com/h3poteto/whalebird-desktop/pull/805) Use same arrow icon for collapse buttons
+- [#803](https://github.com/h3poteto/whalebird-desktop/pull/803) Use same arrow icon for collapse buttons
+- [#799](https://github.com/h3poteto/whalebird-desktop/pull/799) Rescue parser error after streaming listener is closed
+- [#790](https://github.com/h3poteto/whalebird-desktop/pull/790) Emojify display name in follow notification
+- [#787](https://github.com/h3poteto/whalebird-desktop/pull/787) Updated English Text
+
+
+
 ## [2.6.1] - 2018-12-14
 
 ### Added

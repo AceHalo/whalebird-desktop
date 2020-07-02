@@ -11,7 +11,7 @@ export default {
   name: 'Whalebird',
   computed: {
     ...mapState({
-      theme: (state) => {
+      theme: state => {
         return {
           '--theme-background-color': state.App.theme.background_color,
           '--theme-selected-background-color': state.App.theme.selected_background_color,
@@ -23,27 +23,31 @@ export default {
           '--theme-border-color': state.App.theme.border_color,
           '--theme-header-menu-color': state.App.theme.header_menu_color,
           '--theme-wrapper-mask-color': state.App.theme.wrapper_mask_color,
+          '--theme-scrollbar-color': state.App.theme.scrollbar_color,
+          '--toot-padding': `${state.App.tootPadding}px`,
           '--base-font-size': `${state.App.fontSize}px`,
           '--specified-fonts': state.App.defaultFonts.join(', ')
         }
       }
     })
   },
-  created () {
+  created() {
     this.$store.dispatch('App/watchShortcutsEvents')
-    this.$store.dispatch('App/loadPreferences')
-      .then((conf) => {
-        this.$i18n.i18next.changeLanguage(conf.language.language)
-      })
+    this.$store.dispatch('App/loadPreferences').then(conf => {
+      this.$i18n.i18next.changeLanguage(conf.language.language)
+    })
+    this.$store.dispatch('App/loadProxy')
   },
-  destroyed () {
+  destroyed() {
     this.$store.dispatch('App/removeShortcutsEvents')
   }
 }
 </script>
 
 <style lang="scss">
-html, body, #app {
+html,
+body,
+#app {
   --theme-background-color: #ffffff;
   --theme-selected-background-color: #f2f6fc;
   --theme-global-header-color: #4a5664;
@@ -54,6 +58,7 @@ html, body, #app {
   --theme-border-color: #ebeef5;
   --theme-header-menu-color: #ffffff;
   --theme-wrapper-mask-color: rgba(255, 255, 255, 0.7);
+  --theme-scrollbar-color: rgba(0, 0, 0, 0.4);
 
   background-color: var(--theme-background-color);
   color: var(--theme-primary-color);
@@ -66,6 +71,7 @@ html, body, #app {
     color: #409eff;
   }
 
+  --toot-padding: 8px;
   --base-font-size: 14px;
 
   font-size: var(--base-font-size);
@@ -74,7 +80,8 @@ html, body, #app {
     background-color: #d9e1e8;
   }
 
-  --specified-fonts: 'Noto Sans', 'Noto Sans CJK JP', 'Takaoゴシック', 'ヒラギノ角ゴ ProN W3', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  --specified-fonts: 'Noto Sans', 'Noto Sans CJK JP', 'Takaoゴシック', 'ヒラギノ角ゴ W3', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI',
+    'Roboto', 'Helvetica Neue', 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji', 'Noto Emoji';
 
   font-family: var(--specified-fonts);
 
@@ -86,12 +93,31 @@ html, body, #app {
   select,
   button {
     font-family: var(--specified-fonts);
+    unicode-bidi: plaintext;
   }
 }
 
-html, body, #app, #global_header {
+html,
+body,
+#app,
+#global_header {
   height: 100%;
   margin: 0;
+}
+
+#app {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--theme-scrollbar-color);
+    border-radius: 10px;
+  }
 }
 
 p {
@@ -99,9 +125,9 @@ p {
 }
 
 .clearfix:after {
-  content:" ";
-  display:block;
-  clear:both;
+  content: ' ';
+  display: block;
+  clear: both;
 }
 </style>
 <style src="animate.css/animate.min.css"></style>

@@ -8,6 +8,7 @@
       "hide": "Whalebirdを隠す",
       "hide_others": "ほかを隠す",
       "show_all": "すべてを表示",
+      "open": "ウィンドウを開く",
       "quit": "終了"
     },
     "toot": {
@@ -28,6 +29,7 @@
       "toggle_full_screen": "フルスクリーンにする"
     },
     "window": {
+      "always_show_menu_bar": "メニューバーを常に表示",
       "name": "ウィンドウ",
       "close": "ウィンドウを閉じる",
       "open": "ウィンドウを表示",
@@ -47,7 +49,9 @@
     "expand": "拡大",
     "home": "ホーム",
     "notification": "通知",
-    "direct": "ダイレクトメッセージ",
+    "mention": "返信",
+    "direct": "DM",
+    "follow_requests": "フォロー申請",
     "favourite": "お気に入り",
     "local": "ローカル",
     "public": "連合",
@@ -58,7 +62,10 @@
   "header_menu": {
     "home": "ホーム",
     "notification": "通知",
+    "mention": "返信",
     "favourite": "お気に入り",
+    "follow_requests": "フォロー申請",
+    "direct_messages": "ダイレクトメッセージ",
     "local": "ローカルタイムライン",
     "public": "連合タイムライン",
     "hashtag": "ハッシュタグ",
@@ -68,11 +75,11 @@
     "filter": {
       "title": "フィルター",
       "placeholder": "正規表現でフィルター",
+      "show_dms": "DMを表示",
       "show_reblogs": "ブースト表示",
       "show_replies": "返信表示",
       "apply": "適用"
     },
-    "switch_streaming": "Websocketによるストリーミングを行う．もしタイムラインが自動で更新されない場合にはお試しください",
     "new_toot": "トゥート",
     "reload": "再読み込み",
     "settings": "設定"
@@ -122,6 +129,10 @@
         "cw": "常にCWを表示する",
         "nfsw": "常にNFSWを表示する",
         "hideAllAttachments": "すべてのメディアを非表示にする"
+      },
+      "other": {
+        "title": "その他",
+        "launch": "ログイン時にアプリを起動する"
       }
     },
     "appearance": {
@@ -149,6 +160,7 @@
       },
       "font_size": "フォントサイズ",
       "font_family": "フォント",
+      "toot_padding": "トゥート周りの空白",
       "display_style": {
         "title": "ユーザ名の表示形式",
         "display_name_and_username": "表示名+ユーザー名",
@@ -168,7 +180,8 @@
         "reply": "返信がある時",
         "reblog": "ブーストされた時",
         "favourite": "お気に入りされた時",
-        "follow": "フォローされた時"
+        "follow": "フォローされた時",
+        "reaction": "絵文字リアクションを受け取ったとき"
       }
     },
     "account": {
@@ -183,6 +196,29 @@
       "confirm": "確認",
       "cancel": "キャンセル",
       "confirm_message": "本当に全ての連携を削除しますか？"
+    },
+    "network": {
+      "title": "ネットワーク",
+      "proxy": {
+        "title": "プロキシー設定",
+        "no": "プロキシーを使わない",
+        "system": "OSのプロキシー設定を利用する",
+        "manual": "プロキシーを手動で設定する",
+        "protocol": "プロトコル",
+        "host": "ホスト",
+        "port": "ポート",
+        "username": "ユーザー名",
+        "password": "パスワード",
+        "protocol_list": {
+          "http": "http",
+          "https": "https",
+          "socks4": "socks4",
+          "socks4a": "socks4a",
+          "socks5": "socks5",
+          "socks5h": "socks5h"
+        }
+      },
+      "save": "保存"
     },
     "language": {
       "title": "言語",
@@ -206,12 +242,27 @@
       "close_confirm": "本当に閉じますか？",
       "close_confirm_ok": "閉じる",
       "close_confirm_cancel": "キャンセル",
-      "add_image": "画像を添付",
-      "change_visibility": "プライバシー設定",
-      "add_cw": "閲覧注意を追加",
-      "change_sensitive": "メディアの閲覧注意設定",
-      "pined_hashtag": "ハッシュタグを固定する",
-      "description": "メディアの説明を追加"
+      "description": "メディアの説明を追加",
+      "footer": {
+        "add_image": "画像を添付",
+        "poll": "アンケートを追加",
+        "change_visibility": "プライバシー設定",
+        "change_sensitive": "メディアの閲覧注意設定",
+        "add_cw": "閲覧注意を追加",
+        "pined_hashtag": "ハッシュタグを固定する"
+      },
+      "poll": {
+        "add_choice": "選択肢を追加",
+        "expires": {
+          "5_minutes": "5分後",
+          "30_minutes": "30分後",
+          "1_hour": "1時間後",
+          "6_hours": "6時間後",
+          "1_day": "1日後",
+          "3_days": "3日後",
+          "7_days": "7日後"
+        }
+      }
     },
     "jump": {
       "jump_to": "移動..."
@@ -235,6 +286,7 @@
       "ctrl_k": "タイムラインの移動",
       "ctrl_n": "トゥートモーダルの表示",
       "ctrl_enter": "トゥート送信",
+      "ctrl_r": "タイムラインを更新",
       "j": "次のトゥートを選択",
       "k": "前のトゥートを選択",
       "h": "右のカラムを選択",
@@ -248,6 +300,12 @@
       "x": "CWとNSFWの表示切り替え",
       "?": "このヘルプを開く",
       "esc": "ページを閉じる"
+    },
+    "report": {
+      "title": "このユーザを報告する",
+      "comment": "追加のコメント",
+      "cancel": "キャンセル",
+      "ok": "報告"
     }
   },
   "cards": {
@@ -267,7 +325,14 @@
       "reblog": "ブースト",
       "fav": "お気に入り",
       "detail": "詳細",
-      "pinned": "固定されたトゥート"
+      "pinned": "固定されたトゥート",
+      "poll": {
+        "vote": "投票",
+        "votes_count": "投票",
+        "until": "{{datetime}}まで",
+        "left": "{{datetime}}まで",
+        "refresh": "更新"
+      }
     }
   },
   "side_bar": {
@@ -289,6 +354,10 @@
       "followers": "フォロワー"
     }
   },
+  "follow_requests": {
+    "accept": "承認",
+    "reject": "却下"
+  },
   "hashtag": {
     "tag_name": "タグ名",
     "delete_tag": "タグを削除",
@@ -309,6 +378,8 @@
   },
   "login": {
     "domain_name_label": "ドメイン名を入力してマストドンにログインしてください．",
+    "proxy_info": "もしプロキシを利用する場合は",
+    "proxy_here": "こちら．",
     "search": "検索",
     "login": "ログイン"
   },
@@ -316,6 +387,7 @@
     "manually_1": "認証用ページが自動的に開きます．",
     "manually_2": "もし開かない場合は，以下のURLから手動で認証用ページを開いてください．",
     "code_label": "ブラウザに表示された認証コードを貼り付けてください",
+    "misskey_label": "ブラウザでこのアプリを許可した後に認証ボタンを押してください",
     "submit": "認証"
   },
   "receive_drop": {
@@ -328,7 +400,10 @@
     "timeline_fetch_error": "タイムラインの読み込みに失敗しました",
     "notification_fetch_error": "通知の読み込みに失敗しました",
     "favourite_fetch_error": "お気に入りの読み込みに失敗しました",
+    "follow_request_accept_error": "フォロー申請の承認に失敗しました",
+    "follow_reuqest_reject_error": "フォロー申請の却下に失敗しました",
     "start_streaming_error": "ストリーミングを開始できませんでした",
+    "start_all_streamings_error": "{{domain}}のストリーミングを開始できませんでした",
     "attach_error": "ファイルを添付できませんでした",
     "authorize_duplicate_error": "同一ドメイン同一アカウントではログインできません",
     "authorize_error": "認証に失敗しました",
@@ -353,7 +428,7 @@
     "add_user_error": "メンバー追加に失敗しました",
     "authorize_url_error": "認証用URLの取得に失敗しました",
     "domain_confirmed": "{{domain}} が確認できました，ログインしてください",
-    "domain_doesnt_exist": "{{domain}} は存在しません",
+    "domain_doesnt_exist": "{{domain}} に接続できません，URLを確認してください",
     "loading": "読み込み中..."
   },
   "validation": {
@@ -364,7 +439,34 @@
     "new_toot": {
       "toot_length": "トゥートの長さは {{min}} から {{max}}文字である必要があります",
       "attach_length": "添付ファイルは {{max}} つまでです",
-      "attach_image": "画像かビデオしか添付できません"
+      "attach_image": "画像かビデオしか添付できません",
+      "poll_invalid": "アンケートに不正な選択肢が含まれています"
+    }
+  },
+  "notification": {
+    "favourite": {
+      "title": "お気に入り",
+      "body": "{{username}} さんにお気に入り登録されました"
+    },
+    "follow": {
+      "title": "フォロー",
+      "body": "{{username}} さんにフォローされました"
+    },
+    "follow_request": {
+      "title": "フォローリクエスト",
+      "body": "{{username}} からフォローリクエストを受け取りました"
+    },
+    "reblog": {
+      "title": "ブースト",
+      "body": "{{username}} さんにブーストされました"
+    },
+    "quote": {
+      "title": "引用",
+      "body": "{{username}} があなたのステータスを引用しました"
+    },
+    "reaction": {
+      "title": "リアクション",
+      "body": "{{username}} さんがリアクションをつけました"
     }
   }
 }

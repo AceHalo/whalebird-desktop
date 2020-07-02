@@ -1,12 +1,12 @@
 <template>
   <div id="side_menu">
-    <div :class="collapse ? 'profile-wrapper narrow-menu':'profile-wrapper'" style="-webkit-app-region: drag;">
+    <div :class="collapse ? 'profile-wrapper narrow-menu' : 'profile-wrapper'" style="-webkit-app-region: drag;">
       <div :class="collapse ? 'profile-narrow' : 'profile-wide'">
         <div class="account">
           <div class="avatar" v-if="collapse">
             <img :src="account.avatar" />
           </div>
-          <div v-else>
+          <div class="acct" v-else>
             @{{ account.username }}
             <span class="domain-name">{{ account.domain }}</span>
           </div>
@@ -15,9 +15,9 @@
               <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="show">{{ $t("side_menu.show_profile") }}</el-dropdown-item>
-              <el-dropdown-item command="edit">{{ $t("side_menu.edit_profile") }}</el-dropdown-item>
-              <el-dropdown-item command="settings">{{ $t("side_menu.settings") }}</el-dropdown-item>
+              <el-dropdown-item command="show">{{ $t('side_menu.show_profile') }}</el-dropdown-item>
+              <el-dropdown-item command="edit">{{ $t('side_menu.edit_profile') }}</el-dropdown-item>
+              <el-dropdown-item command="settings">{{ $t('side_menu.settings') }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -38,62 +38,90 @@
       :collapse="collapse"
       active-text-color="#ffffff"
       :router="true"
-      :class="collapse ? 'el-menu-vertical timeline-menu narrow-menu':'el-menu-vertical timeline-menu'"
-      role="menu">
+      :class="collapse ? 'el-menu-vertical timeline-menu narrow-menu' : 'el-menu-vertical timeline-menu'"
+      role="menu"
+    >
       <el-menu-item :index="`/${id()}/home`" role="menuitem" :title="$t('side_menu.home')">
         <icon name="home"></icon>
-        <span>{{ $t("side_menu.home") }}</span>
-        <el-badge is-dot :hidden="!unreadHomeTimeline">
-        </el-badge>
+        <span>{{ $t('side_menu.home') }}</span>
+        <el-badge is-dot :hidden="!unreadHomeTimeline"> </el-badge>
       </el-menu-item>
-      <el-menu-item :index="`/${id()}/notifications`" role="menuitem" :title="$t('side_menu.notification')">
+      <el-menu-item
+        :index="`/${id()}/notifications`"
+        role="menuitem"
+        :title="$t('side_menu.notification')"
+        v-if="enabledTimelines.notification"
+      >
         <icon name="bell"></icon>
-        <span>{{ $t("side_menu.notification") }}</span>
-        <el-badge is-dot :hidden="!unreadNotifications">
-        </el-badge>
+        <span>{{ $t('side_menu.notification') }}</span>
+        <el-badge is-dot :hidden="!unreadNotifications"> </el-badge>
       </el-menu-item>
-      <el-menu-item :index="`/${id()}/favourites`" role="menuitem" :title="$t('side_menu.favourite')">
-        <icon name="star"></icon>
-        <span>{{ $t("side_menu.favourite") }}</span>
+      <el-menu-item :index="`/${id()}/mentions`" role="menuitem" :title="$t('side_menu.mention')" v-if="enabledTimelines.mention">
+        <icon name="at"></icon>
+        <span>{{ $t('side_menu.mention') }}</span>
+        <el-badge is-dot :hidden="!unreadMentions"> </el-badge>
       </el-menu-item>
-      <el-menu-item :index="`/${id()}/direct-messages`" role="menuitem">
+      <el-menu-item :index="`/${id()}/direct-messages`" role="menuitem" :title="$t('side_menu.direct')" v-if="enabledTimelines.direct">
         <icon name="envelope"></icon>
-        <span>{{ $t("side_menu.direct") }}</span>
-        <el-badge is-dot :hidden="!unreadDirectMessagesTimeline">
-        </el-badge>
+        <span>{{ $t('side_menu.direct') }}</span>
+        <el-badge is-dot :hidden="!unreadDirectMessagesTimeline"> </el-badge>
       </el-menu-item>
-      <el-menu-item :index="`/${id()}/local`" role="menuitem" :title="$t('side_menu.local')">
+      <el-menu-item
+        v-if="unreadFollowRequests"
+        :index="`/${id()}/follow-requests`"
+        role="menuitem"
+        :title="$t('side_menu.follow_requests')"
+      >
         <icon name="users"></icon>
-        <span>{{ $t("side_menu.local") }}</span>
-        <el-badge is-dot :hidden="!unreadLocalTimeline">
-        </el-badge>
+        <span>{{ $t('side_menu.follow_requests') }}</span>
+        <el-badge is-dot></el-badge>
       </el-menu-item>
-      <el-menu-item :index="`/${id()}/public`" role="menuitem" :title="$t('side_menu.public')">
+      <el-menu-item :index="`/${id()}/favourites`" role="menuitem" :title="$t('side_menu.favourite')" v-if="enabledTimelines.favourite">
+        <icon name="star"></icon>
+        <span>{{ $t('side_menu.favourite') }}</span>
+      </el-menu-item>
+      <el-menu-item :index="`/${id()}/local`" role="menuitem" :title="$t('side_menu.local')" v-if="enabledTimelines.local">
+        <icon name="users"></icon>
+        <span>{{ $t('side_menu.local') }}</span>
+        <el-badge is-dot :hidden="!unreadLocalTimeline"> </el-badge>
+      </el-menu-item>
+      <el-menu-item :index="`/${id()}/public`" role="menuitem" :title="$t('side_menu.public')" v-if="enabledTimelines.public">
         <icon name="globe"></icon>
-        <span>{{ $t("side_menu.public") }}</span>
-        <el-badge is-dot :hidden="!unreadPublicTimeline">
-        </el-badge>
+        <span>{{ $t('side_menu.public') }}</span>
+        <el-badge is-dot :hidden="!unreadPublicTimeline"> </el-badge>
       </el-menu-item>
       <el-menu-item :index="`/${id()}/search`" role="menuitem" :title="$t('side_menu.search')">
         <icon name="search"></icon>
-        <span>{{ $t("side_menu.search") }}</span>
+        <span>{{ $t('side_menu.search') }}</span>
       </el-menu-item>
       <el-menu-item :index="`/${id()}/hashtag`" role="menuitem" :title="$t('side_menu.hashtag')">
         <icon name="hashtag"></icon>
-        <span>{{ $t("side_menu.hashtag") }}</span>
+        <span>{{ $t('side_menu.hashtag') }}</span>
       </el-menu-item>
-      <template v-for="tag in tags">
-        <el-menu-item :index="`/${id()}/hashtag/${tag.tagName}`" :class="collapse ? '' : 'sub-menu'" :key="tag.tagName" role="menuitem" :title="tag.tagName">
+      <template v-for="tag in tags" v-if="enabledTimelines.tag">
+        <el-menu-item
+          :index="`/${id()}/hashtag/${tag.tagName}`"
+          :class="collapse ? '' : 'sub-menu'"
+          :key="tag.tagName"
+          role="menuitem"
+          :title="tag.tagName"
+        >
           <icon name="hashtag" scale="0.8"></icon>
           <span>{{ tag.tagName }}</span>
         </el-menu-item>
       </template>
       <el-menu-item :index="`/${id()}/lists`" role="menuitem" :title="$t('side_menu.lists')">
         <icon name="list-ul"></icon>
-        <span>{{ $t("side_menu.lists") }}</span>
+        <span>{{ $t('side_menu.lists') }}</span>
       </el-menu-item>
-      <template v-for="list in lists">
-        <el-menu-item :index="`/${id()}/lists/${list.id}`" :class="collapse ? '' : 'sub-menu'" :key="list.id" role="menuitem" :title="list.title">
+      <template v-for="list in lists" v-if="enabledTimelines.list">
+        <el-menu-item
+          :index="`/${id()}/lists/${list.id}`"
+          :class="collapse ? '' : 'sub-menu'"
+          :key="list.id"
+          role="menuitem"
+          :title="list.title"
+        >
           <icon name="list-ul" scale="0.8"></icon>
           <span>{{ list.title }}</span>
         </el-menu-item>
@@ -110,7 +138,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import { shell } from 'electron'
 
 export default {
   name: 'side-menu',
@@ -118,12 +145,15 @@ export default {
     ...mapState('TimelineSpace/SideMenu', {
       unreadHomeTimeline: state => state.unreadHomeTimeline,
       unreadNotifications: state => state.unreadNotifications,
+      unreadMentions: state => state.unreadMentions,
       unreadLocalTimeline: state => state.unreadLocalTimeline,
       unreadDirectMessagesTimeline: state => state.unreadDirectMessagesTimeline,
       unreadPublicTimeline: state => state.unreadPublicTimeline,
+      unreadFollowRequests: state => state.unreadFollowRequests,
       lists: state => state.lists,
       tags: state => state.tags,
-      collapse: state => state.collapse
+      collapse: state => state.collapse,
+      enabledTimelines: state => state.enabledTimelines
     }),
     ...mapState({
       account: state => state.TimelineSpace.account,
@@ -131,44 +161,44 @@ export default {
       hideGlobalHeader: state => state.GlobalHeader.hide
     })
   },
-  created () {
+  created() {
     this.$store.dispatch('TimelineSpace/SideMenu/readCollapse')
     this.$store.dispatch('TimelineSpace/SideMenu/listTags')
   },
   methods: {
-    activeRoute () {
+    activeRoute() {
       return this.$route.path
     },
-    id () {
+    id() {
       return this.$route.params.id
     },
-    handleProfile (command) {
+    handleProfile(command) {
       switch (command) {
         case 'show':
-          this.$store.dispatch('TimelineSpace/Contents/SideBar/AccountProfile/fetchAccount', this.account.accountId)
-            .then((account) => {
-              this.$store.dispatch('TimelineSpace/Contents/SideBar/AccountProfile/changeAccount', account)
-              this.$store.commit('TimelineSpace/Contents/SideBar/changeOpenSideBar', true)
-            })
+          this.$store.dispatch('TimelineSpace/Contents/SideBar/AccountProfile/fetchAccount', this.account.accountId).then(account => {
+            this.$store.dispatch('TimelineSpace/Contents/SideBar/AccountProfile/changeAccount', account)
+            this.$store.commit('TimelineSpace/Contents/SideBar/changeOpenSideBar', true)
+          })
 
           this.$store.dispatch('TimelineSpace/Contents/SideBar/openAccountComponent')
           break
         case 'edit':
-          shell.openExternal(this.account.baseURL + '/settings/profile')
+          window.shell.openExternal(this.account.baseURL + '/settings/profile')
           break
-        case 'settings':
+        case 'settings': {
           const url = `/${this.id()}/settings`
           this.$router.push(url)
           break
+        }
       }
     },
-    doCollapse () {
+    doCollapse() {
       this.$store.dispatch('TimelineSpace/SideMenu/changeCollapse', true)
     },
-    releaseCollapse () {
+    releaseCollapse() {
       this.$store.dispatch('TimelineSpace/SideMenu/changeCollapse', false)
     },
-    async changeGlobalHeader (value) {
+    async changeGlobalHeader(value) {
       await this.$store.dispatch('GlobalHeader/switchHide', value)
     }
   }
@@ -194,6 +224,12 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
+
+      .acct {
+        max-width: 117px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
 
       .el-dropdown-link {
         cursor: pointer;
@@ -269,7 +305,7 @@ export default {
     height: calc(100% - 82px);
     width: 180px;
     border: none;
-    overflow-y: auto;
+    overflow-y: hidden;
 
     .el-badge__content {
       background-color: #409eff;
@@ -294,6 +330,10 @@ export default {
     }
   }
 
+  .timeline-menu:hover /deep/ {
+    overflow-y: auto;
+  }
+
   .narrow-menu /deep/ {
     width: 64px;
 
@@ -316,6 +356,19 @@ export default {
     padding: 4px 0 0 0;
     border-radius: 0 4px 4px 0;
     background-color: var(--theme-global-header-color);
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 10px;
   }
 }
 </style>

@@ -8,6 +8,7 @@
       "hide": "Ukryj Whalebird",
       "hide_others": "Ukryj pozostałe",
       "show_all": "Pokaż wszystkie",
+      "open": "Otwórz okno",
       "quit": "Wyjdź"
     },
     "toot": {
@@ -19,7 +20,7 @@
       "undo": "Cofnij",
       "redo": "Powtórz",
       "cut": "Wytnij",
-      "copy": "Copy",
+      "copy": "Kopiuj",
       "paste": "Wklej",
       "select_all": "Zaznacz wszystko"
     },
@@ -28,9 +29,10 @@
       "toggle_full_screen": "Przełącz pełny ekran"
     },
     "window": {
+      "always_show_menu_bar": "Always Show Menu Bar",
       "name": "Okno",
       "close": "Zamknij okno",
-      "open": "Open Window",
+      "open": "Otwórz okno",
       "minimize": "Zminimalizuj",
       "jump_to": "Przejdź do"
     }
@@ -42,11 +44,14 @@
     "profile": "Profil",
     "show_profile": "Pokaż profil",
     "edit_profile": "Edytuj profil",
-    "settings": "Settings",
+    "settings": "Ustawienia",
     "collapse": "Zawalić się",
     "expand": "Rozszerzać",
     "home": "Strona główna",
     "notification": "Powiadomienia",
+    "mention": "Wspomnij",
+    "direct": "Bezpośrednie wiadomości",
+    "follow_requests": "Follow Requests",
     "favourite": "Ulubione",
     "local": "Lokalna oś czasu",
     "public": "Publiczna oś czasu",
@@ -57,7 +62,10 @@
   "header_menu": {
     "home": "Strona główna",
     "notification": "Powiadomienia",
+    "mention": "Wspomnij",
     "favourite": "Ulubione",
+    "follow_requests": "Follow Requests",
+    "direct_messages": "Direct Messages",
     "local": "Lokalna oś czasu",
     "public": "Publiczna oś czasu",
     "hashtag": "Hashtagi",
@@ -67,15 +75,17 @@
     "filter": {
       "title": "Filtruj",
       "placeholder": "Filtruj z użyciem wyrażeń regularnych",
+      "show_dms": "Show direct messages",
       "show_reblogs": "Pokazuj podbicia",
       "show_replies": "Pokazuj odpowiedzi",
       "apply": "Zastosuj"
     },
     "new_toot": "Wpisy",
-    "reload": "Przeładować"
+    "reload": "Przeładować",
+    "settings": "Ustawienia"
   },
   "settings": {
-    "title": "Settings",
+    "title": "Ustawienia",
     "general": {
       "title": "Ogólne",
       "toot": {
@@ -91,6 +101,16 @@
           "description": "Mark medias as sensitive by default"
         }
       }
+    },
+    "timeline": {
+      "title": "Oś czasu",
+      "unread_notification": {
+        "title": "Unread Notification",
+        "description": "Customize unread notifications for each timeline.",
+        "direct": "Direct Messages",
+        "local": "Lokalna oś czasu",
+        "public": "Publiczna oś czasu"
+      }
     }
   },
   "preferences": {
@@ -102,6 +122,17 @@
         "description": "Please set feedback sounds.",
         "fav_rb": "Polubienie i podbicie",
         "toot": "Wpisy"
+      },
+      "timeline": {
+        "title": "Oś czasu",
+        "description": "Customize view in your timelines.",
+        "cw": "Always ignore contents warnings",
+        "nfsw": "Always ignore NFSW of medias",
+        "hideAllAttachments": "Hide all medias"
+      },
+      "other": {
+        "title": "Other options",
+        "launch": "Launch app on login"
       }
     },
     "appearance": {
@@ -113,7 +144,7 @@
         "solarized_light": "SolarizedLight",
         "solarized_dark": "SolarizedDark",
         "kimbie_dark": "KimbieDark",
-        "custom": "Custom"
+        "custom": "Własna"
       },
       "custom_theme": {
         "background_color": "Base background",
@@ -123,12 +154,13 @@
         "primary_color": "Primary font",
         "regular_color": "Regular font",
         "secondary_color": "Secondary font",
-        "border_color": "Border",
+        "border_color": "Obramowanie",
         "header_menu_color": "Header menu",
         "wrapper_mask_color": "Modal wrapper"
       },
       "font_size": "Rozmiar czcionki",
       "font_family": "Font family",
+      "toot_padding": "Padding around toots",
       "display_style": {
         "title": "Styl wyświetlania",
         "display_name_and_username": "Nazwa wyświetlana i nazwa użytkownika",
@@ -136,19 +168,20 @@
         "username": "Nazwa użytkownika"
       },
       "time_format": {
-        "title": "Time format",
+        "title": "Format godziny",
         "absolute": "Absolute",
         "relative": "Relative"
       }
     },
     "notification": {
-      "title": "Notification",
+      "title": "Powiadomienia",
       "enable": {
         "description": "Please set notification events.",
         "reply": "Notify me when I receive reply",
         "reblog": "Notify me when I receive reblog",
         "favourite": "Notify me when I receive favourite",
-        "follow": "Notify me when I receive follow"
+        "follow": "Notify me when I receive follow",
+        "reaction": "Notify me when I receive a emoji reaction"
       }
     },
     "account": {
@@ -163,6 +196,29 @@
       "confirm": "Potwierdź",
       "cancel": "Anuluj",
       "confirm_message": "Czy na pewno chcesz usunąć wszystkie powiązania?"
+    },
+    "network": {
+      "title": "Sieć",
+      "proxy": {
+        "title": "Proxy Configuration",
+        "no": "No proxy",
+        "system": "Use system proxy",
+        "manual": "Manual proxy configuration",
+        "protocol": "Protocol",
+        "host": "Proxy host",
+        "port": "Proxy port",
+        "username": "Proxy username",
+        "password": "Proxy password",
+        "protocol_list": {
+          "http": "http",
+          "https": "https",
+          "socks4": "socks4",
+          "socks4a": "socks4a",
+          "socks5": "socks5",
+          "socks5h": "socks5h"
+        }
+      },
+      "save": "Save"
     },
     "language": {
       "title": "Język",
@@ -186,13 +242,27 @@
       "close_confirm": "Czy na pewno chcesz porzucić tworzenie wpisu?",
       "close_confirm_ok": "OK",
       "close_confirm_cancel": "Anuluj",
-      "add_image": "Dodaj obraz",
-      "change_visibility": "Zmień widoczność",
-      "add_cw": "Dodaj ostrzeżenie zawartości",
-      "change_sensitive": "Zmień wrażliwy",
-      "pined_hashtag": "Pin the hashtag",
       "description": "Wprowadź opis dla niewidomych i niedowidzących",
-      "pinned": "Przypięty wpis"
+      "footer": {
+        "add_image": "Dodaj obraz",
+        "poll": "Add a poll",
+        "change_visibility": "Zmień widoczność",
+        "change_sensitive": "Zmień wrażliwy",
+        "add_cw": "Dodaj ostrzeżenie zawartości",
+        "pined_hashtag": "Pin the hashtag"
+      },
+      "poll": {
+        "add_choice": "Add a choice",
+        "expires": {
+          "5_minutes": "5 minutes",
+          "30_minutes": "30 minutes",
+          "1_hour": "1 hour",
+          "6_hours": "6 hours",
+          "1_day": "1 day",
+          "3_days": "3 days",
+          "7_days": "7 days"
+        }
+      }
     },
     "jump": {
       "jump_to": "Przejdź do…"
@@ -216,8 +286,11 @@
       "ctrl_k": "Jump to other timelines",
       "ctrl_n": "Open the new toot modal",
       "ctrl_enter": "Post the toot",
+      "ctrl_r": "Reload current timeline",
       "j": "Select the next toot",
       "k": "Select the previous toot",
+      "h": "Switch focus to the left column",
+      "l": "Switch focus to the right column",
       "r": "Reply to the toot",
       "b": "Reblog the toot",
       "f": "Favourite the toot",
@@ -225,7 +298,14 @@
       "p": "Open account profile of the toot",
       "i": "Open the images",
       "x": "Show/hide CW and NSFW",
+      "?": "Show this help",
       "esc": "Close current page"
+    },
+    "report": {
+      "title": "Reporting this user",
+      "comment": "Additional comments",
+      "cancel": "Cancel",
+      "ok": "Report"
     }
   },
   "cards": {
@@ -244,7 +324,15 @@
       "reply": "Odpowiadać",
       "reblog": "Podbić wpisu",
       "fav": "Ulubiony",
-      "detail": "Szczegół"
+      "detail": "Szczegół",
+      "pinned": "Przypięty wpis",
+      "poll": {
+        "vote": "Vote",
+        "votes_count": "votes",
+        "until": "until {{datetime}}",
+        "left": "{{datetime}} left",
+        "refresh": "Refresh"
+      }
     }
   },
   "side_bar": {
@@ -266,6 +354,10 @@
       "followers": "Śledzący"
     }
   },
+  "follow_requests": {
+    "accept": "Accept",
+    "reject": "Reject"
+  },
   "hashtag": {
     "tag_name": "Tag",
     "delete_tag": "Delete tag",
@@ -274,6 +366,7 @@
   "search": {
     "search": "Szukaj",
     "account": "Konta",
+    "tag": "Hashtag",
     "keyword": "Słowo kluczowe",
     "toot": "Wpisy"
   },
@@ -284,7 +377,9 @@
     }
   },
   "login": {
-    "domain_name_label": "Na początek musisz się zalogować na instancję Mastodona. Wprowadź domenę instancji.",
+    "domain_name_label": "Na początek musisz się zalogować na serwerze Mastodona. Wprowadź domenę serwerze.",
+    "proxy_info": "If you want to use proxy server, please setup your proxy in",
+    "proxy_here": " here",
     "search": "Znajdź",
     "login": "Zaloguj się"
   },
@@ -292,6 +387,7 @@
     "manually_1": "Strona autoryzacji została otwarta w Twojej przeglądarce.",
     "manually_2": "Jeżeli nie, odwiedź następujący adres w przeglądarce.",
     "code_label": "Wklej kod autoryzacyjny z przeglądarki:",
+    "misskey_label": "Please submit after you authorize in your browser.",
     "submit": "Wyślij"
   },
   "receive_drop": {
@@ -304,7 +400,10 @@
     "timeline_fetch_error": "Nie udało się załadować osi czasu",
     "notification_fetch_error": "Nie udało się załadować powiadomień",
     "favourite_fetch_error": "Nie udało się załadować ulubionych",
+    "follow_request_accept_error": "Failed to accept the request",
+    "follow_reuqest_reject_error": "failed to reject the request",
     "start_streaming_error": "Nie udało się rozpocząć strumieniowania",
+    "start_all_streamings_error": "Failed to start streaming of {{domain}}",
     "attach_error": "Nie udało się załączyć pliku",
     "authorize_duplicate_error": "Nie możesz zalogować się na to samo konto na tej samej instancji",
     "authorize_error": "Uwierzytelnienie nie powiodło się",
@@ -329,7 +428,7 @@
     "add_user_error": "Nie udało się dodać użytkownika",
     "authorize_url_error": "Nie udało się uzyskać adresu autoryzacji",
     "domain_confirmed": "{{domain}} została potwierdzona, zaloguj się",
-    "domain_doesnt_exist": "{{domain}} nie istnieje",
+    "domain_doesnt_exist": "Failed to connect {{domain}}, make sure the server URL",
     "loading": "Ładowanie…"
   },
   "validation": {
@@ -340,7 +439,34 @@
     "new_toot": {
       "toot_length": "Długość wpisu może wynosić od {{min}} do {{max}}",
       "attach_length": "Możesz załączyć maksymalnie {{max}} obrazów",
-      "attach_image": "Możesz załączyć tylko obrazy lub filmy"
+      "attach_image": "Możesz załączyć tylko obrazy lub filmy",
+      "poll_invalid": "Invalid poll choices"
+    }
+  },
+  "notification": {
+    "favourite": {
+      "title": "Favourite",
+      "body": "{{username}} favourited your status"
+    },
+    "follow": {
+      "title": "Follow",
+      "body": "{{username}} is now following you"
+    },
+    "follow_request": {
+      "title": "FollowRequest",
+      "body": "Receive a follow request from {{username}}"
+    },
+    "reblog": {
+      "title": "Reblog",
+      "body": "{{username}} boosted your status"
+    },
+    "quote": {
+      "title": "Quote",
+      "body": "{{username}} quoted your status"
+    },
+    "reaction": {
+      "title": "Reaction",
+      "body": "{{username}} reacted your status"
     }
   }
 }

@@ -1,17 +1,14 @@
 <template>
-  <div
-    id="current-media"
-    v-loading="loading"
-    element-loading-background="rgba(0, 0, 0, 0.8)"
-  >
-    <video :src="src" v-if="isMovieFile()" controls v-on:loadstart="loaded()"></video>
+  <div id="current-media" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0.8)">
+    <video :src="src" v-if="isMovieFile()" autoplay loop controls v-on:loadstart="loaded()"></video>
     <video :src="src" v-else-if="isGIF()" autoplay loop v-on:loadstart="loaded()"></video>
-    <img :src="src" v-else v-on:load="loaded()">
+    <img :src="imageSrc" v-else v-on:load="loaded()" />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import exifImageUrl from '@/components/utils/exifImageUrl'
 
 export default {
   props: {
@@ -24,19 +21,37 @@ export default {
       default: ''
     }
   },
+  data() {
+    return {
+      imageSrc: this.src
+    }
+  },
+  watch: {
+    src: async function(newSrc, _oldSrc) {
+      this.imageSrc = newSrc
+      if (newSrc && !this.isMovieFile() && !this.isGIF()) {
+        try {
+          const transformed = await exifImageUrl(newSrc)
+          this.imageSrc = transformed
+        } catch (err) {
+          console.error(err)
+        }
+      }
+    }
+  },
   computed: {
     ...mapState({
       loading: state => state.TimelineSpace.Modals.ImageViewer.loading
     })
   },
   methods: {
-    isMovieFile () {
+    isMovieFile() {
       return ['video'].includes(this.type)
     },
-    isGIF () {
+    isGIF() {
       return ['gifv'].includes(this.type)
     },
-    async loaded () {
+    async loaded() {
       this.$store.dispatch('TimelineSpace/Modals/ImageViewer/loaded')
     }
   }
@@ -58,5 +73,3 @@ export default {
   }
 }
 </style>
-
-

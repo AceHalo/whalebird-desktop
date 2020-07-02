@@ -7,19 +7,17 @@ const { dependencies } = require('../package.json')
 const webpack = require('webpack')
 
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const MinifyPlugin = require('babel-minify-webpack-plugin')
 
 let mainConfig = {
   entry: {
-    main: path.join(__dirname, '../src/main/index.js')
+    main: path.join(__dirname, '../src/main/index.ts'),
+    preload: path.join(__dirname, '../src/main/preload.js')
   },
-  externals: [
-    ...Object.keys(dependencies || {})
-  ],
+  externals: [...Object.keys(dependencies || {})],
   module: {
     rules: [
       {
-        test: /\.(js)$/,
+        test: /\.(js|ts)$/,
         enforce: 'pre',
         exclude: /node_modules/,
         use: {
@@ -30,6 +28,11 @@ let mainConfig = {
         }
       },
       {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        loader: 'ts-loader'
+      },
+      {
         test: /\.js$/,
         use: 'babel-loader',
         exclude: /node_modules/
@@ -37,6 +40,12 @@ let mainConfig = {
       {
         test: /\.node$/,
         use: 'node-loader'
+      },
+      {
+        test: /\.json$/,
+        exclude: /node_modules/,
+        use: 'json-loader',
+        type: 'javascript/auto'
       }
     ]
   },
@@ -51,16 +60,25 @@ let mainConfig = {
   },
   plugins: [
     new webpack.NoEmitOnErrorsPlugin(),
-    new CopyWebpackPlugin([
-      {
-        from: path.join(__dirname, '../src/config/locales'),
-        to: path.join(__dirname, '../dist/electron/locales'),
-        ignore: ['.*', '*~']
-      }
-    ])
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: path.join(__dirname, '../src/config/locales'),
+          to: path.join(__dirname, '../dist/electron/locales'),
+          globOptions: {
+            ignore: ['.*', '*~']
+          }
+        }
+      ]
+    })
   ],
   resolve: {
-    extensions: ['.js', '.json', '.node']
+    alias: {
+      // Same as tsconfig.json
+      '@': path.join(__dirname, '../src/renderer'),
+      '~': path.join(__dirname, '../')
+    },
+    extensions: ['.js', '.json', '.node', '.ts']
   },
   target: 'electron-main'
 }
@@ -71,7 +89,7 @@ let mainConfig = {
 if (process.env.NODE_ENV !== 'production') {
   mainConfig.plugins.push(
     new webpack.DefinePlugin({
-      '__static': `"${path.join(__dirname, '../static').replace(/\\/g, '\\\\')}"`
+      __static: `"${path.join(__dirname, '../static').replace(/\\/g, '\\\\')}"`
     })
   )
 }
@@ -80,8 +98,8 @@ if (process.env.NODE_ENV !== 'production') {
  * Adjust mainConfig for production settings
  */
 if (process.env.NODE_ENV === 'production') {
+  mainConfig.mode = 'production'
   mainConfig.plugins.push(
-    new MinifyPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"production"'
     })

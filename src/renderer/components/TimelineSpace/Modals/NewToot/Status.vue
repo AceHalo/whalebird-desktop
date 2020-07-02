@@ -1,63 +1,60 @@
 <template>
-<div class="status">
-  <textarea
-    v-model="status"
-    ref="status"
-    v-shortkey="openSuggest ? {up: ['arrowup'], down: ['arrowdown'], enter: ['enter'], esc: ['esc']} : {linux: ['ctrl', 'enter'], mac: ['meta', 'enter'], left: ['arrowleft'], right: ['arrowright']}"
-    @shortkey="handleKey"
-    @paste="onPaste"
-    v-on:input="startSuggest"
-    :placeholder="$t('modals.new_toot.status')"
-    role="textbox"
-    contenteditable="true"
-    aria-multiline="true"
-    autofocus>
-  </textarea>
-  <el-popover
-    placement="bottom-start"
-    width="300"
-    trigger="manual"
-    v-model="openSuggest">
-    <ul class="suggest-list">
-      <li
-        v-for="(item, index) in filteredSuggestion"
-        :key="index"
-        @click="insertItem(item)"
-        @shortkey="insertItem(item)"
-        @mouseover="highlightedIndex = index"
-        :class="{'highlighted': highlightedIndex === index}">
-        <span v-if="item.image">
-          <img :src="item.image" class="icon" />
-        </span>
-        <span v-if="item.code">
-          {{ item.code }}
-        </span>
-        {{ item.name }}
-      </li>
-    </ul>
-  </el-popover>
-  <div v-click-outside="hideEmojiPicker">
-    <el-button type="text" class="emoji-selector" @click="toggleEmojiPicker">
-      <icon name="regular/smile" scale="1.2"></icon>
-    </el-button>
-    <div v-if="openEmojiPicker" class="emoji-picker">
-      <picker
-        set="emojione"
-        :autoFocus="true"
-        :custom="pickerEmojis"
-        @select="selectEmoji"
-        />
+  <div class="status">
+    <textarea
+      v-model="status"
+      ref="status"
+      v-shortkey="
+        openSuggest
+          ? { up: ['arrowup'], down: ['arrowdown'], enter: ['enter'], esc: ['esc'] }
+          : { linux: ['ctrl', 'enter'], mac: ['meta', 'enter'], left: ['arrowleft'], right: ['arrowright'] }
+      "
+      @shortkey="handleKey"
+      @paste="onPaste"
+      v-on:input="startSuggest"
+      :placeholder="$t('modals.new_toot.status')"
+      role="textbox"
+      contenteditable="true"
+      aria-multiline="true"
+      :style="`height: ${height}px`"
+      autofocus
+    >
+    </textarea>
+    <el-popover placement="bottom-start" width="300" trigger="manual" :value="openSuggest">
+      <ul class="suggest-list">
+        <li
+          v-for="(item, index) in filteredSuggestion"
+          :key="index"
+          @click="insertItem(item)"
+          @shortkey="insertItem(item)"
+          @mouseover="highlightedIndex = index"
+          :class="{ highlighted: highlightedIndex === index }"
+        >
+          <span v-if="item.image">
+            <img :src="item.image" class="icon" />
+          </span>
+          <span v-if="item.code">
+            {{ item.code }}
+          </span>
+          {{ item.name }}
+        </li>
+      </ul>
+    </el-popover>
+    <div v-click-outside="hideEmojiPicker">
+      <el-button type="text" class="emoji-selector" @click="toggleEmojiPicker">
+        <icon name="regular/smile" scale="1.2"></icon>
+      </el-button>
+      <div v-if="openEmojiPicker" class="emoji-picker">
+        <picker set="emojione" :autoFocus="true" :custom="pickerEmojis" @select="selectEmoji" />
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import emojilib from 'emojilib'
 import { Picker } from 'emoji-mart-vue'
 import ClickOutside from 'vue-click-outside'
-import suggestText from '../../../../utils/suggestText'
+import suggestText from '@/utils/suggestText'
 
 export default {
   name: 'status',
@@ -78,29 +75,28 @@ export default {
     fixCursorPos: {
       type: Boolean,
       default: false
+    },
+    height: {
+      type: Number,
+      default: 120
     }
   },
-  data () {
+  data() {
     return {
-      openSuggest: false,
       highlightedIndex: 0,
-      startIndex: null,
-      matchWord: null,
-      filteredSuggestion: [],
       openEmojiPicker: false
     }
   },
   computed: {
-    ...mapState({
-      customEmojis: state => state.TimelineSpace.emojis
-    }),
     ...mapState('TimelineSpace/Modals/NewToot/Status', {
       filteredAccounts: state => state.filteredAccounts,
-      filteredHashtags: state => state.filteredHashtags
+      filteredHashtags: state => state.filteredHashtags,
+      openSuggest: state => state.openSuggest,
+      startIndex: state => state.startIndex,
+      matchWord: state => state.matchWord,
+      filteredSuggestion: state => state.filteredSuggestion
     }),
-    ...mapGetters('TimelineSpace/Modals/NewToot/Status', [
-      'pickerEmojis'
-    ]),
+    ...mapGetters('TimelineSpace/Modals/NewToot/Status', ['pickerEmojis']),
     status: {
       get: function () {
         return this.value
@@ -110,7 +106,7 @@ export default {
       }
     }
   },
-  mounted () {
+  mounted() {
     // When change account, the new toot modal is recreated.
     // So can not catch open event in watch.
     this.$refs.status.focus()
@@ -134,7 +130,7 @@ export default {
     }
   },
   methods: {
-    async startSuggest (e) {
+    async startSuggest(e) {
       const currentValue = e.target.value
       // Start suggest after user stop writing
       setTimeout(async () => {
@@ -143,7 +139,7 @@ export default {
         }
       }, 700)
     },
-    async suggest (e) {
+    async suggest(e) {
       // e.target.sectionStart: Cursor position
       // e.target.value: current value of the textarea
       const [start, word] = suggestText(e.target.value, e.target.selectionStart)
@@ -165,68 +161,44 @@ export default {
           return false
       }
     },
-    async suggestAccount (start, word) {
+    async suggestAccount(start, word) {
       try {
-        await this.$store.dispatch('TimelineSpace/Modals/NewToot/Status/searchAccount', word)
-        this.openSuggest = true
-        this.startIndex = start
-        this.matchWord = word
-        this.filteredSuggestion = this.filteredAccounts
+        await this.$store.dispatch('TimelineSpace/Modals/NewToot/Status/suggestAccount', { word: word, start: start })
+        this.$emit('suggestOpened', true)
         return true
       } catch (err) {
         console.log(err)
         return false
       }
     },
-    async suggestHashtag (start, word) {
+    async suggestHashtag(start, word) {
       try {
-        await this.$store.dispatch('TimelineSpace/Modals/NewToot/Status/searchHashtag', word)
-        this.openSuggest = true
-        this.startIndex = start
-        this.matchWord = word
-        this.filteredSuggestion = this.filteredHashtags
+        await this.$store.dispatch('TimelineSpace/Modals/NewToot/Status/suggestHashtag', { word: word, start: start })
+        this.$emit('suggestOpened', true)
         return true
       } catch (err) {
         console.log(err)
         return false
       }
     },
-    suggestEmoji (start, word) {
-      // Find native emojis
-      const filteredEmojiName = emojilib.ordered.filter(emoji => `:${emoji}`.includes(word))
-      const filteredNativeEmoji = filteredEmojiName.map((name) => {
-        return {
-          name: `:${name}:`,
-          code: emojilib.lib[name].char
-        }
-      })
-      // Find custom emojis
-      const filteredCustomEmoji = this.customEmojis.filter(emoji => emoji.name.includes(word))
-      const filtered = filteredNativeEmoji.concat(filteredCustomEmoji)
-      if (filtered.length > 0) {
-        this.openSuggest = true
-        this.startIndex = start
-        this.matchWord = word
-        this.filteredSuggestion = filtered.filter((e, i, array) => {
-          return (array.findIndex(ar => e.name === ar.name) === i)
-        })
-      } else {
+    suggestEmoji(start, word) {
+      try {
+        this.$store.dispatch('TimelineSpace/Modals/NewToot/Status/suggestEmoji', { word: word, start: start })
+        this.$emit('suggestOpened', true)
+        return true
+      } catch (err) {
         this.closeSuggest()
+        return false
       }
-      return true
     },
-    closeSuggest () {
+    closeSuggest() {
+      this.$store.dispatch('TimelineSpace/Modals/NewToot/Status/closeSuggest')
       if (this.openSuggest) {
-        this.openSuggest = false
-        this.startIndex = null
-        this.matchWord = null
         this.highlightedIndex = 0
-        this.filteredSuggestion = []
-        this.$store.commit('TimelineSpace/Modals/NewToot/Status/clearFilteredAccounts')
-        this.$store.commit('TimelineSpace/Modals/NewToot/Status/clearFilteredHashtags')
       }
+      this.$emit('suggestOpened', false)
     },
-    suggestHighlight (index) {
+    suggestHighlight(index) {
       if (index < 0) {
         this.highlightedIndex = 0
       } else if (index >= this.filteredSuggestion.length) {
@@ -235,7 +207,7 @@ export default {
         this.highlightedIndex = index
       }
     },
-    insertItem (item) {
+    insertItem(item) {
       if (item.code) {
         const str = `${this.status.slice(0, this.startIndex - 1)}${item.code} ${this.status.slice(this.startIndex + this.matchWord.length)}`
         this.status = str
@@ -245,14 +217,14 @@ export default {
       }
       this.closeSuggest()
     },
-    selectCurrentItem () {
+    selectCurrentItem() {
       const item = this.filteredSuggestion[this.highlightedIndex]
       this.insertItem(item)
     },
-    onPaste (e) {
+    onPaste(e) {
       this.$emit('paste', e)
     },
-    handleKey (event) {
+    handleKey(event) {
       const current = event.target.selectionStart
       switch (event.srcKey) {
         case 'up':
@@ -281,13 +253,17 @@ export default {
           return true
       }
     },
-    toggleEmojiPicker () {
+    toggleEmojiPicker() {
       this.openEmojiPicker = !this.openEmojiPicker
+      this.$emit('pickerOpened', this.openEmojiPicker)
     },
-    hideEmojiPicker () {
+    hideEmojiPicker() {
+      if (this.openEmojiPicker) {
+        this.$emit('pickerOpened', false)
+      }
       this.openEmojiPicker = false
     },
-    selectEmoji (emoji) {
+    selectEmoji(emoji) {
       const current = this.$refs.status.selectionStart
       if (emoji.native) {
         this.status = `${this.status.slice(0, current)}${emoji.native} ${this.status.slice(current)}`
@@ -305,8 +281,10 @@ export default {
 .status {
   position: relative;
   z-index: 1;
+  font-size: var(--base-font-size);
 
   textarea {
+    position: relative;
     display: block;
     padding: 4px 32px 4px 16px;
     line-height: 1.5;
@@ -320,6 +298,7 @@ export default {
     resize: none;
     height: 120px;
     transition: border-color 0.2s cubic-bezier(0.645, 0.045, 9.355, 1);
+    word-break: normal;
 
     &::placeholder {
       color: #c0c4cc;
@@ -337,7 +316,7 @@ export default {
     box-sizing: border-box;
 
     li {
-      font-size: 14px;
+      font-size: var(--base-font-size);
       padding: 0 20px;
       white-space: nowrap;
       overflow: hidden;
@@ -370,8 +349,8 @@ export default {
 
   .emoji-picker {
     position: absolute;
-    top: 32px;
-    left: 240px;
+    top: 0;
+    right: 32px;
   }
 }
 </style>

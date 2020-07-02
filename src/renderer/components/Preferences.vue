@@ -18,7 +18,8 @@
           class="setting-menu"
           :text-color="primaryColor"
           :background-color="backgroundColor"
-          :router="true">
+          :router="true"
+        >
           <el-menu-item index="/preferences/general">
             <icon name="cog" class="icon" scale="1.3"></icon>
             <span>{{ $t('preferences.general.title') }}</span>
@@ -34,6 +35,10 @@
           <el-menu-item index="/preferences/account">
             <icon name="user" class="icon" scale="1.3"></icon>
             <span>{{ $t('preferences.account.title') }}</span>
+          </el-menu-item>
+          <el-menu-item index="/preferences/network">
+            <icon name="network-wired" class="icon" scale="1.3"></icon>
+            <span>{{ $t('preferences.network.title') }}</span>
           </el-menu-item>
           <el-menu-item index="/preferences/language">
             <icon name="language" class="icon" scale="1.3"></icon>
@@ -60,10 +65,10 @@ export default {
     })
   },
   methods: {
-    close () {
-      this.$router.push('/')
+    close() {
+      this.$router.push({ path: '/', query: { redirect: 'home' } })
     },
-    activeRoute () {
+    activeRoute() {
       return this.$route.path
     }
   }
@@ -73,6 +78,7 @@ export default {
 <style lang="scss" scoped>
 #preferences {
   height: 100%;
+  overflow: auto;
 
   .header {
     text-align: center;
